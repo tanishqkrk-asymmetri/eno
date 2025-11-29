@@ -1337,37 +1337,67 @@ export default function StopMotion() {
                 </div>
               )}
             </div>
-            {currentProductImage > "500" && (
-              <>
-                <motion.img
-                  className="fixed bottom-0 left-0 z-999999999999999999999 w-1/3 max-md:w-full max-md:h-1/3 max-md:top-0 max-md:left-0 max-md:object-cover "
-                  style={{
-                    y: girl1,
-                    // opacity: girl1opacity,
-                  }}
-                  src="/pp1.webp"
-                  alt=""
-                />
-                <motion.img
-                  className="fixed bottom-0 left-1/3  z-999999999999999999999 w-1/3 max-md:w-full max-md:h-1/3 max-md:top-1/3 max-md:left-0 max-md:object-cover"
-                  style={{
-                    y: girl2,
-                    // opacity: girl2opacity,
-                  }}
-                  src="/pp2.webp"
-                  alt=""
-                />
-                <motion.img
-                  className="fixed bottom-0 left-2/3  z-999999999999999999999 w-1/3 max-md:w-full max-md:h-1/3 max-md:top-2/3 max-md:left-0 max-md:object-cover"
-                  style={{
-                    y: girl3,
-                    // opacity: girl3opacity,
-                  }}
-                  src="/pp3.webp"
-                  alt=""
-                />
-              </>
-            )}
+            <AnimatePresence>
+              {currentProductImage > "580" && (
+                <div className="flex fixed bottom-0 left-0 w-screen h-screen justify-between max-md:flex-col">
+                  <motion.img
+                    className="max-md:h-1/3 object-cover"
+                    initial={{
+                      opacity: 0,
+                    }}
+                    animate={{
+                      opacity: 1,
+                    }}
+                    exit={{
+                      opacity: 0,
+                    }}
+                    transition={{
+                      duration: 0.8,
+                      delay: 0.2,
+                    }}
+                    src="/pp1.webp"
+                    alt=""
+                  />
+                  <motion.img
+                    className="max-md:h-1/3 object-cover"
+                    initial={{
+                      opacity: 0,
+                    }}
+                    animate={{
+                      opacity: 1,
+                    }}
+                    exit={{
+                      opacity: 0,
+                    }}
+                    transition={{
+                      duration: 0.8,
+                      delay: 0.4,
+                    }}
+                    src="/pp2.webp"
+                    alt=""
+                  />
+                  <motion.img
+                    className="max-md:h-1/3 object-cover"
+                    initial={{
+                      opacity: 0,
+                    }}
+                    animate={{
+                      opacity: 1,
+                    }}
+                    exit={{
+                      opacity: 0,
+                    }}
+                    transition={{
+                      duration: 0.8,
+                      delay: 0.6,
+                    }}
+                    src="/pp3.webp"
+                    alt=""
+                  />
+                </div>
+              )}
+            </AnimatePresence>
+            {/* {currentProductImage > "590" && <div className=""></div>} */}
           </motion.div>
         )}
       </AnimatePresence>
