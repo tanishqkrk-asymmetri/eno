@@ -17,7 +17,7 @@ import { ChevronLeft, ChevronRight } from "lucide-react";
 // Founder data
 const founders = [
   {
-    name: "Alex Chalakov",
+    name: "Gaelic Jara ",
     title: "CTO",
     subtitle: "(aka leading the hardware pillar)",
     description: "read about his personal insights from the hardware journey",
@@ -25,7 +25,7 @@ const founders = [
     substack:
       "https://substack.com/@gaelicjara?utm_campaign=profile&utm_medium=profile-page",
     socialPlatform: "substack",
-    mainImage: "/team/A.jpg",
+    mainImage: "/team/C.jpg",
   },
   {
     name: "Ina Jovicic",
@@ -39,7 +39,7 @@ const founders = [
     mainImage: "/team/B.jpg",
   },
   {
-    name: "Gaelic Jara",
+    name: "Alex Chalakov",
     title: "CSO",
     subtitle: "(aka leading the AI/software pillar)",
     description:
@@ -47,7 +47,7 @@ const founders = [
     linkedin: "https://www.linkedin.com/in/aleksandarchalakov/",
     substack: "https://x.com/alex_chalakov",
     socialPlatform: "x",
-    mainImage: "/team/C.jpg",
+    mainImage: "/team/A.jpg",
   },
 ];
 
@@ -227,9 +227,21 @@ export default function StopMotion() {
       }
     }
   }, [isLoaded, images]);
-  const girl1 = useTransform(scrollYProgress, [0.93, 1], ["100%", "0%"]);
-  const girl2 = useTransform(scrollYProgress, [0.96, 1], ["100%", "0%"]);
-  const girl3 = useTransform(scrollYProgress, [0.94, 1], ["100%", "0%"]);
+  const girl1 = useTransform(
+    scrollYProgress,
+    [0.93, 1],
+    isMobile ? ["300%", "0%"] : ["100%", "0%"]
+  );
+  const girl2 = useTransform(
+    scrollYProgress,
+    [0.96, 1],
+    isMobile ? ["300%", "0%"] : ["100%", "0%"]
+  );
+  const girl3 = useTransform(
+    scrollYProgress,
+    [0.94, 1],
+    isMobile ? ["300%", "0%"] : ["100%", "0%"]
+  );
   const girl1opacity = useTransform(scrollYProgress, [0.9, 1], [0, 1]);
   const girl2opacity = useTransform(scrollYProgress, [0.93, 1], [0, 1]);
   const girl3opacity = useTransform(scrollYProgress, [0.89, 1], [0, 1]);
@@ -462,7 +474,7 @@ export default function StopMotion() {
             </motion.div>
             <div
               onClick={() => {
-                setFounder(2);
+                setFounder(0);
               }}
               className="border-white rounded-full border p-0.5 group-hover:p-1.5 aspect-square fixed top-[35%] left-[32%] max-md:top-[48%] max-md:left-[20%] z-9999  flex justify-center items-center cursor-pointer hover:scale-110 transition-transform group"
             >
@@ -529,7 +541,7 @@ export default function StopMotion() {
             </div>
             <div
               onClick={() => {
-                setFounder(0);
+                setFounder(2);
               }}
               className="border-white rounded-full border p-0.5 group-hover:p-1.5 aspect-square fixed top-[35%] right-[30%] z-9999  flex justify-center items-center cursor-pointer hover:scale-110 transition-transform group max-md:top-[50%] max-md:right-[15%]"
             >
@@ -651,7 +663,7 @@ export default function StopMotion() {
                 exit={{
                   opacity: 0,
                 }}
-                className="bg-linear-to-b from-transparent to-black h-96 max-md:h-auto min-h-[200px] w-full absolute z-999999999999999 bottom-0 flex flex-col max-md:flex-col md:flex-row justify-between items-end max-md:items-end p-8 max-md:p-6 max-md:pb-8 md:p-16 gap-6 max-md:gap-0"
+                className="bg-linear-to-b from-transparent to-black h-96 max-md:h-auto min-h-[200px] w-full absolute z-999999999999999 bottom-0 flex flex-col max-md:flex-col md:flex-row justify-between items-end max-md:items-end p-8 max-md:p-6 max-md:pb-8 md:p-16 gap-6 max-md:gap-0 "
               >
                 <div className="space-y-4 max-md:space-y-3 w-full max-md:w-full md:w-auto">
                   <div className="text-white text-2xl max-md:text-xl md:text-4xl font-light capitalize max-md:text-center">
@@ -786,7 +798,7 @@ export default function StopMotion() {
                       duration: 0.8,
                     }}
                     src={"/endframe.webp"}
-                    className="h-screen object-cover max-md:hidden"
+                    className="h-screen object-cover max-md:hidden "
                   ></motion.img>
                   <motion.img
                     initial={{
@@ -802,7 +814,7 @@ export default function StopMotion() {
                       duration: 0.8,
                     }}
                     src={"/endframe-mobile.webp"}
-                    className="h-screen object-contain z-9999999999 scale-140"
+                    className="h-screen object-contain z-9999999999 scale-140 hidden max-md:block"
                   ></motion.img>
                 </>
               )}
@@ -1328,7 +1340,7 @@ export default function StopMotion() {
             {currentProductImage > "500" && (
               <>
                 <motion.img
-                  className="fixed bottom-0 left-0 z-999999999999999999999 w-1/3 "
+                  className="fixed bottom-0 left-0 z-999999999999999999999 w-1/3 max-md:w-full max-md:h-1/3 max-md:top-0 max-md:left-0 max-md:object-cover"
                   style={{
                     y: girl1,
                     // opacity: girl1opacity,
@@ -1337,7 +1349,7 @@ export default function StopMotion() {
                   alt=""
                 />
                 <motion.img
-                  className="fixed bottom-0 left-1/3  z-999999999999999999999 w-1/3 "
+                  className="fixed bottom-0 left-1/3  z-999999999999999999999 w-1/3 max-md:w-full max-md:h-1/3 max-md:top-1/3 max-md:left-0 max-md:object-cover"
                   style={{
                     y: girl2,
                     // opacity: girl2opacity,
@@ -1346,7 +1358,7 @@ export default function StopMotion() {
                   alt=""
                 />
                 <motion.img
-                  className="fixed bottom-0 left-2/3  z-999999999999999999999 w-1/3 "
+                  className="fixed bottom-0 left-2/3  z-999999999999999999999 w-1/3 max-md:w-full max-md:h-1/3 max-md:top-2/3 max-md:left-0 max-md:object-cover"
                   style={{
                     y: girl3,
                     // opacity: girl3opacity,
