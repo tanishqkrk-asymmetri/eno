@@ -304,7 +304,7 @@ export default function StopMotion() {
           )}
         </div>
         {loadProgress === 100 && (
-          <div id="sd-container" className="absolute bottom-6">
+          <div id="sd-container" className="absolute bottom-6 max-md:bottom-32">
             <div className="arrow"></div>
             <div className="arrow"></div>
           </div>
@@ -1333,7 +1333,7 @@ export default function StopMotion() {
                     opacity: parseInt(currentProductImage) > 10 ? 0 : 1,
                   }}
                   id="sd-container"
-                  className="fixed bottom-6 left-1/2 -translate-x-1/2"
+                  className="fixed bottom-6 left-1/2 -translate-x-1/2 max-md:bottom-32"
                 >
                   <div className="arrow"></div>
                   <div className="arrow"></div>
