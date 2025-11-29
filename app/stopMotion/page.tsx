@@ -57,6 +57,7 @@ export default function StopMotion() {
   const [loading, setLoading] = useState(false);
 
   const videoRef = useRef<HTMLVideoElement>(null);
+  const videoRef3 = useRef<HTMLVideoElement>(null);
   const videoRef2 = useRef<HTMLVideoElement>(null);
 
   const [announce, setAnnounce] = useState(false);
@@ -240,6 +241,8 @@ export default function StopMotion() {
       videoRef.current.play();
       // @ts-expect-error later
       videoRef2.current.play();
+      // @ts-expect-error later
+      videoRef3.current.play();
       setTimeout(() => {
         setPlayed(true);
       }, 35000);
@@ -322,7 +325,7 @@ export default function StopMotion() {
 
       {images && isLoaded && (
         <img
-          className="fixed top-0 h-screen object-cover w-screen"
+          className="fixed top-0 h-screen object-cover w-screen "
           src={`/miniframe/frame${currentImage}.webp`}
           alt=""
         />
@@ -620,6 +623,11 @@ export default function StopMotion() {
                       // @ts-expect-error later
 
                       videoRef2.current.duration - 2;
+                    // @ts-expect-error later
+                    videoRef3.current.currentTime =
+                      // @ts-expect-error later
+
+                      videoRef3.current.duration - 2;
                   }}
                   className="p-3 rounded-full  cursor-pointer py-2  hover:bg-black/30 backdrop-blur-xl flex"
                 >
@@ -756,7 +764,7 @@ export default function StopMotion() {
                       }
                     }}
                     muted
-                    ref={videoRef}
+                    ref={videoRef3}
                     src="https://res.cloudinary.com/dyi7gdcpj/video/upload/v1764419674/heroMobile_hmusmk.mp4"
                     preload="auto"
                     className="w-full h-screen object-contain md:object-cover md:scale-150   video  z-9999 relative hidden max-md:block"

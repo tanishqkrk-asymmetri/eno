@@ -8,12 +8,13 @@ import "@splidejs/react-splide/css";
 
 const founders = [
   {
-    name: "Gaelic Jara",
+    name: "Gaelic Jara ",
     title: "CTO",
     subtitle: "(aka leading the hardware pillar)",
     description: "read about his personal insights from the hardware journey",
-    linkedin: "#",
-    substack: "#",
+    linkedin: "https://www.linkedin.com/in/gaelicjara/",
+    substack:
+      "https://substack.com/@gaelicjara?utm_campaign=profile&utm_medium=profile-page",
     socialPlatform: "substack",
     mainImage: "/team/C.jpg",
   },
@@ -22,10 +23,11 @@ const founders = [
     title: "CEO",
     subtitle: "(aka leading the commercial pillar)",
     description: "wanna see the behind the scenes of building a start-up",
-    linkedin: "#",
-    substack: "#",
+    linkedin: "https://www.linkedin.com/in/ina-jovicic/",
+    substack:
+      "https://www.instagram.com/ina_founder?igsh=bmozaTM0bmd6NDVh&utm_source=qr",
     socialPlatform: "instagram",
-    mainImage: "/team/A.jpg",
+    mainImage: "/team/B.jpg",
   },
   {
     name: "Alex Chalakov",
@@ -33,10 +35,10 @@ const founders = [
     subtitle: "(aka leading the AI/software pillar)",
     description:
       "curious to know his thoughts on latest on AI and emerging tech",
-    linkedin: "#",
-    substack: "#",
+    linkedin: "https://www.linkedin.com/in/aleksandarchalakov/",
+    substack: "https://x.com/alex_chalakov",
     socialPlatform: "x",
-    mainImage: "/team/B.jpg",
+    mainImage: "/team/A.jpg",
   },
 ];
 
