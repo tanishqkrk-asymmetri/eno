@@ -1042,7 +1042,7 @@ export default function StopMotion() {
               </div>
             </div>
             <div className="md:hidden z-9999999999 text-white grid grid-rows-2 h-full">
-              <FoundersCarousel></FoundersCarousel>
+              <FoundersCarousel founder={founder}></FoundersCarousel>
             </div>
           </motion.div>
         )}

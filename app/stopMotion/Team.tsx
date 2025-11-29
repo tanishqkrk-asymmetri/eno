@@ -47,24 +47,24 @@ const getSocialIcon = (platform: string) => {
     case "instagram":
       return <Instagram className="w-5 h-5" />;
     case "x":
-      return <Twitter className="w-5 h-5" />;
+      return <img src="/x.svg" alt="" />;
     default:
-      return <span className="text-sm font-medium">substack</span>;
+      return <img className="w-4" src="/substack.svg" alt="" />;
   }
 };
 
-export default function FoundersCarousel() {
-  const [currentIndex, setCurrentIndex] = useState(1);
-
+export default function FoundersCarousel({ founder }: { founder: number }) {
+  const [currentIndex, setCurrentIndex] = useState(founder);
+  console.log(founder);
   const splideOptions = {
     type: "loop" as const,
     focus: "center" as const,
-    perPage: 2,
-    perMove: 0.5,
+    perPage: 1.5,
+    perMove: 0.1,
     gap: "0rem",
     pagination: false,
     arrows: false,
-    start: 1,
+    start: founder,
     autoWidth: false,
     updateOnMove: true,
     drag: true,
@@ -83,7 +83,7 @@ export default function FoundersCarousel() {
   const currentFounder = founders[currentIndex % founders.length];
 
   return (
-    <div className="min-h-screen bg-black text-white flex flex-col items-center justify-center  py-8 sm:py-12 overflow-hidden relative">
+    <div className="min-h-screen bg-black text-white flex flex-col items-center justify-start  py-8 sm:py-12 overflow-hidden relative">
       <style>{`
         .splide__arrow {
           background: rgba(55, 65, 81, 0.9);
@@ -196,27 +196,23 @@ export default function FoundersCarousel() {
           {currentFounder.description}
         </p>
 
-        <div className="flex flex-col sm:flex-row items-center justify-center gap-4 sm:gap-6 pt-2">
+        <div className="flex flex-row items-center justify-center gap-6 pt-2">
           <a
             href={currentFounder.linkedin}
             target="_blank"
             rel="noopener noreferrer"
-            className="flex items-center gap-2 text-gray-300 hover:text-white transition-all duration-300 hover:scale-105 group"
+            className="text-gray-300 hover:text-white transition-all duration-300 hover:scale-105 group"
           >
             <Linkedin className="w-5 h-5 group-hover:text-red-500 transition-colors" />
-            <span className="text-sm sm:text-base">linkedin</span>
           </a>
 
           <a
             href={currentFounder.substack}
             target="_blank"
             rel="noopener noreferrer"
-            className="flex items-center gap-2 text-gray-300 hover:text-white transition-all duration-300 hover:scale-105 group"
+            className="text-gray-300 hover:text-white transition-all duration-300 hover:scale-105 group"
           >
             {getSocialIcon(currentFounder.socialPlatform)}
-            <span className="text-sm sm:text-base capitalize">
-              {currentFounder.socialPlatform}
-            </span>
           </a>
         </div>
       </div>
