@@ -229,17 +229,17 @@ export default function StopMotion() {
   }, [isLoaded, images]);
   const girl1 = useTransform(
     scrollYProgress,
-    [0.93, 1],
+    [0.96, 0.97],
     isMobile ? ["300%", "0%"] : ["100%", "0%"]
   );
   const girl2 = useTransform(
     scrollYProgress,
-    [0.96, 1],
+    [0.97, 0.98],
     isMobile ? ["300%", "0%"] : ["100%", "0%"]
   );
   const girl3 = useTransform(
     scrollYProgress,
-    [0.94, 1],
+    [0.98, 1],
     isMobile ? ["300%", "0%"] : ["100%", "0%"]
   );
   const girl1opacity = useTransform(scrollYProgress, [0.9, 1], [0, 1]);
@@ -1340,7 +1340,7 @@ export default function StopMotion() {
             {currentProductImage > "500" && (
               <>
                 <motion.img
-                  className="fixed bottom-0 left-0 z-999999999999999999999 w-1/3 max-md:w-full max-md:h-1/3 max-md:top-0 max-md:left-0 max-md:object-cover"
+                  className="fixed bottom-0 left-0 z-999999999999999999999 w-1/3 max-md:w-full max-md:h-1/3 max-md:top-0 max-md:left-0 max-md:object-cover "
                   style={{
                     y: girl1,
                     // opacity: girl1opacity,
