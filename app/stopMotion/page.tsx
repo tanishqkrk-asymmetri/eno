@@ -751,12 +751,14 @@ export default function StopMotion() {
                       }
                     }}
                     muted
+                    playsInline
                     ref={videoRef}
                     src="https://res.cloudinary.com/dyi7gdcpj/video/upload/v1764407817/hero2_iik12b.mp4"
                     preload="auto"
                     className="w-full h-screen object-contain md:object-cover md:scale-150   video  z-9999 relative max-md:hidden"
                   ></motion.video>
                   <motion.video
+                    playsInline
                     initial={{
                       opacity: 0,
                     }}
@@ -823,6 +825,7 @@ export default function StopMotion() {
               muted
               ref={videoRef2}
               src=""
+              playsInline
               className="w-full h-screen object-cover md:object-cover scale-150   video  blur-lg fixed top-0 z-0 hidden max-md:block "
             ></video>
           </motion.div>
