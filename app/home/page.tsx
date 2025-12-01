@@ -865,7 +865,7 @@ export default function StopMotion() {
             </motion.div>
             <motion.div
               onClick={() => {
-                setFounder(1);
+                setFounder(2);
               }}
               whileHover={{ scale: 1.15 }}
               whileTap={{ scale: 0.95 }}
