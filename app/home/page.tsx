@@ -980,7 +980,7 @@ export default function StopMotion() {
               <img src="/logo-new.png" className="w-16" alt="" />
             </a>
 
-            <div className="absolute top-0 right-0 px-16 p-10 z-9 text-white max-md:px-3 z-99999999 max-md:py-18">
+            <div className="absolute top-0 right-0 px-16 p-10 z-9 text-white max-md:px-3 z-99999999 max-md:py-10">
               {played && (
                 <div className="w-full max-md:w-full md:w-auto hidden max-md:block group relative">
                   <button
