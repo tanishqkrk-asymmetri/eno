@@ -703,7 +703,7 @@ export default function StopMotion() {
               }}
               whileHover={{ scale: 1.15 }}
               whileTap={{ scale: 0.95 }}
-              className="bg-red-500/20 rounded-full w-10 aspect-square fixed    top-[50%] left-[52%] flex justify-center items-center cursor-pointer duration-200 z-999999 max-md:left-[46%] max-md:top-[50%]"
+              className="bg-red-500/20 rounded-full w-10 aspect-square fixed    top-[53%] left-[50%] flex justify-center items-center cursor-pointer duration-200 z-999999 max-md:left-[46%] max-md:top-[50%]"
             >
               {/* Subtle Ripple animations - increased opacity and slower */}
               <motion.div
