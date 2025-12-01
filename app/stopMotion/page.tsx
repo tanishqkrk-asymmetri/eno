@@ -1495,7 +1495,7 @@ export default function StopMotion() {
 
             <AnimatePresence>
               {currentProductImage > "130" && currentImage < "230" && (
-                <motion.div className="fixed text-white top-1/3 space-y-6 left-16 z-9999999999 max-w-sm max-md:bottom-16 max-md:top-auto  max-md:h-fit max-md:left-0 max-md:px-6">
+                <motion.div className="fixed text-white top-1/3 space-y-6 left-16 z-9999999999 max-w-sm max-md:bottom-16 max-md:top-auto  max-md:h-fit max-md:left-1/2 max-md:w-full max-md:-translate-x-1/2 max-md:px-6">
                   <motion.div
                     initial={{
                       opacity: 0,
@@ -1569,7 +1569,7 @@ export default function StopMotion() {
             </AnimatePresence>
             <AnimatePresence>
               {currentProductImage > "230" && currentImage < "400" && (
-                <motion.div className="fixed text-white top-1/3 space-y-6 left-16 z-9999999999 max-w-sm max-md:bottom-16 max-md:top-auto  max-md:h-fit max-md:left-0 max-md:px-6">
+                <motion.div className="fixed text-white top-1/3 space-y-6 left-16 z-9999999999 max-w-sm max-md:bottom-16 max-md:top-auto  max-md:h-fit max-md:left-1/2 max-md:w-full max-md:-translate-x-1/2 max-md:px-6">
                   <motion.div
                     initial={{
                       opacity: 0,
@@ -1643,7 +1643,7 @@ export default function StopMotion() {
             </AnimatePresence>
             <AnimatePresence>
               {currentProductImage > "410" && currentProductImage < "510" && (
-                <motion.div className="fixed text-white top-1/3 space-y-6 left-16 z-9999999999 max-w-sm max-md:bottom-0 max-md:top-auto max-md:left-0 max-md:px-6  max-md:h-fit ">
+                <motion.div className="fixed text-white top-1/3 space-y-6 left-16 z-9999999999 max-w-sm max-md:bottom-16 max-md:top-auto  max-md:h-fit max-md:left-1/2 max-md:w-full max-md:-translate-x-1/2 max-md:px-6 ">
                   <motion.div
                     initial={{
                       opacity: 0,
