@@ -1,7 +1,10 @@
 "use client";
 export default function Announce() {
   return (
-    <div>
+    <div className="p-16 px-64 space-y-6 max-md:px-0">
+      <div className="flex justify-center items-center">
+        <img src="/logo-small.svg" className="w-36" alt="" />
+      </div>
       <article className="px-8 pb-12 md:px-16 md:pb-16 text-black space-y-6 clear-both bg-white ">
         <video
           className="rounded-lg"
@@ -11,173 +14,152 @@ export default function Announce() {
           controls
           src="https://res.cloudinary.com/dyi7gdcpj/video/upload/v1764577052/TRAILER_V3_1_fwcfhx.mp4"
         ></video>
-        <h1 className="text-3xl md:text-5xl font-bold">
-          eNOugh Raises £2.7M to Build a Mini AI Bodyguard Helping People Get
-          Home Safely
-        </h1>
-
         <p className="text-sm">
-          <strong>By:</strong> Will Hall
+          <strong>By:</strong>{" "}
+          <a
+            href="https://www.linkedin.com/in/willhall-/"
+            className="underline text-blue-500"
+          >
+            Will Hall
+          </a>
         </p>
+
+        {/* <p className="text-sm"></p> */}
 
         <p className="text-sm">
           <strong>Contact:</strong> press@enoughsafety.com
         </p>
 
-        {/* <hr className="my-6" /> */}
+        <h1 className="text-3xl md:text-5xl font-bold">
+          London-based startup, eNOugh, has raised $2.7M to build a mini AI
+          bodyguard to empower people to get home safely.
+        </h1>
 
-        <div className="flex gap-16 max-md:flex-col">
+        <div className="flex gap-16">
           <div>
-            <img src="/teamimage.png" className="w-400 object-cover" alt="" />
+            <img src="/teamimage.png" className="w-400" alt="" />
           </div>
           <div className="space-y-6">
             <p>
-              London-based startup <strong>eNOugh</strong> has raised{" "}
-              <strong>£2.7M</strong> to build the <em>eNO badge</em>, a mini AI
-              bodyguard designed to empower people to get home safely.
+              eNOugh is a London based company building the eNO badge, an AI
+              safety companion that is addressing the lack of safety in the
+              cities people call home.
             </p>
 
             <p>
-              eNOugh is a London-based company building the eNO badge, an AI
-              safety companion addressing the lack of safety in the cities
-              people call home.
+              Four years ago, Ina Jovicic was attacked walking home from dinner
+              in a well-lit supposedly safe area of central London.
             </p>
 
             <p>
-              Four years ago, <strong>Ina Jovicic</strong> was attacked walking
-              home from dinner in what should have been a safe, well-lit area of
-              central London. Today, Ina and co-founders <strong>Gaelic</strong>{" "}
-              and <strong>Alex</strong> announce they have raised £2.7M in
-              funding, led by <strong>A*Ventures</strong>, with participation
-              from <strong>Comma Capital</strong>,{" "}
-              <strong>Karman Ventures</strong>, <strong>Intuition VC</strong>,
-              and others, to build the first-of-its-kind AI wearable threat
-              detection device. Several prominent angel investors also joined
-              the round.
+              Today, Ina, and co-founders Gaelic and Alex, announce they have
+              raised $2.7M funding, led by A*Ventures, with participation from
+              Comma Capital, Karman Ventures, Intuition VC and more, to build
+              the eNO badge, the first of its kind AI wearable threat detection
+              device. Alongside venture capitalist backing, the round was joined
+              by several prominent angel investors.
             </p>
           </div>
         </div>
-        {/* <hr className="my-6" /> */}
 
         <h2 className="text-2xl font-bold">
-          Quote from Kevin, General Partner at A*Ventures
+          Quote from Kevin, General Partner at A*Ventures:
         </h2>
 
         <blockquote className="border-l-4 border-gray-400 pl-4 italic">
-          "I've always believed that safety and security are critically
+          “I’ve always believed that safety and security are critically
           important. With the rise of multimodal AI, smart wearables, and
-          advances in detection technology, there's a unique opportunity to
+          advances in detection technology, there’s a unique opportunity to
           create a safer world for everyone. What eNOugh is building is hugely
-          important."
+          important.”
         </blockquote>
 
         <p>
-          A* is a venture capital firm co-founded by{" "}
-          <strong>Kevin Hartz</strong>. Kevin has seeded companies such as
-          Airbnb and Pinterest and founded two companies that reached the public
-          markets (Xoom and Eventbrite). A*'s broader investment record includes
-          PayPal, Uber, Decagon, Ramp, and security-focused startups such as
-          Flock Safety and Sauron.
+          A* is a venture capital firm co-founded by Kevin Hartz. Kevin has
+          seeded companies such as Airbnb and Pinterest, and has founded two
+          companies that reached the public markets (Xoom and Eventbrite). A*'s
+          broader investment track record includes companies like PayPal, Uber,
+          Decagon, Ramp, and security-focused startups such as Flock Safety and
+          Sauron.
         </p>
 
-        {/* <hr className="my-6" /> */}
-
-        <h2 className="text-2xl font-bold">Quotes from eNOugh Co-Founders</h2>
+        <h2 className="text-2xl font-bold">Quotes from eNOugh co-founders:</h2>
 
         <blockquote className="border-l-4 border-gray-400 pl-4 italic">
-          "This round is fundamental in eNOugh's journey as it will allow us to
-          launch the product and watch it make a difference in people's daily
+          “This round is fundamental in eNOugh’s journey as it will allow us to
+          launch the product and watch it make a difference in people’s daily
           life. The stories we hear every day remind us why a product like this
           must exist, we want to give people the freedom to live without
-          limitations."
+          limitations.”
         </blockquote>
-        <p>
-          — <strong>Ina, co-founder/CEO</strong>
-        </p>
+        <p>(Ina, co-founder/CEO)</p>
 
         <blockquote className="border-l-4 border-gray-400 pl-4 italic">
-          "I've always believed that some problems can't be solved through
+          “I’ve always believed that some problems can’t be solved through
           software alone. Feeling unsafe is one of them. You need something
-          physical, visible, and reliable, and that's what the eNO badge gives
-          you. Thanks to our backers, we're now bringing it to life."
+          physical, visible, and reliable, and that’s what the eNO badge gives
+          you. Thanks to our backers, we’re now bringing it to life.”
         </blockquote>
-        <p>
-          — <strong>Gaelic, co-founder/CTO</strong>
-        </p>
+        <p>(Gaelic, co-founder/CTO)</p>
 
         <blockquote className="border-l-4 border-gray-400 pl-4 italic">
-          "What we are doing with our AI is taking it out of the lab and
+          “What we are doing with our AI is taking it out of the lab and
           bringing it into everyday life. With the eNO badge, grounded in
           real-world, multimodal signals, we support people in the moments that
           actually feel human - like when someone feels unsafe walking home at
-          night."
+          night.”
         </blockquote>
-        <p>
-          — <strong>Alex, co-founder/CSO</strong>
-        </p>
-
-        {/* <hr className="my-6" /> */}
-
-        <h2 className="text-2xl font-bold">Why eNOugh Exists</h2>
+        <p>(Alex, co-founder/CSO)</p>
 
         <p className="font-bold">London, 12th October 2021</p>
 
         <p>
           Four men circled and attacked Ina as they tried to take her things.
-          Her instinct was to fight back, but four against one isn't a fair
-          fight. She was dragged into the street before they stole everything
-          and left her with injured knees.
-        </p>
-
-        <p>When police arrived, they told her:</p>
-
-        <ul className="list-disc pl-6">
-          <li>"You're lucky you weren't stabbed."</li>
-          <li>"You should never fight back."</li>
-        </ul>
-
-        <p>
-          That second line sparked action, not fear. Ina channelled the
-          experience into researching real solutions to a problem that remains
-          unsolved.
+          The Balkan temperament in her kicked in and she immediately decided to
+          fight back, but four against one isn't a fair fight. She was dragged
+          into the middle of the street before they stole everything and left
+          her with injured knees as souvenirs.
         </p>
 
         <p>
-          She partnered with two innovative minds, <strong>Gaelic</strong> and{" "}
-          <strong>Alex</strong>, and together they started eNOugh.
+          When the police arrived, they told her two things: "You're lucky you
+          weren't stabbed" and "You should never fight back”.
         </p>
 
-        {/* <hr className="my-6" /> */}
+        <p>
+          That second line became the catalyst. Not for fear, but for action.
+          Ina used her experience as fuel to start her research into how to
+          solve this yet unresolved issue.
+        </p>
+
+        <p>
+          To bring a solution to life, she partnered with two innovative minds,
+          Gaelic and Alex, and together they started eNOugh.
+        </p>
 
         <h2 className="text-2xl font-bold">
-          What Does It Mean to "Get Home Safe"?
+          What does it mean to “get home safe”?
         </h2>
 
         <p>
-          For many — especially women — it's not just a simple message. It can
-          feel like <em>mission planning</em>:
+          Unfortunately, it’s not as simple as it sounds. For many, and
+          particularly for women, it’s more than just a message you send after a
+          night out.
         </p>
 
-        <ul className="list-disc pl-6">
-          <li>route strategy</li>
-          <li>risk assessment</li>
-          <li>keys-between-knuckles</li>
-          <li>fake phone calls</li>
-          <li>the "I'm two minutes away" lie</li>
-        </ul>
-
         <p>
-          This isn't just a London problem. It's a{" "}
-          <strong>Paris, New York, Mexico City… everywhere problem.</strong>{" "}
-          That's millions of people whose lives are shaped by the state of the
-          cities they live in.
+          It can feel like mission planning… route strategy, risk assessment,
+          key-between-knuckles, the fake phone call, the "I'm literally two
+          minutes away" lie.
         </p>
 
-        {/* <hr className="my-6" /> */}
-
-        <h2 className="text-2xl font-bold">The UK Safety Reality</h2>
-
         <p>
+          This isn't a London problem. It's a Paris, New York, Mexico City…
+          everywhere problem. That's millions of people whose lives are shaped
+          by the state of the cities they live in.
+        </p>
+
+        <h2 className="text-2xl font-bold">
           <a
             href="https://www.ons.gov.uk/peoplepopulationandcommunity/crimeandjustice/datasets/perceptionsofpersonalsafetyandexperiencesofharassmentgreatbritain"
             target="_blank"
@@ -187,71 +169,68 @@ export default function Announce() {
             In the UK
           </a>
           :
+        </h2>
+
+        <ul className="list-disc pl-6">
+          <li>
+            One in two women and one in five men feel unsafe walking alone after
+            dark in a busy public place
+          </li>
+          <li>68% of women aged 18-24 feel unsafe walking home at night</li>
+          <li>
+            62% of people have stopped doing things - leaving home alone,
+            walking certain routes, going to certain places - because they don't
+            feel safe
+          </li>
+          <li>
+            Two out of three women aged 16 to 34 years experienced one form of
+            harassment in the previous 12 months; with 44% of women aged 16 to
+            34 years having experienced catcalls, whistles, unwanted sexual
+            comments or jokes, and 29% having felt like they were being
+            followed.
+          </li>
+        </ul>
+
+        <p>
+          And the ‘solutions’? Pepper spray (illegal in the UK by the way).
+          Keychain ‘self-defence’ tools that still expect you to fight back
+          after a criminal has already made their move. Panic buttons you’re
+          supposed to be able to press while being attacked on top of hoping
+          someone is nearby to help. Tracking apps that assume you’ll unlock
+          your phone, enter the app, and tap a button in the middle of panic.
+          ‘Ask Angela,’ which everyone already knows about… including the
+          attackers.
         </p>
-
-        <ul className="list-disc pl-6">
-          <li>
-            <strong>1 in 2 women</strong> and <strong>1 in 5 men</strong> feel
-            unsafe walking alone after dark in a busy public place
-          </li>
-          <li>
-            <strong>68%</strong> of women aged 18–24 feel unsafe walking home at
-            night
-          </li>
-          <li>
-            <strong>62%</strong> of people have stopped doing things (walking
-            alone, taking certain routes, visiting certain places) because they
-            don't feel safe
-          </li>
-          <li>
-            <strong>2 out of 3 women</strong> aged 16–34 experienced harassment
-            in the last year
-          </li>
-          <li>
-            <strong>44%</strong> experienced catcalls or unwanted comments
-          </li>
-          <li>
-            <strong>29%</strong> felt they were being followed
-          </li>
-        </ul>
-
-        <p>And existing "solutions" aren't good enough:</p>
-
-        <ul className="list-disc pl-6">
-          <li>Pepper spray (illegal in the UK)</li>
-          <li>Keychain "self-defence" tools expecting people to fight back</li>
-          <li>Panic buttons requiring presence of mind during an attack</li>
-          <li>Tracking apps requiring you to unlock your phone</li>
-          <li>"Ask Angela" — widely known, including by attackers</li>
-        </ul>
 
         <p>
           <strong>eNOugh was created to be the solution.</strong>
         </p>
 
-        {/* <hr className="my-6" /> */}
-
-        <h1 className="text-3xl font-bold">Changing the Game</h1>
-
-        <p>The eNO badge has two core functions:</p>
-
-        <h2 className="text-2xl font-bold">1. Threat Detection</h2>
+        <h1 className="text-3xl font-bold">Changing the game</h1>
 
         <p>
-          Using advanced AI and hardware integration, the device detects when
-          its user is under threat — and takes action.
+          There are two key aspects of the eNO badge: threat detection and
+          threat deterrence.
+        </p>
+
+        <p>
+          <strong>Threat detection:</strong> Using sophisticated AI models and
+          integration with hardware innovation, the device can detect a moment
+          where its user is under threat - and crucially, take actions.
         </p>
 
         <p>When it detects a threat, it:</p>
 
         <ul className="list-disc pl-6">
-          <li>records evidence (camera + mic)</li>
+          <li>Records evidence (camera + mic built in)</li>
           <li>
-            alerts an emergency operator who can contact police or your
+            Alerts an emergency operator who can contact police or your
             emergency contacts
           </li>
-          <li>streams live footage</li>
-          <li>shares real-time location data</li>
+          <li>
+            Streams live footage and shares location data so help knows exactly
+            where you are
+          </li>
         </ul>
 
         <p>
@@ -262,89 +241,76 @@ export default function Announce() {
             rel="noopener noreferrer"
             className="text-blue-600 underline"
           >
-            Less than 1% of thefts in London get solved.
-          </a>
+            less than 1% of thefts in London get solved.
+          </a>{" "}
+          Evidence changes that equation.
         </p>
 
-        <p>Evidence changes that equation.</p>
-
-        {/* <hr className="my-6" /> */}
-
-        <h2 className="text-2xl font-bold">2. Threat Deterrence</h2>
-
-        <p>Traditional safety tools are hidden and reactive.</p>
-
-        <p>The eNO badge is the opposite:</p>
-
-        <ul className="list-disc pl-6">
-          <li>
-            <strong>bright</strong>
-          </li>
-          <li>
-            <strong>visible</strong>
-          </li>
-          <li>
-            <strong>unmissable</strong>
-          </li>
-        </ul>
-
-        <p>To a passerby it's a badge.</p>
-
-        <p>To an attacker it's:</p>
-
-        <ul className="list-disc pl-6">
-          <li>a camera recording</li>
-          <li>streaming live</li>
-          <li>connected to authorities</li>
-          <li>creating consequences</li>
-        </ul>
-
-        <p className="font-bold">
-          Deterrence through visibility.
-          <br />
-          Protection through presence.
+        <p>
+          <strong>Threat deterrence:</strong> Traditional safety tools are meant
+          to be hidden and reactive, intended for the moment when something has
+          already gone wrong. The eNO badge flips that paradigm.
         </p>
 
-        {/* <hr className="my-6" /> */}
+        <p>
+          Designed to be seen, bright and unmissable - because to prevent
+          danger, deterrence is crucial.
+        </p>
+
+        <p>
+          An ordinary pedestrian sees a badge, but to an attacker they see a
+          camera recording, real-time streaming to authorities, evidence that
+          creates consequences. It’s deterrence through visibility, protection
+          through presence.
+        </p>
 
         <h1 className="text-3xl font-bold">
-          The Network Effects of Collective Safety
+          The network effects of collective safety
         </h1>
 
         <p>
-          The more people wearing an eNO badge, the stronger the network
-          becomes.
+          The more people wear the eNO badge, the more capable it becomes at
+          protecting everyone. By wearing it, you not only protect yourself, but
+          also those around you.
         </p>
 
         <p>
-          Each badge is a <strong>node in a distributed AI network</strong>,
-          collecting real-world threat data to train better algorithms.
+          Each eNO badge serves as a node in a distributed AI network,
+          collecting real-world threat data to train increasingly sophisticated
+          protection algorithms. Empowering everyone who wears a badge to be
+          part of the solution - this is about people not having things done to
+          them, but doing them. When you wear your badge on a Tuesday night
+          walking home, even if nothing happens, you're training the AI to
+          recognise patterns and better protect someone else on Wednesday.
         </p>
 
         <p>
-          Your Tuesday walk home — even if nothing happens — helps protect
-          someone else on Wednesday.
+          This is a collective fight against a problem left unsolved for too
+          long. It marks the start of a safer future for cities across the
+          world.
         </p>
 
         <p>
-          This is a <strong>collective fight</strong>, marking the start of
-          safer cities worldwide.
+          eNOugh want nighttime to feel carefree again - spontaneous, fun, the
+          way it should be. "Walking home shouldn't feel like a risk, and
+          worrying about your safety shouldn't hold you back from living your
+          life" says Ina.
         </p>
 
-        <blockquote className="border-l-4 border-gray-400 pl-4 italic">
-          "Walking home shouldn't feel like a risk… eNOugh isn't just a product,
-          it's a reclamation of safety." — <strong>Ina</strong>
-        </blockquote>
+        <p>
+          "This isn't just about protection - it's about giving you the freedom
+          to go where you want, do what you love, and feel secure while doing
+          it. eNOugh isn’t just a product, it’s a reclamation of safety that
+          should have already existed as a non-negotiable norm.”
+        </p>
 
-        {/* <hr className="my-6" /> */}
-
-        <h1 className="text-3xl font-bold">The Team</h1>
-
-        <h3 className="text-xl font-bold">Ina — CEO</h3>
+        <h1 className="text-3xl font-bold">The team</h1>
 
         <p>
-          Bosnian by background, raised in Czechia. The idea sparked after her
-          London attack while completing a Master's in Entrepreneurship at UCL.
+          Ina, the CEO, is originally Bosnian but born and raised in Czechia,
+          and the idea came to her after her own unfortunate experience in
+          central London 3 years ago when she was completing a masters in
+          Entrepreneurship at UCL.
         </p>
 
         <p>
@@ -361,16 +327,15 @@ export default function Announce() {
           )
         </p>
 
-        <h3 className="text-xl font-bold">Gaelic — CTO</h3>
-
         <p>
-          Uruguayan/French electronic engineer. Leads the product pillar.
-          Dropped his Master's in Electronic & Electrical Engineering to build
-          eNOugh full-time.
+          Gaelic is Uruguayan/French electronic engineer by background who has
+          been leading eNOugh’s product pillar as CTO and has decided to drop
+          his masters studies in electronic and electrical engineering to pursue
+          eNOugh full time.
         </p>
 
         <p>
-          (if you want to follow Gaelic's journey on how to build great
+          (if you want to follow Gaelic’s journey on how to build great
           products, read{" "}
           <a
             href="https://www.linkedin.com/in/gaelicjara/"
@@ -383,11 +348,11 @@ export default function Announce() {
           )
         </p>
 
-        <h3 className="text-xl font-bold">Alex — CSO</h3>
-
         <p>
-          Bulgarian-born, leads software and AI. Joined early and became
-          indispensable.
+          Alex is Bulgarian-born, leading the software and AI pillar as CSO with
+          his background in computer science and emerging digital technologies.
+          He joined eNOugh in its early stages and has become an irreplaceable
+          part of the team ever since.
         </p>
 
         <p>
@@ -403,38 +368,37 @@ export default function Announce() {
           )
         </p>
 
-        {/* <hr className="my-6" /> */}
-
-        <h1 className="text-3xl font-bold">What's Next?</h1>
-
-        <p>
-          With this £2.7M round, eNOugh has opened the <strong>waitlist</strong>
-          .
-        </p>
-
-        <ul className="list-disc pl-6">
-          <li>Waitlisters will be first to know when pre-orders go live</li>
-          <li>Early-bird discounts before official launch</li>
-        </ul>
-
-        <p>eNOugh is partnering with:</p>
-
-        <ul className="list-disc pl-6">
-          <li>universities</li>
-          <li>hospitals</li>
-          <li>nightlife venues</li>
-        </ul>
-
-        <p>London will be the first launch city before rapid expansion.</p>
+        <h1 className="text-3xl font-bold">
+          So what happens now? A note from the founders
+        </h1>
 
         <p>
-          The response has been overwhelmingly positive — a reminder of why this
-          product matters.
+          With this $2.7M round, the eNOugh team has opened the waitlist.
+          Waitlist subscribers will be the first ones to get notified when the
+          pre-orders for the badge are released and will receive an early bird
+          discount just before the official launch.
         </p>
 
-        <p className="font-bold">Excited? Join the waitlist here.</p>
+        <p>
+          In the meantime, eNOugh is collaborating with partners across sectors
+          where the eNO badge will have major impact, including universities,
+          hospitals, and nightlife venues across London, the first city where
+          we’ll launch before expanding quickly.
+        </p>
 
-        <p>And follow the journey here.</p>
+        <p>The response to the eNO badge so far has been incredible.</p>
+
+        <p>
+          Hearing people’s reactions, their positive feedback, and the constant
+          reminders of why this matters is exactly why the trio started eNOugh
+          and cannot wait to put the badge in people’s hands.
+        </p>
+
+        <p className="font-bold">
+          If you’re just as excited, you can join the waitlist here.
+        </p>
+
+        <p>And in the meantime, you can follow the journey here.</p>
 
         <div className="border-2 border-red-600   h-full text-center text-black bg-white  w-fit rounded-full cursor-pointer hover:shadow-2xl hover:shadow-red-800 duration-200  lowercase relative pre-order-container">
           <div className="pre-order-outside2 p-4  w-full h-full rounded-full z-9"></div>
