@@ -14,8 +14,22 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "eNO Badge",
-  description: "",
+  title: "eNO - you mini AI bodyguard",
+  description:
+    "the world’s first mini AI bodyguard that uses real-time AI intelligence to autonomously detect and respond to real-world threats without relying on human reaction during danger",
+  openGraph: {
+    title: "eNO Badge",
+    description: "",
+    images: [
+      {
+        url: "/endframe.webp",
+        width: 1200,
+        height: 630,
+        alt: "eNO Badge",
+      },
+    ],
+    type: "website",
+  },
 };
 
 export default function RootLayout({
