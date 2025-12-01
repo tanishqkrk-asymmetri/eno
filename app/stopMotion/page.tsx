@@ -755,164 +755,183 @@ export default function StopMotion() {
                 ></div>
               </motion.div>
             </motion.div>
+
             <motion.div
               onClick={() => {
                 setFounder(0);
               }}
+              whileHover={{ scale: 1.15 }}
+              whileTap={{ scale: 0.95 }}
               className="border-white rounded-full border p-0.5 group-hover:p-1.5 aspect-square fixed top-[43%] left-[32%] max-md:top-[48%] max-md:left-[20%] z-9999  flex justify-center items-center cursor-pointer hover:scale-110 transition-transform group"
-              animate={{
-                scale: [1, 1.15, 1],
-              }}
-              transition={{
-                duration: 2,
-                repeat: Infinity,
-                ease: "easeInOut",
-              }}
             >
-              {/* Pulsing Ripple animations */}
+              {/* Subtle Ripple animations - increased opacity and slower */}
               <motion.div
-                className="absolute inset-0 border-white border-2 rounded-full"
-                initial={{ scale: 1, opacity: 0.8 }}
-                animate={{ scale: 2.5, opacity: 0 }}
+                className="absolute inset-0 border-white border rounded-full"
+                initial={{ scale: 1, opacity: 0 }}
+                animate={{ scale: 2.5, opacity: [0, 0.25, 0] }}
                 transition={{
-                  duration: 1.5,
+                  duration: 2.5,
                   repeat: Infinity,
                   ease: "easeOut",
                 }}
               />
               <motion.div
-                className="absolute inset-0 border-white border-2 rounded-full"
-                initial={{ scale: 1, opacity: 0.8 }}
-                animate={{ scale: 2.5, opacity: 0 }}
+                className="absolute inset-0 border-white border rounded-full"
+                initial={{ scale: 1, opacity: 0 }}
+                animate={{ scale: 2.5, opacity: [0, 0.25, 0] }}
                 transition={{
-                  duration: 1.5,
+                  duration: 2.5,
                   repeat: Infinity,
                   ease: "easeOut",
-                  delay: 0.5,
+                  delay: 0.8,
                 }}
               />
               <motion.div
-                className="absolute inset-0 border-white border-2 rounded-full"
-                initial={{ scale: 1, opacity: 0.8 }}
-                animate={{ scale: 2.5, opacity: 0 }}
+                className="absolute inset-0 borderwhite border rounded-full"
+                initial={{ scale: 1, opacity: 0 }}
+                animate={{ scale: 2.5, opacity: [0, 0.25, 0] }}
                 transition={{
-                  duration: 1.5,
+                  duration: 2.5,
                   repeat: Infinity,
                   ease: "easeOut",
-                  delay: 1.0,
+                  delay: 1.6,
                 }}
               />
 
-              <div className="border-white rounded-full border p-0.5 group-hover:p-1.5  aspect-square z-9999  flex justify-center items-center duration-200 cursor-pointer">
-                <div className="bg-white rounded-full w-1  aspect-square group-hover:scale-110"></div>
-              </div>
+              <motion.div className="bg-white border-2 border-white rounded-full w-2 aspect-square flex justify-center items-center relative">
+                <div
+                  style={{
+                    // background: productPageOn ? "black" : "#FF0000",
+                    // scale: productPageOn ? 150 : 1,
+                    transition: "all 1s ease-in-out",
+                  }}
+                  onClick={(e) => {
+                    if (productPageOn) {
+                      e.stopPropagation();
+                      setProductPageOn(false);
+                    }
+                  }}
+                  className="rounded-full w-4 aspect-square"
+                ></div>
+              </motion.div>
             </motion.div>
-
             <motion.div
               onClick={() => {
                 setFounder(1);
               }}
+              whileHover={{ scale: 1.15 }}
+              whileTap={{ scale: 0.95 }}
               className="border-white rounded-full border p-0.5 group-hover:p-1.5 aspect-square fixed top-[65%] left-[45%] z-9999  flex justify-center items-center cursor-pointer hover:scale-110 transition-transform group max-md:top-[70%] max-md:left-[40%]"
-              animate={{
-                scale: [1, 1.15, 1],
-              }}
-              transition={{
-                duration: 2,
-                repeat: Infinity,
-                ease: "easeInOut",
-                delay: 0.3,
-              }}
             >
-              {/* Pulsing Ripple animations */}
+              {/* Subtle Ripple animations - increased opacity and slower */}
               <motion.div
-                className="absolute inset-0 border-white border-2 rounded-full"
-                initial={{ scale: 1, opacity: 0.8 }}
-                animate={{ scale: 2.5, opacity: 0 }}
+                className="absolute inset-0 border-white border rounded-full"
+                initial={{ scale: 1, opacity: 0 }}
+                animate={{ scale: 2.5, opacity: [0, 0.25, 0] }}
                 transition={{
-                  duration: 1.5,
+                  duration: 2.5,
                   repeat: Infinity,
                   ease: "easeOut",
                 }}
               />
               <motion.div
-                className="absolute inset-0 border-white border-2 rounded-full"
-                initial={{ scale: 1, opacity: 0.8 }}
-                animate={{ scale: 2.5, opacity: 0 }}
+                className="absolute inset-0 border-white border rounded-full"
+                initial={{ scale: 1, opacity: 0 }}
+                animate={{ scale: 2.5, opacity: [0, 0.25, 0] }}
                 transition={{
-                  duration: 1.5,
+                  duration: 2.5,
                   repeat: Infinity,
                   ease: "easeOut",
-                  delay: 0.5,
+                  delay: 0.8,
                 }}
               />
               <motion.div
-                className="absolute inset-0 border-white border-2 rounded-full"
-                initial={{ scale: 1, opacity: 0.8 }}
-                animate={{ scale: 2.5, opacity: 0 }}
+                className="absolute inset-0 borderwhite border rounded-full"
+                initial={{ scale: 1, opacity: 0 }}
+                animate={{ scale: 2.5, opacity: [0, 0.25, 0] }}
                 transition={{
-                  duration: 1.5,
+                  duration: 2.5,
                   repeat: Infinity,
                   ease: "easeOut",
-                  delay: 1.0,
+                  delay: 1.6,
                 }}
               />
 
-              <div className="border-white rounded-full border p-0.5 group-hover:p-1.5  aspect-square z-9999  flex justify-center items-center duration-200 cursor-pointer">
-                <div className="bg-white rounded-full w-1  aspect-square group-hover:scale-110"></div>
-              </div>
+              <motion.div className="bg-white border-2 border-white rounded-full w-2 aspect-square flex justify-center items-center relative">
+                <div
+                  style={{
+                    // background: productPageOn ? "black" : "#FF0000",
+                    // scale: productPageOn ? 150 : 1,
+                    transition: "all 1s ease-in-out",
+                  }}
+                  onClick={(e) => {
+                    if (productPageOn) {
+                      e.stopPropagation();
+                      setProductPageOn(false);
+                    }
+                  }}
+                  className="rounded-full w-4 aspect-square"
+                ></div>
+              </motion.div>
             </motion.div>
             <motion.div
               onClick={() => {
-                setFounder(2);
+                setFounder(1);
               }}
+              whileHover={{ scale: 1.15 }}
+              whileTap={{ scale: 0.95 }}
               className="border-white rounded-full border p-0.5 group-hover:p-1.5 aspect-square fixed top-[45%] right-[30%] z-9999  flex justify-center items-center cursor-pointer hover:scale-110 transition-transform group max-md:top-[50%] max-md:right-[15%]"
-              animate={{
-                scale: [1, 1.15, 1],
-              }}
-              transition={{
-                duration: 2,
-                repeat: Infinity,
-                ease: "easeInOut",
-                delay: 0.6,
-              }}
             >
-              {/* Pulsing Ripple animations */}
+              {/* Subtle Ripple animations - increased opacity and slower */}
               <motion.div
-                className="absolute inset-0 border-white border-2 rounded-full"
-                initial={{ scale: 1, opacity: 0.8 }}
-                animate={{ scale: 2.5, opacity: 0 }}
+                className="absolute inset-0 border-white border rounded-full"
+                initial={{ scale: 1, opacity: 0 }}
+                animate={{ scale: 2.5, opacity: [0, 0.25, 0] }}
                 transition={{
-                  duration: 1.5,
+                  duration: 2.5,
                   repeat: Infinity,
                   ease: "easeOut",
                 }}
               />
               <motion.div
-                className="absolute inset-0 border-white border-2 rounded-full"
-                initial={{ scale: 1, opacity: 0.8 }}
-                animate={{ scale: 2.5, opacity: 0 }}
+                className="absolute inset-0 border-white border rounded-full"
+                initial={{ scale: 1, opacity: 0 }}
+                animate={{ scale: 2.5, opacity: [0, 0.25, 0] }}
                 transition={{
-                  duration: 1.5,
+                  duration: 2.5,
                   repeat: Infinity,
                   ease: "easeOut",
-                  delay: 0.5,
+                  delay: 0.8,
                 }}
               />
               <motion.div
-                className="absolute inset-0 border-white border-2 rounded-full"
-                initial={{ scale: 1, opacity: 0.8 }}
-                animate={{ scale: 2.5, opacity: 0 }}
+                className="absolute inset-0 borderwhite border rounded-full"
+                initial={{ scale: 1, opacity: 0 }}
+                animate={{ scale: 2.5, opacity: [0, 0.25, 0] }}
                 transition={{
-                  duration: 1.5,
+                  duration: 2.5,
                   repeat: Infinity,
                   ease: "easeOut",
-                  delay: 1.0,
+                  delay: 1.6,
                 }}
               />
 
-              <div className="border-white rounded-full border p-0.5 group-hover:p-1.5  aspect-square z-9999  flex justify-center items-center duration-200 cursor-pointer">
-                <div className="bg-white rounded-full w-1  aspect-square group-hover:scale-110"></div>
-              </div>
+              <motion.div className="bg-white border-2 border-white rounded-full w-2 aspect-square flex justify-center items-center relative">
+                <div
+                  style={{
+                    // background: productPageOn ? "black" : "#FF0000",
+                    // scale: productPageOn ? 150 : 1,
+                    transition: "all 1s ease-in-out",
+                  }}
+                  onClick={(e) => {
+                    if (productPageOn) {
+                      e.stopPropagation();
+                      setProductPageOn(false);
+                    }
+                  }}
+                  className="rounded-full w-4 aspect-square"
+                ></div>
+              </motion.div>
             </motion.div>
           </>
         )}
@@ -960,10 +979,25 @@ export default function StopMotion() {
               visibility: parseInt(currentImage) > 457 ? "visible" : "hidden",
             }}
           >
-            <div className="absolute top-0 px-16 p-10 z-999999999 text-white text-xl max-md:px-3 ">
+            <div className="absolute top-0 px-16 p-10 z-999999999 text-white text-xl max-md:px-3 space-y-3">
               <img src="/logo-new.png" className="w-16" alt="" />
             </div>
-            <div className="absolute top-0 right-0 px-16 p-10 z-9 text-white max-md:px-3 z-99999999">
+
+            <div className="absolute top-0 right-0 px-16 p-10 z-9 text-white max-md:px-3 z-99999999 max-md:py-18">
+              {played && (
+                <div className="w-full max-md:w-full md:w-auto hidden max-md:block group relative">
+                  <button
+                    onClick={() => {
+                      setAnnounce(true);
+                    }}
+                    className="border border-white/50 flex justify-center items-center gap-2 text-white p-3 rounded-full  duration-200 cursor-pointer hover:bg-red-800 hover:text-white hover:border-red-900 text-sm ready max-md:text-xs"
+                  >
+                    <div className="absolute w-full h-full bg-black/80 rounded-full group-hover:opacity-0 duration-300 pointer-events-none "></div>
+                    <p className="z-9">eNO’s announcement</p>{" "}
+                    <ArrowUpRight className="z-9"></ArrowUpRight>
+                  </button>
+                </div>
+              )}
               {!played && (
                 <button
                   onClick={() => {
@@ -1013,7 +1047,7 @@ export default function StopMotion() {
                 className="bg-linear-to-b from-transparent to-black h-96 max-md:h-auto min-h-[200px] w-full absolute z-999999999999999 bottom-0 flex flex-col max-md:flex-col md:flex-row justify-between items-end max-md:items-end p-8 max-md:p-6 max-md:pb-8 md:p-16 gap-6 max-md:gap-0 "
               >
                 <div className="space-y-4 max-md:space-y-3 w-full max-md:w-full md:w-auto">
-                  <div className="text-white text-2xl max-md:text-xl md:text-4xl font-light max-md:text-center ">
+                  <div className="text-white text-2xl max-md:text-3xl md:text-4xl font-light max-md:text-center ">
                     your mini AI bodyguard
                   </div>
                   <motion.div
@@ -1051,11 +1085,11 @@ export default function StopMotion() {
                       transition={{
                         delay: 0.5,
                       }}
-                      className="relative pre-order-container w-48 block max-md:w-full "
+                      className="relative pre-order-container w-48 max-md:w-2/3 block max-md:max-w-3xl max-md:mx-auto"
                     >
                       <div className="pre-order-hover"></div>
                       <div className="pre-order-outside p-4  w-full h-full"></div>
-                      <div className="border-2 border-red-600 pre-order-inside p-4  w-full h-full text-center text-white lowercase">
+                      <div className="border-2 border-red-600 pre-order-inside p-4  w-full h-full text-center text-white lowercase ">
                         Join Waitlist
                       </div>
                     </motion.div>
@@ -1070,9 +1104,7 @@ export default function StopMotion() {
                     className="border border-white/50 flex justify-center items-center gap-2 text-white p-3 rounded-full  duration-200 cursor-pointer hover:bg-red-800 hover:text-white hover:border-red-900 text-sm ready "
                   >
                     <div className="absolute w-full h-full bg-black/80 rounded-full group-hover:opacity-0 duration-300 pointer-events-none"></div>
-                    <p className="z-9">
-                      eNO is ready to announce the next step
-                    </p>{" "}
+                    <p className="z-9">eNO’s announcement</p>{" "}
                     <ArrowUpRight className="z-9"></ArrowUpRight>
                   </button>
                 </div>
@@ -1761,10 +1793,10 @@ export default function StopMotion() {
                     }}
                     className="h-screen w-full bg-black/70 absolute top-0 left-0 flex justify-center items-center flex-col z-99999999999999"
                   >
-                    <p className="gradient-text font-semibold text-5xl">
+                    <p className="gradient-text font-semibold text-5xl max-md:text-xl">
                       built for real-life moments
                     </p>
-                    <p className="text-white">
+                    <p className="text-white max-md:text-center">
                       eNO is more than just a product, it’s here to redefine the
                       culture of safety{" "}
                     </p>
@@ -1775,60 +1807,62 @@ export default function StopMotion() {
                       <Instagram className="my-6"></Instagram>
                     </a>
                   </motion.div>
-                  <motion.img
-                    className="max-md:h-1/3 object-cover"
-                    initial={{
-                      opacity: 0,
-                    }}
-                    animate={{
-                      opacity: 1,
-                    }}
-                    exit={{
-                      opacity: 0,
-                    }}
-                    transition={{
-                      duration: 0.8,
-                      delay: 0.2,
-                    }}
-                    src="/pp1.webp"
-                    alt=""
-                  />
-                  <motion.img
-                    className="max-md:h-1/3 object-cover"
-                    initial={{
-                      opacity: 0,
-                    }}
-                    animate={{
-                      opacity: 1,
-                    }}
-                    exit={{
-                      opacity: 0,
-                    }}
-                    transition={{
-                      duration: 0.8,
-                      delay: 0.4,
-                    }}
-                    src="/pp2.webp"
-                    alt=""
-                  />
-                  <motion.img
-                    className="max-md:h-1/3 object-cover"
-                    initial={{
-                      opacity: 0,
-                    }}
-                    animate={{
-                      opacity: 1,
-                    }}
-                    exit={{
-                      opacity: 0,
-                    }}
-                    transition={{
-                      duration: 0.8,
-                      delay: 0.6,
-                    }}
-                    src="/pp3.webp"
-                    alt=""
-                  />
+                  <div className="grid grid-cols-3 justify-items-center content-center max-md:flex max-md:flex-col max-md:h-screen">
+                    <motion.img
+                      className=" object-cover max-md:h-1/3"
+                      initial={{
+                        opacity: 0,
+                      }}
+                      animate={{
+                        opacity: 1,
+                      }}
+                      exit={{
+                        opacity: 0,
+                      }}
+                      transition={{
+                        duration: 0.8,
+                        delay: 0.2,
+                      }}
+                      src="/pp1.webp"
+                      alt=""
+                    />
+                    <motion.img
+                      className=" object-cover max-md:h-1/3"
+                      initial={{
+                        opacity: 0,
+                      }}
+                      animate={{
+                        opacity: 1,
+                      }}
+                      exit={{
+                        opacity: 0,
+                      }}
+                      transition={{
+                        duration: 0.8,
+                        delay: 0.4,
+                      }}
+                      src="/pp2.webp"
+                      alt=""
+                    />
+                    <motion.img
+                      className=" object-cover max-md:h-1/3"
+                      initial={{
+                        opacity: 0,
+                      }}
+                      animate={{
+                        opacity: 1,
+                      }}
+                      exit={{
+                        opacity: 0,
+                      }}
+                      transition={{
+                        duration: 0.8,
+                        delay: 0.6,
+                      }}
+                      src="/pp3.webp"
+                      alt=""
+                    />
+                  </div>
                 </div>
               )}
             </AnimatePresence>
@@ -1865,7 +1899,15 @@ export default function StopMotion() {
 
               {/* Article content */}
 
-              <article className="px-8 py-12 md:px-16 md:py-16 text-black space-y-6 clear-both bg-white ">
+              <article className="px-8 pb-12 md:px-16 md:pb-16 text-black space-y-6 clear-both bg-white ">
+                <video
+                  className="rounded-lg"
+                  // playsInline
+                  // autoplay
+                  // muted
+                  controls
+                  src="https://res.cloudinary.com/dyi7gdcpj/video/upload/v1764577052/TRAILER_V3_1_fwcfhx.mp4"
+                ></video>
                 <h1 className="text-3xl md:text-5xl font-bold">
                   eNOugh Raises £2.7M to Build a Mini AI Bodyguard Helping
                   People Get Home Safely
