@@ -554,9 +554,9 @@ export default function StopMotion() {
       ref={containerRef}
       className="bg-black relative"
       style={{
-        minHeight: productPageOn ? "1000vh" : backToHome ? "100vh" : "400vh",
-        maxHeight: backToHome ? "100vh" : "inherit",
-        height: backToHome ? "100vh" : "inherit",
+        minHeight: productPageOn ? "1000svh" : backToHome ? "100svh" : "400svh",
+        maxHeight: backToHome ? "100svh" : "inherit",
+        height: backToHome ? "100svh" : "inherit",
         overflow: backToHome ? "hidden" : "scroll",
       }}
     >
@@ -1883,7 +1883,7 @@ export default function StopMotion() {
               animate={{ opacity: 1, scale: 1, y: 0 }}
               exit={{ opacity: 0, scale: 0.95, y: 20 }}
               transition={{ delay: 0.1 }}
-              className="bg-white border border-red-500/30 rounded-2xl max-w-4xl w-full max-h-[90vh] overflow-y-auto shadow-2xl"
+              className="bg-white border border-red-500/30 rounded-2xl max-w-4xl w-full max-h-[90svh] overflow-y-auto shadow-2xl"
               onClick={(e) => e.stopPropagation()}
             >
               {/* Close button */}
