@@ -989,7 +989,7 @@ export default function StopMotion() {
                     }}
                     className="border border-white/50 flex justify-center items-center gap-2 text-white p-3 rounded-full  duration-200 cursor-pointer hover:bg-red-800 hover:text-white hover:border-red-900 text-sm ready max-md:text-xs"
                   >
-                    <div className="absolute w-full h-full bg-black/80 rounded-full group-hover:opacity-0 duration-300 pointer-events-none "></div>
+                    <div className="absolute w-full h-full bg-black/60 rounded-full group-hover:opacity-0 duration-300 pointer-events-none "></div>
                     <p className="z-9">eNO’s announcement</p>{" "}
                     <ArrowUpRight className="z-9"></ArrowUpRight>
                   </button>
