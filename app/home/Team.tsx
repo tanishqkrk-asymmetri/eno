@@ -101,7 +101,7 @@ export default function FoundersCarousel({ founder }: { founder: number }) {
   const currentFounder = founders[currentIndex % founders.length];
 
   return (
-    <div className="min-h-screen bg-black text-white flex flex-col items-center justify-start  py-20 sm:py-12 overflow-hidden relative">
+    <div className="min-h-svh bg-black text-white flex flex-col items-center justify-start  py-16 sm:py-12 overflow-hidden relative">
       <style>{`
         .splide__arrow {
   background: rgba(55, 65, 81, 0.9);
@@ -206,7 +206,7 @@ export default function FoundersCarousel({ founder }: { founder: number }) {
       </div>
 
       {/* Founder Details */}
-      <div className="text-center max-w-2xl px-4 sm:px-6 space-y-4 sm:space-y-5 md:space-y-6 mt-10">
+      <div className="text-center max-w-2xl px-4 sm:px-6 space-y-4 sm:space-y-5 md:space-y-6 ">
         <div className="space-y-2 sm:space-y-3">
           <h1 className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-bold text-red-600 leading-tight gradient-text">
             {currentFounder.name}
