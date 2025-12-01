@@ -973,9 +973,12 @@ export default function StopMotion() {
                   : "hidden",
             }}
           >
-            <div className="absolute top-0 px-16 p-10 z-999999999 text-white text-xl max-md:px-3 space-y-3">
+            <a
+              href="/"
+              className="absolute top-0 px-16 p-10 z-999999999 text-white text-xl max-md:px-3 space-y-3"
+            >
               <img src="/logo-new.png" className="w-16" alt="" />
-            </div>
+            </a>
 
             <div className="absolute top-0 right-0 px-16 p-10 z-9 text-white max-md:px-3 z-99999999 max-md:py-18">
               {played && (
@@ -2304,7 +2307,12 @@ export default function StopMotion() {
 
                 <div className="border-2 border-red-600   h-full text-center text-black bg-white  w-fit rounded-full cursor-pointer hover:shadow-2xl hover:shadow-red-800 duration-200  lowercase relative pre-order-container">
                   <div className="pre-order-outside2 p-4  w-full h-full rounded-full z-9"></div>
-                  <div className="bg-white z-9999999999999 relative h-full w-full rounded-full p-4 font-bold">
+                  <div
+                    onClick={() => {
+                      setShowWaitlist(true);
+                    }}
+                    className="bg-white z-9999999999999 relative h-full w-full rounded-full p-4 font-bold"
+                  >
                     Join the Waitlist
                   </div>
                 </div>

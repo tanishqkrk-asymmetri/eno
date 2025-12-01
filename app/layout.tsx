@@ -18,8 +18,9 @@ export const metadata: Metadata = {
   description:
     "the world’s first mini AI bodyguard that uses real-time AI intelligence to autonomously detect and respond to real-world threats without relying on human reaction during danger",
   openGraph: {
-    title: "eNO Badge",
-    description: "",
+    title: "eNO - you mini AI bodyguard",
+    description:
+      "the world’s first mini AI bodyguard that uses real-time AI intelligence to autonomously detect and respond to real-world threats without relying on human reaction during danger",
     images: [
       {
         url: "/endframe.webp",
