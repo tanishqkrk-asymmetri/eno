@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useState } from "react";
-import { Linkedin, Instagram, Twitter } from "lucide-react";
+import { Linkedin, Instagram, Twitter, ArrowUpRight } from "lucide-react";
 // @ts-ignore - Type definitions issue with package exports
 import { Splide, SplideSlide } from "@splidejs/react-splide";
 import "@splidejs/react-splide/css";
@@ -45,11 +45,29 @@ const founders = [
 const getSocialIcon = (platform: string) => {
   switch (platform) {
     case "instagram":
-      return <Instagram className="w-5 h-5" />;
+      return (
+        <div className="underline rounded-full   text-center flex justify-center items-center gap-2">
+          <ArrowUpRight className="w-5 h-5" /> wanna see the behind the scenes
+          of building a start-up
+        </div>
+      );
+    // return <Instagram className="w-5 h-5" />;
     case "x":
-      return <img src="/x.svg" alt="" />;
+      return (
+        <div className="underline rounded-full   text-center flex justify-center items-center gap-2">
+          <ArrowUpRight className="w-5 h-5" />
+          curious to know his thoughts on latest on AI and emerging tech
+        </div>
+      );
+    // return <img src="/x.svg" alt="" />;
     default:
-      return <img className="w-4" src="/substack.svg" alt="" />;
+      return (
+        <div className="underline rounded-full   text-center flex justify-center items-center gap-2">
+          <ArrowUpRight className="w-5 h-5" />
+          read about his personal insights from the hardware journey
+        </div>
+      );
+    // return <img className="w-4" src="/substack.svg" alt="" />;
   }
 };
 
@@ -83,7 +101,7 @@ export default function FoundersCarousel({ founder }: { founder: number }) {
   const currentFounder = founders[currentIndex % founders.length];
 
   return (
-    <div className="min-h-screen bg-black text-white flex flex-col items-center justify-start  py-8 sm:py-12 overflow-hidden relative">
+    <div className="min-h-screen bg-black text-white flex flex-col items-center justify-start  py-20 sm:py-12 overflow-hidden relative">
       <style>{`
         .splide__arrow {
   background: rgba(55, 65, 81, 0.9);
@@ -137,11 +155,13 @@ export default function FoundersCarousel({ founder }: { founder: number }) {
   display: flex;
   justify-content: center;
   align-items: center;
+  filter: grayscale(1) !important
 }
 
 .splide__slide.is-active {
   opacity: 1;
   z-index: 10;
+  filter: grayscale(0) !important
 }
 
 @media (max-width: 768px) {
@@ -186,35 +206,37 @@ export default function FoundersCarousel({ founder }: { founder: number }) {
       </div>
 
       {/* Founder Details */}
-      <div className="text-center max-w-2xl px-4 sm:px-6 space-y-4 sm:space-y-5 md:space-y-6">
+      <div className="text-center max-w-2xl px-4 sm:px-6 space-y-4 sm:space-y-5 md:space-y-6 mt-10">
         <div className="space-y-2 sm:space-y-3">
-          <h1 className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-bold text-red-600 leading-tight">
+          <h1 className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-bold text-red-600 leading-tight gradient-text">
             {currentFounder.name}
           </h1>
-          <div className="space-y-1">
+          <div className="gap-2 items-center justify-center flex flex-col">
             <p className="text-xl sm:text-2xl md:text-3xl text-gray-200 font-medium">
               {currentFounder.title}
             </p>
-            <p className="text-base sm:text-lg md:text-xl text-gray-400">
+            <a
+              href={currentFounder.linkedin}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="text-gray-300 hover:text-white transition-all duration-300 hover:scale-105 group flex gap-3 items-center underline"
+            >
+              <div className="flex">
+                <Linkedin className="w-5 h-5 group-hover:text-red-500 transition-colors" />
+                {/* <ArrowUpRight size={16} className="-mr-3"></ArrowUpRight> */}
+              </div>
+            </a>
+            {/* <p className="text-base sm:text-lg md:text-xl text-gray-400">
               {currentFounder.subtitle}
-            </p>
+            </p> */}
           </div>
         </div>
 
-        <p className="text-sm sm:text-base md:text-lg text-gray-400 max-w-lg mx-auto leading-relaxed px-4">
+        {/* <p className="text-sm sm:text-base md:text-lg text-gray-400 max-w-lg mx-auto leading-relaxed px-4">
           {currentFounder.description}
-        </p>
+        </p> */}
 
-        <div className="flex flex-row items-center justify-center gap-6 pt-2">
-          <a
-            href={currentFounder.linkedin}
-            target="_blank"
-            rel="noopener noreferrer"
-            className="text-gray-300 hover:text-white transition-all duration-300 hover:scale-105 group"
-          >
-            <Linkedin className="w-5 h-5 group-hover:text-red-500 transition-colors" />
-          </a>
-
+        <div className="flex flex-col items-center justify-center gap-6 pt-2">
           <a
             href={currentFounder.substack}
             target="_blank"
