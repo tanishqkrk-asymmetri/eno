@@ -316,18 +316,12 @@ export default function StopMotion() {
 
   useEffect(() => {
     if (!isLoaded) return;
-    if (backToHome) {
-      console.log("ungaungaungaun");
-      return;
-      setTimeout(() => {
-        document.querySelector("#bottom-new")?.scrollIntoView({
-          behavior: "instant",
-        });
-      }, 0);
-    }
-
+    if (productPageOn) return; // Don't run if product page is open
     let isAutoScrolling = true;
+    let isPaused = false;
     let startTime: number | null = null;
+    let pausedTime: number = 0;
+    let pauseStartTime: number | null = null;
     let animationFrameId: number;
     let userHasScrolled = false;
     let isScrollingProgrammatically = false;
@@ -335,9 +329,16 @@ export default function StopMotion() {
     const autoScroll = (timestamp: number) => {
       if (!isAutoScrolling || userHasScrolled) return;
 
+      // If paused, don't update scroll but keep the animation frame going
+      if (isPaused) {
+        animationFrameId = requestAnimationFrame(autoScroll);
+        return;
+      }
+
       if (!startTime) startTime = timestamp;
-      const elapsed = timestamp - startTime;
-      const progress = Math.min(elapsed / 5000, 1);
+      const elapsed = timestamp - startTime - pausedTime;
+      const progress = Math.min(elapsed / 10000, 1);
+      // const progress = Math.min(elapsed / 5000, 1);
 
       const maxScroll =
         document.documentElement.scrollHeight - window.innerHeight;
@@ -367,13 +368,45 @@ export default function StopMotion() {
       if (isAutoScrolling) {
         userHasScrolled = true;
         isAutoScrolling = false;
+        isPaused = false;
         cancelAnimationFrame(animationFrameId);
         console.log("User took control");
       }
     };
 
+    // Handle click to pause/play
+    const handleClick = (e: MouseEvent) => {
+      // Ignore if we're scrolling programmatically or if clicking on interactive elements
+      if (isScrollingProgrammatically) return;
+
+      const target = e.target as HTMLElement;
+      // Don't toggle if clicking on buttons, links, or interactive elements
+      if (
+        target.closest('button, a, input, select, textarea, [role="button"]')
+      ) {
+        return;
+      }
+
+      if (isAutoScrolling && !userHasScrolled) {
+        isPaused = !isPaused;
+        console.log(isPaused ? "Paused" : "Playing");
+
+        if (isPaused) {
+          // Record when we paused
+          pauseStartTime = performance.now();
+        } else {
+          // Resume - add the paused duration to total pausedTime
+          if (pauseStartTime !== null) {
+            pausedTime += performance.now() - pauseStartTime;
+            pauseStartTime = null;
+          }
+        }
+      }
+    };
+
     // Listen for user scroll events
     window.addEventListener("wheel", handleUserScroll, { passive: true });
+    window.addEventListener("click", handleClick, { passive: true });
     window.addEventListener("touchstart", handleUserScroll, { passive: true });
     window.addEventListener("touchmove", handleUserScroll, { passive: true });
     window.addEventListener("keydown", (e) => {
@@ -404,11 +437,11 @@ export default function StopMotion() {
       cancelAnimationFrame(animationFrameId);
       window.removeEventListener("wheel", handleUserScroll);
       window.removeEventListener("touchstart", handleUserScroll);
+      window.removeEventListener("click", handleClick);
       window.removeEventListener("touchmove", handleUserScroll);
     };
-  }, [isLoaded, backToHome]);
+  }, [isLoaded, backToHome, productPageOn]);
 
-  // Second animation
   useEffect(() => {
     if (!isLoaded) return;
 
@@ -423,7 +456,7 @@ export default function StopMotion() {
 
       if (!startTime) startTime = timestamp;
       const elapsed = timestamp - startTime;
-      const progress = Math.min(elapsed / 5000, 1);
+      const progress = Math.min(elapsed / 20000, 1);
 
       const maxScroll =
         document.documentElement.scrollHeight - window.innerHeight;
@@ -578,7 +611,10 @@ export default function StopMotion() {
 
       {images && isLoaded && (
         <img
-          className="fixed top-0 h-screen object-cover w-screen "
+          className={`fixed top-0 h-screen object-cover   duration-200   md:w-screen  /${
+            currentImage > "420" && "max-md:translate-x-10 max-md:w-[150vw]"
+          }
+          `}
           src={`/miniframe/frame${currentImage}.webp`}
           alt=""
         />
