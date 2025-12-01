@@ -12,7 +12,13 @@ import { useEffect, useMemo, useRef, useState } from "react";
 import FoundersCarousel from "./Team";
 import Image from "next/image";
 import ENOughLanding from "./Launch";
-import { ArrowUpRight, ChevronLeft, ChevronRight, X } from "lucide-react";
+import {
+  ArrowUpRight,
+  ChevronLeft,
+  ChevronRight,
+  Instagram,
+  X,
+} from "lucide-react";
 
 // Founder data
 const founders = [
@@ -1428,6 +1434,38 @@ export default function StopMotion() {
 
             <AnimatePresence>
               {currentProductImage > "130" && currentImage < "230" && (
+                <motion.button
+                  onClick={() => {
+                    for (let i = 1; i < 100; i++) {
+                      setCurrentProductImage((org) => {
+                        return org + i;
+                      });
+                    }
+                  }}
+                  initial={{
+                    opacity: 0,
+                    y: "10%",
+                  }}
+                  exit={{
+                    opacity: 0,
+                    y: "10%",
+                  }}
+                  animate={{
+                    opacity: 1,
+                    y: "0%",
+                  }}
+                  transition={{
+                    delay: 0.1,
+                  }}
+                  className="fixed bottom-6 right-6 text-white broder-white border rounded-full z-9999999999999 hehe p-3 hover:scale-105 duration-300 cursor-pointer flex items-center hidden"
+                >
+                  Next <ChevronRight></ChevronRight>
+                </motion.button>
+              )}
+            </AnimatePresence>
+
+            <AnimatePresence>
+              {currentProductImage > "130" && currentImage < "230" && (
                 <motion.div className="fixed text-white top-1/3 space-y-6 left-16 z-9999999999 max-w-sm max-md:bottom-16 max-md:top-auto max-md:left-3 max-md:h-fit">
                   <motion.div
                     initial={{
@@ -1447,7 +1485,7 @@ export default function StopMotion() {
                     }}
                     className="text-3xl max-md:text-center"
                   >
-                    Introducing the eNO badge
+                    the eNO badge{" "}
                   </motion.div>
                   <motion.div
                     initial={{
@@ -1467,11 +1505,10 @@ export default function StopMotion() {
                     }}
                     className="text-white/80 max-md:text-center"
                   >
-                    Introducing the eNO badge, the world’s first mini AI
-                    bodyguard. Its powerful AI autonomously detects and responds
-                    to real-world threats, triggering protective features
-                    without relying on human reactions in high-stress situations
-                    of danger.{" "}
+                    the world’s first mini AI bodyguard that uses real-time AI
+                    intelligence to autonomously detect and respond to
+                    real-world threats without relying on human reaction during
+                    danger
                   </motion.div>
                   <motion.a
                     href="https://buy.stripe.com/bJe5kE87f0f36XX4WUbo404"
@@ -1522,7 +1559,7 @@ export default function StopMotion() {
                     }}
                     className="text-3xl max-md:text-center"
                   >
-                    Secure attachment, <br /> instant safety
+                    secure attachment, instant safety
                   </motion.div>
                   <motion.div
                     initial={{
@@ -1542,11 +1579,10 @@ export default function StopMotion() {
                     }}
                     className="text-white/80 max-md:text-center"
                   >
-                    eNO badge uses a dual attachment system and clips securely
-                    at chest level. It is not meant for all-day wear. It is used
-                    selectively, just like AirPods, in moments when you feel
-                    unsafe such as walking alone at night, commuting or
-                    travelling solo.
+                    the eNO badge uses a versatile mechanism to attach at chest
+                    level. It is meant to be worn only when you need it
+                    most…walking alone at night, commuting, or travelling solo.
+                    Not all day. Just when protection matters.
                   </motion.div>
                   <motion.a
                     href="https://buy.stripe.com/bJe5kE87f0f36XX4WUbo404"
@@ -1597,7 +1633,7 @@ export default function StopMotion() {
                     }}
                     className="text-3xl max-md:text-center"
                   >
-                    Instant Threat Response & Evidence Capture
+                    instant threat response & evidence capture
                   </motion.div>
                   <motion.div
                     initial={{
@@ -1619,9 +1655,9 @@ export default function StopMotion() {
                   >
                     eNO assesses the situation immediately and deploys the right
                     protective response, from de-escalation messages to
-                    immediate escalation to authorities. It captures and secures
-                    crucial real-time evidence throughout the event, addressing
-                    the biggest gap in personal safety today.
+                    immediate connection to authorities. It captures real-time
+                    evidence, addressing the biggest gap in personal safety
+                    today.
                   </motion.div>
                   <motion.a
                     href="https://buy.stripe.com/bJe5kE87f0f36XX4WUbo404"
@@ -1653,18 +1689,26 @@ export default function StopMotion() {
             </AnimatePresence>
             <AnimatePresence></AnimatePresence>
 
-            {productPageOn && (
-              <motion.div
-                style={{
-                  opacity: opacity2,
-                }}
-                className="text-white z-9999999 flex justify-center items-center w-full h-screen fixed text-3xl bg-black/60  max-md:text-xl "
-              >
-                <div className="gradient-text">
-                  introducing your AI safety companion
-                </div>
-              </motion.div>
-            )}
+            <AnimatePresence>
+              {parseInt(currentProductImage) < 20 && (
+                <motion.div
+                  initial={{
+                    opacity: 0,
+                  }}
+                  animate={{
+                    opacity: 1,
+                  }}
+                  exit={{
+                    opacity: 0,
+                  }}
+                  className="text-white z-9999999 flex justify-center items-center w-full h-screen fixed text-5xl font-bold bg-black/60  max-md:text-xl "
+                >
+                  <div className="gradient-text">
+                    introducing your AI safety companion
+                  </div>
+                </motion.div>
+              )}
+            </AnimatePresence>
 
             {images2 && isLoaded2 && (
               <img
@@ -1700,7 +1744,37 @@ export default function StopMotion() {
             </div>
             <AnimatePresence>
               {currentProductImage > "580" && (
-                <div className="flex fixed bottom-0 left-0 w-screen h-screen justify-between max-md:flex-col">
+                <div className="flex fixed bottom-0 left-0 w-screen h-screen justify-center max-md:flex-col">
+                  <motion.div
+                    initial={{
+                      opacity: 0,
+                    }}
+                    animate={{
+                      opacity: 1,
+                    }}
+                    exit={{
+                      opacity: 0,
+                    }}
+                    transition={{
+                      duration: 0.8,
+                      delay: 0.8,
+                    }}
+                    className="h-screen w-full bg-black/70 absolute top-0 left-0 flex justify-center items-center flex-col z-99999999999999"
+                  >
+                    <p className="gradient-text font-semibold text-5xl">
+                      built for real-life moments
+                    </p>
+                    <p className="text-white">
+                      eNO is more than just a product, it’s here to redefine the
+                      culture of safety{" "}
+                    </p>
+                    <a
+                      href="https://www.instagram.com/enough.badge?igsh=dnJnNzQxOXFyaTFv&utm_source=qr"
+                      className="cursor-pointer"
+                    >
+                      <Instagram className="my-6"></Instagram>
+                    </a>
+                  </motion.div>
                   <motion.img
                     className="max-md:h-1/3 object-cover"
                     initial={{
