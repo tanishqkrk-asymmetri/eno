@@ -1041,7 +1041,7 @@ export default function StopMotion() {
                 exit={{
                   opacity: 0,
                 }}
-                className="bg-linear-to-b from-transparent to-black h-96 max-md:h-auto min-h-[200px] w-full absolute z-999999999999999 bottom-0 flex flex-col max-md:flex-col md:flex-row justify-between items-end max-md:items-end p-8 max-md:p-6 max-md:pb-8 md:p-16 gap-6 max-md:gap-0 "
+                className="bg-linear-to-b from-transparent to-black h-96 max-md:h-auto min-h-[200px] w-full absolute z-999999999999999 bottom-0 flex flex-col max-md:flex-col md:flex-row justify-between items-end max-md:items-end p-8 max-md:p-6 max-md:pb-32 md:pb-16 gap-6 max-md:gap-0 "
               >
                 <div className="space-y-4 max-md:space-y-3 w-full max-md:w-full md:w-auto">
                   <div className="text-white text-2xl max-md:text-3xl md:text-4xl font-light max-md:text-center ">
