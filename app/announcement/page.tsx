@@ -215,7 +215,7 @@ export default function Announce() {
             bodyguard to empower people to get home safely.
           </h1>
 
-          <div className="flex gap-16">
+          <div className="flex gap-16 max-md:flex-col">
             <div>
               <img src="/teamimage.png" className="w-400" alt="" />
             </div>

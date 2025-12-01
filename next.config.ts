@@ -8,7 +8,7 @@ const nextConfig: NextConfig = {
     return [
       {
         source: "/",
-        destination: "/stopMotion",
+        destination: "/home",
         permanent: true,
       },
     ];
