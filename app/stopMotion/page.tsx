@@ -12,7 +12,7 @@ import { useEffect, useMemo, useRef, useState } from "react";
 import FoundersCarousel from "./Team";
 import Image from "next/image";
 import ENOughLanding from "./Launch";
-import { ChevronLeft, ChevronRight } from "lucide-react";
+import { ArrowUpRight, ChevronLeft, ChevronRight, X } from "lucide-react";
 
 // Founder data
 const founders = [
@@ -55,7 +55,7 @@ export default function StopMotion() {
   const containerRef = useRef<HTMLDivElement>(null);
 
   const [loading, setLoading] = useState(false);
-
+  const [backToHome, setBackToHome] = useState(false);
   const videoRef = useRef<HTMLVideoElement>(null);
   const videoRef3 = useRef<HTMLVideoElement>(null);
   const videoRef2 = useRef<HTMLVideoElement>(null);
@@ -65,7 +65,7 @@ export default function StopMotion() {
 
   const videoRefFrameA = useRef<HTMLVideoElement>(null);
 
-  console.log(videoRefFrameA.current?.currentTime);
+  // console.log(videoRefFrameA.current?.currentTime);
 
   const [showButtons, setShowButtons] = useState(false);
   const [founder, setFounder] = useState<null | number>(null);
@@ -102,6 +102,7 @@ export default function StopMotion() {
   });
 
   const opacity = useTransform(scrollYProgress, [0, 0.05], [1, 0]);
+  const opacity2 = useTransform(scrollYProgress, [0, 0.05], [1, 0]);
 
   // Animations 1 & 2 complete in first 25% of total scroll
   const leftXOutput = useMemo(
@@ -200,6 +201,58 @@ export default function StopMotion() {
   });
 
   useEffect(() => {
+    if (window) {
+      // Always scroll to top on mount, regardless of isLoaded
+      window.scrollTo(0, 0);
+      if (isLoaded) {
+        window.scrollTo(0, 0);
+      }
+    }
+  }, [isLoaded]);
+
+  // Reset videos and states on mount/refresh to start from beginning
+  useEffect(() => {
+    // Reset states to initial values
+    setCurrentImage("000");
+    setCurrentProductImage("000");
+    setPlayed(false);
+    setShowButtons(false);
+
+    const resetVideos = () => {
+      if (videoRef.current) {
+        videoRef.current.currentTime = 0;
+        videoRef.current.pause();
+        videoRef.current.load();
+      }
+      if (videoRef2.current) {
+        videoRef2.current.currentTime = 0;
+        videoRef2.current.pause();
+        videoRef2.current.load();
+      }
+      if (videoRef3.current) {
+        videoRef3.current.currentTime = 0;
+        videoRef3.current.pause();
+        videoRef3.current.load();
+      }
+    };
+
+    resetVideos();
+
+    // Also reset when user returns to tab
+    const handleVisibilityChange = () => {
+      if (document.visibilityState === "visible") {
+        resetVideos();
+      }
+    };
+
+    document.addEventListener("visibilitychange", handleVisibilityChange);
+
+    return () => {
+      document.removeEventListener("visibilitychange", handleVisibilityChange);
+    };
+  }, []);
+
+  useEffect(() => {
     const handleResize = () => {
       if (canvasRef.current) {
         canvasRef.current.width = window.innerWidth;
@@ -261,11 +314,199 @@ export default function StopMotion() {
     }
   }, [currentImage]);
 
-  console.log(currentProductImage);
+  useEffect(() => {
+    if (!isLoaded) return;
+    if (backToHome) {
+      console.log("ungaungaungaun");
+      return;
+      setTimeout(() => {
+        document.querySelector("#bottom-new")?.scrollIntoView({
+          behavior: "instant",
+        });
+      }, 0);
+    }
+
+    let isAutoScrolling = true;
+    let startTime: number | null = null;
+    let animationFrameId: number;
+    let userHasScrolled = false;
+    let isScrollingProgrammatically = false;
+
+    const autoScroll = (timestamp: number) => {
+      if (!isAutoScrolling || userHasScrolled) return;
+
+      if (!startTime) startTime = timestamp;
+      const elapsed = timestamp - startTime;
+      const progress = Math.min(elapsed / 5000, 1);
+
+      const maxScroll =
+        document.documentElement.scrollHeight - window.innerHeight;
+      const easeProgress =
+        progress < 0.5
+          ? 2 * progress * progress
+          : 1 - Math.pow(-2 * progress + 2, 2) / 2;
+
+      isScrollingProgrammatically = true;
+      window.scrollTo({ top: easeProgress * maxScroll, behavior: "auto" });
+
+      // Reset flag after a short delay
+      setTimeout(() => {
+        isScrollingProgrammatically = false;
+      }, 10);
+
+      if (progress < 1) {
+        animationFrameId = requestAnimationFrame(autoScroll);
+      }
+    };
+
+    // Detect user scroll and stop auto-scroll permanently
+    const handleUserScroll = () => {
+      // Ignore if we're scrolling programmatically
+      if (isScrollingProgrammatically) return;
+
+      if (isAutoScrolling) {
+        userHasScrolled = true;
+        isAutoScrolling = false;
+        cancelAnimationFrame(animationFrameId);
+        console.log("User took control");
+      }
+    };
+
+    // Listen for user scroll events
+    window.addEventListener("wheel", handleUserScroll, { passive: true });
+    window.addEventListener("touchstart", handleUserScroll, { passive: true });
+    window.addEventListener("touchmove", handleUserScroll, { passive: true });
+    window.addEventListener("keydown", (e) => {
+      // Detect arrow keys, space, page up/down
+      if (
+        [
+          "ArrowUp",
+          "ArrowDown",
+          "Space",
+          "PageUp",
+          "PageDown",
+          "Home",
+          "End",
+        ].includes(e.code)
+      ) {
+        handleUserScroll();
+      }
+    });
+
+    // Start auto-scroll after a short delay
+    const startDelay = setTimeout(() => {
+      animationFrameId = requestAnimationFrame(autoScroll);
+    }, 500);
+
+    // Cleanup
+    return () => {
+      clearTimeout(startDelay);
+      cancelAnimationFrame(animationFrameId);
+      window.removeEventListener("wheel", handleUserScroll);
+      window.removeEventListener("touchstart", handleUserScroll);
+      window.removeEventListener("touchmove", handleUserScroll);
+    };
+  }, [isLoaded, backToHome]);
+
+  // Second animation
+  useEffect(() => {
+    if (!isLoaded) return;
+
+    let isAutoScrolling = true;
+    let startTime: number | null = null;
+    let animationFrameId: number;
+    let userHasScrolled = false;
+    let isScrollingProgrammatically = false;
+
+    const autoScroll = (timestamp: number) => {
+      if (!isAutoScrolling || userHasScrolled) return;
+
+      if (!startTime) startTime = timestamp;
+      const elapsed = timestamp - startTime;
+      const progress = Math.min(elapsed / 5000, 1);
+
+      const maxScroll =
+        document.documentElement.scrollHeight - window.innerHeight;
+      const easeProgress =
+        progress < 0.5
+          ? 2 * progress * progress
+          : 1 - Math.pow(-2 * progress + 2, 2) / 2;
+
+      isScrollingProgrammatically = true;
+      window.scrollTo({ top: easeProgress * maxScroll, behavior: "auto" });
+
+      // Reset flag after a short delay
+      setTimeout(() => {
+        isScrollingProgrammatically = false;
+      }, 10);
+
+      if (progress < 1) {
+        animationFrameId = requestAnimationFrame(autoScroll);
+      }
+    };
+
+    // Detect user scroll and stop auto-scroll permanently
+    const handleUserScroll = () => {
+      // Ignore if we're scrolling programmatically
+      if (isScrollingProgrammatically) return;
+
+      if (isAutoScrolling) {
+        userHasScrolled = true;
+        isAutoScrolling = false;
+        cancelAnimationFrame(animationFrameId);
+        console.log("User took control");
+      }
+    };
+
+    // Listen for user scroll events
+    window.addEventListener("wheel", handleUserScroll, { passive: true });
+    window.addEventListener("touchstart", handleUserScroll, { passive: true });
+    window.addEventListener("touchmove", handleUserScroll, { passive: true });
+    window.addEventListener("keydown", (e) => {
+      // Detect arrow keys, space, page up/down
+      if (
+        [
+          "ArrowUp",
+          "ArrowDown",
+          "Space",
+          "PageUp",
+          "PageDown",
+          "Home",
+          "End",
+        ].includes(e.code)
+      ) {
+        handleUserScroll();
+      }
+    });
+
+    // Start auto-scroll after a short delay
+    const startDelay = setTimeout(() => {
+      animationFrameId = requestAnimationFrame(autoScroll);
+    }, 500);
+
+    // Cleanup
+    return () => {
+      clearTimeout(startDelay);
+      cancelAnimationFrame(animationFrameId);
+      window.removeEventListener("wheel", handleUserScroll);
+      window.removeEventListener("touchstart", handleUserScroll);
+      window.removeEventListener("touchmove", handleUserScroll);
+    };
+  }, [productPageOn]);
 
   useEffect(() => {
     if (loadProgress === 100) {
       document.body.style.overflow = "scroll";
+      // setTimeout(() => {
+      //   // window.scrollTo({
+      //   //   top: document.body.getBoundingClientRect().bottom,
+      //   //   left: 0,
+      //   //   behavior: "smooth",
+      //   // });
+      //   document.querySelector("#bottom-new")?.scrollIntoView({
+      //     behavior: "smooth",
+      //   });
+      // }, 0);
     } else {
       document.body.style.overflow = "hidden";
     }
@@ -274,7 +515,7 @@ export default function StopMotion() {
   return (
     <div
       ref={containerRef}
-      className="bg-black "
+      className="bg-black relative"
       style={{
         minHeight: productPageOn ? "1000vh" : "400vh",
       }}
@@ -419,7 +660,7 @@ export default function StopMotion() {
               }}
               whileHover={{ scale: 1.15 }}
               whileTap={{ scale: 0.95 }}
-              className="bg-red-500/20 rounded-full w-10 aspect-square fixed    top-[45%] left-[52%] flex justify-center items-center cursor-pointer duration-200 z-999999 max-md:left-[46%] max-md:top-[50%]"
+              className="bg-red-500/20 rounded-full w-10 aspect-square fixed    top-[50%] left-[52%] flex justify-center items-center cursor-pointer duration-200 z-999999 max-md:left-[46%] max-md:top-[50%]"
             >
               {/* Subtle Ripple animations - increased opacity and slower */}
               <motion.div
@@ -455,7 +696,7 @@ export default function StopMotion() {
                 }}
               />
 
-              <motion.div className="bg-red-500 rounded-full w-6 aspect-square flex justify-center items-center relative">
+              <motion.div className="bg-red-800 border-2 border-red-500 rounded-full w-6 aspect-square flex justify-center items-center relative">
                 <div
                   style={{
                     // background: productPageOn ? "black" : "#FF0000",
@@ -472,106 +713,165 @@ export default function StopMotion() {
                 ></div>
               </motion.div>
             </motion.div>
-            <div
+            <motion.div
               onClick={() => {
                 setFounder(0);
               }}
-              className="border-white rounded-full border p-0.5 group-hover:p-1.5 aspect-square fixed top-[35%] left-[32%] max-md:top-[48%] max-md:left-[20%] z-9999  flex justify-center items-center cursor-pointer hover:scale-110 transition-transform group"
+              className="border-white rounded-full border p-0.5 group-hover:p-1.5 aspect-square fixed top-[43%] left-[32%] max-md:top-[48%] max-md:left-[20%] z-9999  flex justify-center items-center cursor-pointer hover:scale-110 transition-transform group"
+              animate={{
+                scale: [1, 1.15, 1],
+              }}
+              transition={{
+                duration: 2,
+                repeat: Infinity,
+                ease: "easeInOut",
+              }}
             >
-              {/* Subtle Ripple animations */}
+              {/* Pulsing Ripple animations */}
               <motion.div
-                className="absolute inset-0 border-white border rounded-full "
-                initial={{ scale: 1, opacity: 0.1 }}
-                animate={{ scale: 1.3, opacity: 0 }}
+                className="absolute inset-0 border-white border-2 rounded-full"
+                initial={{ scale: 1, opacity: 0.8 }}
+                animate={{ scale: 2.5, opacity: 0 }}
                 transition={{
-                  duration: 2,
+                  duration: 1.5,
                   repeat: Infinity,
                   ease: "easeOut",
                 }}
               />
               <motion.div
-                className="absolute inset-0 border-white border rounded-full opacity-10 duration-200"
-                initial={{ scale: 1, opacity: 0.1 }}
-                animate={{ scale: 1.3, opacity: 0 }}
+                className="absolute inset-0 border-white border-2 rounded-full"
+                initial={{ scale: 1, opacity: 0.8 }}
+                animate={{ scale: 2.5, opacity: 0 }}
                 transition={{
-                  duration: 2,
+                  duration: 1.5,
                   repeat: Infinity,
                   ease: "easeOut",
-                  delay: 0.7,
+                  delay: 0.5,
+                }}
+              />
+              <motion.div
+                className="absolute inset-0 border-white border-2 rounded-full"
+                initial={{ scale: 1, opacity: 0.8 }}
+                animate={{ scale: 2.5, opacity: 0 }}
+                transition={{
+                  duration: 1.5,
+                  repeat: Infinity,
+                  ease: "easeOut",
+                  delay: 1.0,
                 }}
               />
 
               <div className="border-white rounded-full border p-0.5 group-hover:p-1.5  aspect-square z-9999  flex justify-center items-center duration-200 cursor-pointer">
                 <div className="bg-white rounded-full w-1  aspect-square group-hover:scale-110"></div>
               </div>
-            </div>
+            </motion.div>
 
-            <div
+            <motion.div
               onClick={() => {
                 setFounder(1);
               }}
               className="border-white rounded-full border p-0.5 group-hover:p-1.5 aspect-square fixed top-[65%] left-[45%] z-9999  flex justify-center items-center cursor-pointer hover:scale-110 transition-transform group max-md:top-[70%] max-md:left-[40%]"
+              animate={{
+                scale: [1, 1.15, 1],
+              }}
+              transition={{
+                duration: 2,
+                repeat: Infinity,
+                ease: "easeInOut",
+                delay: 0.3,
+              }}
             >
-              {/* Subtle Ripple animations */}
+              {/* Pulsing Ripple animations */}
               <motion.div
-                className="absolute inset-0 border-white border rounded-full "
-                initial={{ scale: 1, opacity: 0.1 }}
-                animate={{ scale: 1.3, opacity: 0 }}
+                className="absolute inset-0 border-white border-2 rounded-full"
+                initial={{ scale: 1, opacity: 0.8 }}
+                animate={{ scale: 2.5, opacity: 0 }}
                 transition={{
-                  duration: 2,
+                  duration: 1.5,
                   repeat: Infinity,
                   ease: "easeOut",
                 }}
               />
               <motion.div
-                className="absolute inset-0 border-white border rounded-full opacity-10 duration-200"
-                initial={{ scale: 1, opacity: 0.1 }}
-                animate={{ scale: 1.3, opacity: 0 }}
+                className="absolute inset-0 border-white border-2 rounded-full"
+                initial={{ scale: 1, opacity: 0.8 }}
+                animate={{ scale: 2.5, opacity: 0 }}
                 transition={{
-                  duration: 2,
+                  duration: 1.5,
                   repeat: Infinity,
                   ease: "easeOut",
-                  delay: 0.7,
+                  delay: 0.5,
+                }}
+              />
+              <motion.div
+                className="absolute inset-0 border-white border-2 rounded-full"
+                initial={{ scale: 1, opacity: 0.8 }}
+                animate={{ scale: 2.5, opacity: 0 }}
+                transition={{
+                  duration: 1.5,
+                  repeat: Infinity,
+                  ease: "easeOut",
+                  delay: 1.0,
                 }}
               />
 
               <div className="border-white rounded-full border p-0.5 group-hover:p-1.5  aspect-square z-9999  flex justify-center items-center duration-200 cursor-pointer">
                 <div className="bg-white rounded-full w-1  aspect-square group-hover:scale-110"></div>
               </div>
-            </div>
-            <div
+            </motion.div>
+            <motion.div
               onClick={() => {
                 setFounder(2);
               }}
-              className="border-white rounded-full border p-0.5 group-hover:p-1.5 aspect-square fixed top-[35%] right-[30%] z-9999  flex justify-center items-center cursor-pointer hover:scale-110 transition-transform group max-md:top-[50%] max-md:right-[15%]"
+              className="border-white rounded-full border p-0.5 group-hover:p-1.5 aspect-square fixed top-[45%] right-[30%] z-9999  flex justify-center items-center cursor-pointer hover:scale-110 transition-transform group max-md:top-[50%] max-md:right-[15%]"
+              animate={{
+                scale: [1, 1.15, 1],
+              }}
+              transition={{
+                duration: 2,
+                repeat: Infinity,
+                ease: "easeInOut",
+                delay: 0.6,
+              }}
             >
-              {/* Subtle Ripple animations */}
+              {/* Pulsing Ripple animations */}
               <motion.div
-                className="absolute inset-0 border-white border rounded-full "
-                initial={{ scale: 1, opacity: 0.1 }}
-                animate={{ scale: 1.3, opacity: 0 }}
+                className="absolute inset-0 border-white border-2 rounded-full"
+                initial={{ scale: 1, opacity: 0.8 }}
+                animate={{ scale: 2.5, opacity: 0 }}
                 transition={{
-                  duration: 2,
+                  duration: 1.5,
                   repeat: Infinity,
                   ease: "easeOut",
                 }}
               />
               <motion.div
-                className="absolute inset-0 border-white border rounded-full opacity-10 duration-200"
-                initial={{ scale: 1, opacity: 0.1 }}
-                animate={{ scale: 1.3, opacity: 0 }}
+                className="absolute inset-0 border-white border-2 rounded-full"
+                initial={{ scale: 1, opacity: 0.8 }}
+                animate={{ scale: 2.5, opacity: 0 }}
                 transition={{
-                  duration: 2,
+                  duration: 1.5,
                   repeat: Infinity,
                   ease: "easeOut",
-                  delay: 0.7,
+                  delay: 0.5,
+                }}
+              />
+              <motion.div
+                className="absolute inset-0 border-white border-2 rounded-full"
+                initial={{ scale: 1, opacity: 0.8 }}
+                animate={{ scale: 2.5, opacity: 0 }}
+                transition={{
+                  duration: 1.5,
+                  repeat: Infinity,
+                  ease: "easeOut",
+                  delay: 1.0,
                 }}
               />
 
               <div className="border-white rounded-full border p-0.5 group-hover:p-1.5  aspect-square z-9999  flex justify-center items-center duration-200 cursor-pointer">
                 <div className="bg-white rounded-full w-1  aspect-square group-hover:scale-110"></div>
               </div>
-            </div>
+            </motion.div>
           </>
         )}
       </AnimatePresence>
@@ -611,7 +911,12 @@ export default function StopMotion() {
               opacity: parseInt(currentImage) > 457 ? 1 : 0,
               // opacity: parseInt(currentImage) > 417 ? 1 : 0,
             }}
-            className={`min-h-screen max-h-screen overflow-hidden fixed left-1/2 -translate-x-1/2 w-full video-container `}
+            className={`min-h-screen max-h-screen overflow-hidden fixed left-1/2 -translate-x-1/2 w-full video-container ${
+              parseInt(currentImage) <= 457 ? "pointer-events-none" : ""
+            }`}
+            style={{
+              visibility: parseInt(currentImage) > 457 ? "visible" : "hidden",
+            }}
           >
             <div className="absolute top-0 px-16 p-10 z-999999999 text-white text-xl max-md:px-3 ">
               <img src="/logo-new.png" className="w-16" alt="" />
@@ -641,7 +946,7 @@ export default function StopMotion() {
 
                       videoRef3.current.duration - 2;
                   }}
-                  className="p-3 rounded-full  cursor-pointer py-2  hover:bg-black/30 backdrop-blur-xl flex"
+                  className="p-3 rounded-full  cursor-pointer py-2  hover:bg-black/30 backdrop-blur-xl flex lowercase"
                 >
                   Skip video{" "}
                   <div className="flex">
@@ -666,7 +971,7 @@ export default function StopMotion() {
                 className="bg-linear-to-b from-transparent to-black h-96 max-md:h-auto min-h-[200px] w-full absolute z-999999999999999 bottom-0 flex flex-col max-md:flex-col md:flex-row justify-between items-end max-md:items-end p-8 max-md:p-6 max-md:pb-8 md:p-16 gap-6 max-md:gap-0 "
               >
                 <div className="space-y-4 max-md:space-y-3 w-full max-md:w-full md:w-auto">
-                  <div className="text-white text-2xl max-md:text-xl md:text-4xl font-light capitalize max-md:text-center">
+                  <div className="text-white text-2xl max-md:text-xl md:text-4xl font-light max-md:text-center ">
                     your mini AI bodyguard
                   </div>
                   <motion.div
@@ -708,21 +1013,25 @@ export default function StopMotion() {
                     >
                       <div className="pre-order-hover"></div>
                       <div className="pre-order-outside p-4  w-full h-full"></div>
-                      <div className="border-2 border-red-600 pre-order-inside p-4  w-full h-full text-center text-white">
+                      <div className="border-2 border-red-600 pre-order-inside p-4  w-full h-full text-center text-white lowercase">
                         Join Waitlist
                       </div>
                     </motion.div>
                   </motion.div>
                 </div>
 
-                <div className="w-full max-md:w-full md:w-auto max-md:hidden">
+                <div className="w-full max-md:w-full md:w-auto max-md:hidden group relative">
                   <button
                     onClick={() => {
                       setAnnounce(true);
                     }}
-                    className="bg-black border border-gray-400/30 text-white px-4 max-md:px-4 md:px-6 py-2 max-md:py-2.5 md:py-2 rounded-full cursor-pointer hover:bg-gray-900 transition-colors duration-200 text-sm max-md:text-sm md:text-base w-full max-md:w-full md:w-auto max-md:hidden"
+                    className="border border-white/50 flex justify-center items-center gap-2 text-white p-3 rounded-full  duration-200 cursor-pointer hover:bg-red-800 hover:text-white hover:border-red-900 text-sm ready "
                   >
-                    eNO is ready to announce the next step
+                    <div className="absolute w-full h-full bg-black/80 rounded-full group-hover:opacity-0 duration-300 pointer-events-none"></div>
+                    <p className="z-9">
+                      eNO is ready to announce the next step
+                    </p>{" "}
+                    <ArrowUpRight className="z-9"></ArrowUpRight>
                   </button>
                 </div>
               </motion.div>
@@ -942,16 +1251,16 @@ export default function StopMotion() {
                       .map((item) => (
                         <motion.div
                           key={item.index}
-                          onMouseEnter={() => {
+                          onClick={() => {
                             setTimeout(() => {
                               setFounder(item.index);
-                            }, 500);
+                            }, 0);
                           }}
                           // onMouseEnter={() => setFounder(item.index)}
                           // onClick={() => setFounder(item.index)}
                           // whileHover={{ scale: 1.05 }}
                           // whileTap={{ scale: 0.95 }}
-                          className="w-[18rem] h-112 lg:rounded-[100px] overflow-hidden  grayscale hover:grayscale-50 cursor-pointer transition-all duration-300 group"
+                          className="w-[18rem] h-112 lg:rounded-[100px] overflow-hidden  grayscale  cursor-pointer transition-all duration-300 group"
                         >
                           <img
                             src={item.founder.mainImage}
@@ -977,9 +1286,9 @@ export default function StopMotion() {
                     <div className="space-y-1 sm:space-y-2">
                       <p className="text-sm sm:text-base md:text-lg lg:text-2xl text-white font-light ">
                         {founders[founder].title}{" "}
-                        <span className="text-white/60 block sm:inline text-xs sm:text-sm md:text-base lg:text-xl ">
+                        {/* <span className="text-white/60 block sm:inline text-xs sm:text-sm md:text-base lg:text-xl ">
                           {founders[founder].subtitle}
-                        </span>
+                        </span> */}
                       </p>
                     </div>
 
@@ -1067,12 +1376,12 @@ export default function StopMotion() {
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ delay: 0.3 }}
                 onClick={() => {
-                  setProductPageOn(false);
-                  document.querySelector("#bottom")?.scrollIntoView({
-                    behavior: "smooth",
-                  });
+                  setBackToHome(true);
+                  setTimeout(() => {
+                    setProductPageOn(false);
+                  }, 0);
                 }}
-                className="fixed top-4 right-4 sm:top-6 sm:right-6 lg:top-8 lg:right-8 px-4 py-2 sm:px-5 sm:py-2.5 lg:px-6 lg:py-3  rounded-full text-white/80 max-md:text-center  hover:text-white transition-all duration-300 text-sm sm:text-base z-9999999999999 cursor-pointer flex"
+                className="fixed top-4 right-4 sm:top-6 sm:right-6 lg:top-8 lg:right-8 px-4 py-2 sm:px-5 sm:py-2.5 lg:px-6 lg:py-3  rounded-full text-white/80 max-md:text-center  hover:text-white transition-all duration-300 text-sm sm:text-base z-9999999999999 cursor-pointer flex lowercase"
               >
                 <ChevronLeft></ChevronLeft> Back to home
               </motion.button>
@@ -1308,6 +1617,19 @@ export default function StopMotion() {
             </AnimatePresence>
             <AnimatePresence></AnimatePresence>
 
+            {productPageOn && (
+              <motion.div
+                style={{
+                  opacity: opacity2,
+                }}
+                className="text-white z-9999999 flex justify-center items-center w-full h-screen fixed text-3xl bg-black/60  max-md:text-xl "
+              >
+                <div className="gradient-text">
+                  introducing your AI safety companion
+                </div>
+              </motion.div>
+            )}
+
             {images2 && isLoaded2 && (
               <img
                 fetchPriority="high"
@@ -1420,265 +1742,475 @@ export default function StopMotion() {
               animate={{ opacity: 1, scale: 1, y: 0 }}
               exit={{ opacity: 0, scale: 0.95, y: 20 }}
               transition={{ delay: 0.1 }}
-              className="bg-black border border-red-500/30 rounded-2xl max-w-4xl w-full max-h-[90vh] overflow-y-auto shadow-2xl"
+              className="bg-white border border-red-500/30 rounded-2xl max-w-4xl w-full max-h-[90vh] overflow-y-auto shadow-2xl"
               onClick={(e) => e.stopPropagation()}
             >
               {/* Close button */}
               <button
                 onClick={() => setAnnounce(false)}
-                className="sticky top-4 float-right mr-4 mt-4 px-4 py-2 border border-white/30 rounded-full text-white/80 hover:text-white hover:border-red-500/50 transition-all duration-300 text-sm backdrop-blur-sm bg-black/30 z-50"
+                className="sticky top-4 float-right mr-4 mt-4 px-4 py-2 border border-white/30 rounded-full text-white/80 hover:text-white hover:border-red-500/50 transition-all duration-300 text-sm backdrop-blur-sm bg-black/30 z-50 "
               >
-                Close
+                <X></X>
               </button>
 
               {/* Article content */}
-              <article className="px-8 py-12 md:px-16 md:py-16 text-white space-y-6 clear-both">
-                <p className="text-xs uppercase">Funding Announcement</p>
 
+              <article className="px-8 py-12 md:px-16 md:py-16 text-black space-y-6 clear-both bg-white ">
                 <h1 className="text-3xl md:text-5xl font-bold">
-                  eNOugh raises £2.7M to build AI bodyguard for urban safety
+                  eNOugh Raises £2.7M to Build a Mini AI Bodyguard Helping
+                  People Get Home Safely
                 </h1>
 
-                <div className="flex justify-start items-start gap-16">
+                <p className="text-sm">
+                  <strong>By:</strong> Will Hall
+                </p>
+
+                <p className="text-sm">
+                  <strong>Contact:</strong> press@enoughsafety.com
+                </p>
+
+                {/* <hr className="my-6" /> */}
+
+                <div className="flex gap-16 max-md:flex-col">
                   <div>
-                    <img className="w-lg" src="/teamimage.png" alt="" />
+                    <img
+                      src="/teamimage.png"
+                      className="w-400 object-cover"
+                      alt=""
+                    />
                   </div>
-                  <div className="">
+                  <div className="space-y-6">
                     <p>
-                      London-based startup announces seed funding led by
-                      A*Ventures to develop the eNO badge, the first AI wearable
-                      threat detection device.
+                      London-based startup <strong>eNOugh</strong> has raised{" "}
+                      <strong>£2.7M</strong> to build the <em>eNO badge</em>, a
+                      mini AI bodyguard designed to empower people to get home
+                      safely.
                     </p>
-                    <br />
+
                     <p>
-                      <strong>London, UK</strong> — eNOugh, a London-based
-                      company building the eNO badge, an AI safety companion
-                      addressing the lack of safety in cities people call home,
-                      today announces it has raised £2.7M in seed funding.
+                      eNOugh is a London-based company building the eNO badge,
+                      an AI safety companion addressing the lack of safety in
+                      the cities people call home.
                     </p>
-                    <br />
+
                     <p>
-                      The round is led by A*Ventures, with participation from
-                      Comma Capital, Karman Ventures, Intuition VC, and several
-                      prominent angel investors.
+                      Four years ago, <strong>Ina Jovicic</strong> was attacked
+                      walking home from dinner in what should have been a safe,
+                      well-lit area of central London. Today, Ina and
+                      co-founders <strong>Gaelic</strong> and{" "}
+                      <strong>Alex</strong> announce they have raised £2.7M in
+                      funding, led by <strong>A*Ventures</strong>, with
+                      participation from <strong>Comma Capital</strong>,{" "}
+                      <strong>Karman Ventures</strong>,{" "}
+                      <strong>Intuition VC</strong>, and others, to build the
+                      first-of-its-kind AI wearable threat detection device.
+                      Several prominent angel investors also joined the round.
                     </p>
                   </div>
                 </div>
+                {/* <hr className="my-6" /> */}
 
-                <h2 className="text-2xl font-bold">The Catalyst</h2>
+                <h2 className="text-2xl font-bold">
+                  Quote from Kevin, General Partner at A*Ventures
+                </h2>
 
-                <p>
-                  Four years ago, Ina Jovicic was attacked walking home from
-                  dinner in a well-lit, supposedly safe area of central London.
-                  Four men circled and attacked her, dragging her into the
-                  street before stealing everything and leaving her injured.
-                </p>
-
-                <p>
-                  When police arrived, they told her: "You're lucky you weren't
-                  stabbed" and "You should never fight back."
-                </p>
-
-                <p>
-                  That second line became the catalyst—not for fear, but for
-                  action.
-                </p>
-
-                <p>
+                <blockquote className="border-l-4 border-gray-400 pl-4 italic">
                   "I've always believed that safety and security are critically
                   important. With the rise of multimodal AI, smart wearables,
                   and advances in detection technology, there's a unique
                   opportunity to create a safer world for everyone. What eNOugh
                   is building is hugely important."
-                </p>
-
-                <p>— Kevin Hartz, General Partner at A*Ventures</p>
-
-                <h2 className="text-2xl font-bold">The Problem</h2>
+                </blockquote>
 
                 <p>
-                  Unfortunately, "getting home safe" isn't simple. For many,
-                  particularly women, it involves mission planning: route
-                  strategy, risk assessment, keys-between-knuckles, fake phone
-                  calls, and the "I'm literally two minutes away" lie.
-                </p>
-
-                <p>Key statistics from the UK:</p>
-
-                <p>
-                  1 in 2 women and 1 in 5 men feel unsafe walking alone after
-                  dark
-                </p>
-
-                <p>68% of women aged 18-24 feel unsafe walking home at night</p>
-
-                <p>
-                  62% have stopped doing things because they don't feel safe
-                </p>
-
-                <p>&lt;1% of thefts in London get solved</p>
-
-                <h2 className="text-2xl font-bold">
-                  The Solution: The eNO Badge
-                </h2>
-
-                <p>
-                  The eNO badge combines sophisticated AI models with hardware
-                  innovation to detect threats and take action. It represents a
-                  paradigm shift from reactive to proactive safety.
-                </p>
-
-                <h3 className="text-xl font-bold">Threat Detection</h3>
-
-                <p>
-                  When the device detects a threat, it records evidence (camera
-                  + mic), alerts emergency operators, and streams live footage
-                  with location data.
-                </p>
-
-                <h3 className="text-xl font-bold">Threat Deterrence</h3>
-
-                <p>
-                  Designed to be bright and visible. To an attacker, it's a
-                  camera recording and streaming to authorities—deterrence
-                  through visibility.
-                </p>
-
-                <h2 className="text-2xl font-bold">
-                  The Network Effects of Collective Safety
-                </h2>
-
-                <p>
-                  The more people wear the eNO badge, the more capable it
-                  becomes at protecting everyone. Each badge serves as a node in
-                  a distributed AI network, collecting real-world threat data to
-                  train increasingly sophisticated protection algorithms.
-                </p>
-
-                <p>
-                  By wearing it, you not only protect yourself, but also those
-                  around you. When you wear your badge on a Tuesday night
-                  walking home, even if nothing happens, you're training the AI
-                  to recognise patterns and better protect someone else on
-                  Wednesday.
-                </p>
-
-                <h2 className="text-2xl font-bold">From the Founders</h2>
-
-                <p>
-                  "This round is fundamental in eNOugh's journey as it will
-                  allow us to launch the product and watch it make a difference
-                  in people's daily life. We want to give people the freedom to
-                  live without limitations."
-                </p>
-
-                <p>— Ina Jovicic, CEO</p>
-
-                <p>
-                  "I've always believed that some problems can't be solved
-                  through software alone. Feeling unsafe is one of them. You
-                  need something physical, visible, and reliable, and that's
-                  what the eNO badge gives you."
-                </p>
-
-                <p>— Gaelic Jara, CTO</p>
-
-                <p>
-                  "What we are doing with our AI is taking it out of the lab and
-                  bringing it into everyday life. With the eNO badge, grounded
-                  in real-world, multimodal signals, we support people in the
-                  moments that actually feel human."
-                </p>
-
-                <p>— Alex Chalakov, CSO</p>
-
-                <h2 className="text-2xl font-bold">The Team</h2>
-
-                <h3 className="text-xl font-bold">Ina Jovicic</h3>
-
-                <p>CEO & Co-founder</p>
-
-                <p>
-                  Originally from Bosnia, born and raised in Czechia. Former
-                  Entrepreneurship student at UCL.
-                </p>
-
-                <h3 className="text-xl font-bold">Gaelic Jara</h3>
-
-                <p>CTO & Co-founder</p>
-
-                <p>
-                  Uruguayan/French electronic engineer who dropped his masters
-                  to pursue eNOugh full time.
-                </p>
-
-                <h3 className="text-xl font-bold">Alex Chalakov</h3>
-
-                <p>CSO & Co-founder</p>
-
-                <p>
-                  Bulgarian-born, leading the software and AI pillar with
-                  background in computer science.
-                </p>
-
-                <h2 className="text-2xl font-bold">About A*Ventures</h2>
-
-                <p>
-                  A* is a venture capital firm co-founded by Kevin Hartz. Kevin
-                  has seeded companies such as Airbnb and Pinterest, and has
-                  founded two companies that reached the public markets (Xoom
-                  and Eventbrite). A*'s broader investment track record includes
-                  companies like PayPal, Uber, Decagon, Ramp, and
+                  A* is a venture capital firm co-founded by{" "}
+                  <strong>Kevin Hartz</strong>. Kevin has seeded companies such
+                  as Airbnb and Pinterest and founded two companies that reached
+                  the public markets (Xoom and Eventbrite). A*'s broader
+                  investment record includes PayPal, Uber, Decagon, Ramp, and
                   security-focused startups such as Flock Safety and Sauron.
                 </p>
 
-                <h2 className="text-2xl font-bold">What's Next</h2>
+                {/* <hr className="my-6" /> */}
+
+                <h2 className="text-2xl font-bold">
+                  Quotes from eNOugh Co-Founders
+                </h2>
+
+                <blockquote className="border-l-4 border-gray-400 pl-4 italic">
+                  "This round is fundamental in eNOugh's journey as it will
+                  allow us to launch the product and watch it make a difference
+                  in people's daily life. The stories we hear every day remind
+                  us why a product like this must exist, we want to give people
+                  the freedom to live without limitations."
+                </blockquote>
+                <p>
+                  — <strong>Ina, co-founder/CEO</strong>
+                </p>
+
+                <blockquote className="border-l-4 border-gray-400 pl-4 italic">
+                  "I've always believed that some problems can't be solved
+                  through software alone. Feeling unsafe is one of them. You
+                  need something physical, visible, and reliable, and that's
+                  what the eNO badge gives you. Thanks to our backers, we're now
+                  bringing it to life."
+                </blockquote>
+                <p>
+                  — <strong>Gaelic, co-founder/CTO</strong>
+                </p>
+
+                <blockquote className="border-l-4 border-gray-400 pl-4 italic">
+                  "What we are doing with our AI is taking it out of the lab and
+                  bringing it into everyday life. With the eNO badge, grounded
+                  in real-world, multimodal signals, we support people in the
+                  moments that actually feel human - like when someone feels
+                  unsafe walking home at night."
+                </blockquote>
+                <p>
+                  — <strong>Alex, co-founder/CSO</strong>
+                </p>
+
+                {/* <hr className="my-6" /> */}
+
+                <h2 className="text-2xl font-bold">Why eNOugh Exists</h2>
+
+                <p className="font-bold">London, 12th October 2021</p>
 
                 <p>
-                  With this £2.7M round, eNOugh has opened the waitlist.
-                  Subscribers will be the first to receive notifications when
-                  pre-orders are released and will receive an early bird
-                  discount.
+                  Four men circled and attacked Ina as they tried to take her
+                  things. Her instinct was to fight back, but four against one
+                  isn't a fair fight. She was dragged into the street before
+                  they stole everything and left her with injured knees.
+                </p>
+
+                <p>When police arrived, they told her:</p>
+
+                <ul className="list-disc pl-6">
+                  <li>"You're lucky you weren't stabbed."</li>
+                  <li>"You should never fight back."</li>
+                </ul>
+
+                <p>
+                  That second line sparked action, not fear. Ina channelled the
+                  experience into researching real solutions to a problem that
+                  remains unsolved.
                 </p>
 
                 <p>
-                  The company is collaborating with partners across
-                  universities, hospitals, and nightlife venues across London,
-                  the first city where they'll launch before expanding quickly.
+                  She partnered with two innovative minds,{" "}
+                  <strong>Gaelic</strong> and <strong>Alex</strong>, and
+                  together they started eNOugh.
+                </p>
+
+                {/* <hr className="my-6" /> */}
+
+                <h2 className="text-2xl font-bold">
+                  What Does It Mean to "Get Home Safe"?
+                </h2>
+
+                <p>
+                  For many — especially women — it's not just a simple message.
+                  It can feel like <em>mission planning</em>:
+                </p>
+
+                <ul className="list-disc pl-6">
+                  <li>route strategy</li>
+                  <li>risk assessment</li>
+                  <li>keys-between-knuckles</li>
+                  <li>fake phone calls</li>
+                  <li>the "I'm two minutes away" lie</li>
+                </ul>
+
+                <p>
+                  This isn't just a London problem. It's a{" "}
+                  <strong>
+                    Paris, New York, Mexico City… everywhere problem.
+                  </strong>{" "}
+                  That's millions of people whose lives are shaped by the state
+                  of the cities they live in.
+                </p>
+
+                {/* <hr className="my-6" /> */}
+
+                <h2 className="text-2xl font-bold">The UK Safety Reality</h2>
+
+                <p>
+                  <a
+                    href="https://www.ons.gov.uk/peoplepopulationandcommunity/crimeandjustice/datasets/perceptionsofpersonalsafetyandexperiencesofharassmentgreatbritain"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="text-blue-600 underline"
+                  >
+                    In the UK
+                  </a>
+                  :
+                </p>
+
+                <ul className="list-disc pl-6">
+                  <li>
+                    <strong>1 in 2 women</strong> and{" "}
+                    <strong>1 in 5 men</strong> feel unsafe walking alone after
+                    dark in a busy public place
+                  </li>
+                  <li>
+                    <strong>68%</strong> of women aged 18–24 feel unsafe walking
+                    home at night
+                  </li>
+                  <li>
+                    <strong>62%</strong> of people have stopped doing things
+                    (walking alone, taking certain routes, visiting certain
+                    places) because they don't feel safe
+                  </li>
+                  <li>
+                    <strong>2 out of 3 women</strong> aged 16–34 experienced
+                    harassment in the last year
+                  </li>
+                  <li>
+                    <strong>44%</strong> experienced catcalls or unwanted
+                    comments
+                  </li>
+                  <li>
+                    <strong>29%</strong> felt they were being followed
+                  </li>
+                </ul>
+
+                <p>And existing "solutions" aren't good enough:</p>
+
+                <ul className="list-disc pl-6">
+                  <li>Pepper spray (illegal in the UK)</li>
+                  <li>
+                    Keychain "self-defence" tools expecting people to fight back
+                  </li>
+                  <li>
+                    Panic buttons requiring presence of mind during an attack
+                  </li>
+                  <li>Tracking apps requiring you to unlock your phone</li>
+                  <li>"Ask Angela" — widely known, including by attackers</li>
+                </ul>
+
+                <p>
+                  <strong>eNOugh was created to be the solution.</strong>
+                </p>
+
+                {/* <hr className="my-6" /> */}
+
+                <h1 className="text-3xl font-bold">Changing the Game</h1>
+
+                <p>The eNO badge has two core functions:</p>
+
+                <h2 className="text-2xl font-bold">1. Threat Detection</h2>
+
+                <p>
+                  Using advanced AI and hardware integration, the device detects
+                  when its user is under threat — and takes action.
+                </p>
+
+                <p>When it detects a threat, it:</p>
+
+                <ul className="list-disc pl-6">
+                  <li>records evidence (camera + mic)</li>
+                  <li>
+                    alerts an emergency operator who can contact police or your
+                    emergency contacts
+                  </li>
+                  <li>streams live footage</li>
+                  <li>shares real-time location data</li>
+                </ul>
+
+                <p>
+                  <strong>Fun fact:</strong>{" "}
+                  <a
+                    href="https://policyexchange.org.uk/publication/your-money-or-your-life/"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="text-blue-600 underline"
+                  >
+                    Less than 1% of thefts in London get solved.
+                  </a>
+                </p>
+
+                <p>Evidence changes that equation.</p>
+
+                {/* <hr className="my-6" /> */}
+
+                <h2 className="text-2xl font-bold">2. Threat Deterrence</h2>
+
+                <p>Traditional safety tools are hidden and reactive.</p>
+
+                <p>The eNO badge is the opposite:</p>
+
+                <ul className="list-disc pl-6">
+                  <li>
+                    <strong>bright</strong>
+                  </li>
+                  <li>
+                    <strong>visible</strong>
+                  </li>
+                  <li>
+                    <strong>unmissable</strong>
+                  </li>
+                </ul>
+
+                <p>To a passerby it's a badge.</p>
+
+                <p>To an attacker it's:</p>
+
+                <ul className="list-disc pl-6">
+                  <li>a camera recording</li>
+                  <li>streaming live</li>
+                  <li>connected to authorities</li>
+                  <li>creating consequences</li>
+                </ul>
+
+                <p className="font-bold">
+                  Deterrence through visibility.
+                  <br />
+                  Protection through presence.
+                </p>
+
+                {/* <hr className="my-6" /> */}
+
+                <h1 className="text-3xl font-bold">
+                  The Network Effects of Collective Safety
+                </h1>
+
+                <p>
+                  The more people wearing an eNO badge, the stronger the network
+                  becomes.
                 </p>
 
                 <p>
-                  "This isn't just about protection—it's about giving you the
-                  freedom to go where you want, do what you love, and feel
-                  secure while doing it. eNOugh isn't just a product, it's a
-                  reclamation of safety that should have already existed as a
-                  non-negotiable norm."
+                  Each badge is a{" "}
+                  <strong>node in a distributed AI network</strong>, collecting
+                  real-world threat data to train better algorithms.
                 </p>
 
-                <motion.div
-                  initial={{
-                    opacity: 0,
-                    y: "10%",
-                  }}
-                  exit={{
-                    opacity: 0,
-                    y: "10%",
-                  }}
-                  animate={{
-                    opacity: 1,
-                    y: "0%",
-                  }}
-                  transition={{
-                    delay: 0.5,
-                  }}
-                  className="relative pre-order-container w-48 block max-md:w-full z-9999999999 cursor-pointer"
-                >
-                  <div className="pre-order-hover"></div>
-                  <div className="pre-order-outside p-4  w-full h-full"></div>
-                  <div className="border-2 border-red-600 pre-order-inside p-4  w-full h-full text-center text-white">
+                <p>
+                  Your Tuesday walk home — even if nothing happens — helps
+                  protect someone else on Wednesday.
+                </p>
+
+                <p>
+                  This is a <strong>collective fight</strong>, marking the start
+                  of safer cities worldwide.
+                </p>
+
+                <blockquote className="border-l-4 border-gray-400 pl-4 italic">
+                  "Walking home shouldn't feel like a risk… eNOugh isn't just a
+                  product, it's a reclamation of safety." — <strong>Ina</strong>
+                </blockquote>
+
+                {/* <hr className="my-6" /> */}
+
+                <h1 className="text-3xl font-bold">The Team</h1>
+
+                <h3 className="text-xl font-bold">Ina — CEO</h3>
+
+                <p>
+                  Bosnian by background, raised in Czechia. The idea sparked
+                  after her London attack while completing a Master's in
+                  Entrepreneurship at UCL.
+                </p>
+
+                <p>
+                  (if you want to follow her behind the scenes of building the
+                  start-up, follow her{" "}
+                  <a
+                    href="https://www.instagram.com/ina_founder?igsh=bmozaTM0bmd6NDVh&utm_source=qr"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="text-blue-600 underline"
+                  >
+                    here
+                  </a>
+                  )
+                </p>
+
+                <h3 className="text-xl font-bold">Gaelic — CTO</h3>
+
+                <p>
+                  Uruguayan/French electronic engineer. Leads the product
+                  pillar. Dropped his Master's in Electronic & Electrical
+                  Engineering to build eNOugh full-time.
+                </p>
+
+                <p>
+                  (if you want to follow Gaelic's journey on how to build great
+                  products, read{" "}
+                  <a
+                    href="https://www.linkedin.com/in/gaelicjara/"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="text-blue-600 underline"
+                  >
+                    here
+                  </a>
+                  )
+                </p>
+
+                <h3 className="text-xl font-bold">Alex — CSO</h3>
+
+                <p>
+                  Bulgarian-born, leads software and AI. Joined early and became
+                  indispensable.
+                </p>
+
+                <p>
+                  (follow his recent thoughts on AI and emerging trends{" "}
+                  <a
+                    href="https://x.com/alex_chalakov"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="text-blue-600 underline"
+                  >
+                    here
+                  </a>
+                  )
+                </p>
+
+                {/* <hr className="my-6" /> */}
+
+                <h1 className="text-3xl font-bold">What's Next?</h1>
+
+                <p>
+                  With this £2.7M round, eNOugh has opened the{" "}
+                  <strong>waitlist</strong>.
+                </p>
+
+                <ul className="list-disc pl-6">
+                  <li>
+                    Waitlisters will be first to know when pre-orders go live
+                  </li>
+                  <li>Early-bird discounts before official launch</li>
+                </ul>
+
+                <p>eNOugh is partnering with:</p>
+
+                <ul className="list-disc pl-6">
+                  <li>universities</li>
+                  <li>hospitals</li>
+                  <li>nightlife venues</li>
+                </ul>
+
+                <p>
+                  London will be the first launch city before rapid expansion.
+                </p>
+
+                <p>
+                  The response has been overwhelmingly positive — a reminder of
+                  why this product matters.
+                </p>
+
+                <p className="font-bold">Excited? Join the waitlist here.</p>
+
+                <p>And follow the journey here.</p>
+
+                <div className="border-2 border-red-600   h-full text-center text-black bg-white  w-fit rounded-full cursor-pointer hover:shadow-2xl hover:shadow-red-800 duration-200  lowercase relative pre-order-container">
+                  <div className="pre-order-outside2 p-4  w-full h-full rounded-full z-9"></div>
+                  <div className="bg-white z-9999999999999 relative h-full w-full rounded-full p-4 font-bold">
                     Join the Waitlist
                   </div>
-                </motion.div>
+                </div>
               </article>
             </motion.div>
           </motion.div>
@@ -1711,7 +2243,7 @@ export default function StopMotion() {
                 onClick={() => setShowWaitlist(false)}
                 className="absolute top-4 right-4 px-4 py-2 border border-white/30 rounded-full text-white/80 hover:text-white hover:border-red-500/50 transition-all duration-300 text-sm backdrop-blur-sm bg-black/30 z-10"
               >
-                Close
+                <X></X>
               </button>
 
               {/* Form content */}
@@ -1794,7 +2326,7 @@ export default function StopMotion() {
                   >
                     <div className="pre-order-hover"></div>
                     <div className="pre-order-outside p-4 w-full h-full"></div>
-                    <div className="border-2 border-red-600 pre-order-inside p-4 w-full h-full text-center font-bold text-white">
+                    <div className="border-2 border-red-600 pre-order-inside p-4 w-full h-full text-center font-bold text-white lowercase">
                       Join Waitlist
                     </div>
                   </motion.button>
@@ -1811,6 +2343,7 @@ export default function StopMotion() {
         )}
       </AnimatePresence>
 
+      <div className="absolute bottom-0" id="bottom-new"></div>
       {/* {productPageOn && (
         <div className="min-h-[500vh] fixed top-0 left- z-999999999999999999999 bg-blackw-full h-full ungabunga"></div>
       )} */}

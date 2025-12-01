@@ -27,9 +27,10 @@ body {
 }
 
 .neon {
-  animation: neon 3s infinite;
+  /* animation: neon 3s infinite; */
 }
 *{
+  /* text-transform: lowercase !important; */
   /* outline: 1px solid red; */
 }
 
@@ -92,6 +93,26 @@ body {
   transform: translate(-2.5%, -3%);
   filter: blur(0.2px);
 }
+.pre-order-outside2 {
+  position: absolute;
+  /* z-index: -999; */
+  background: radial-gradient(
+    circle,
+    rgba(255, 255, 255, 0) 0%,
+    rgba(255, 255, 255, 0) 80%,
+    rgba(255, 0, 0, 1) 100%
+  );
+  transition: 3s;
+  animation: rotateBG 3s linear infinite;
+  background-size: 200%;
+  top: 0;
+  left: 0;
+  /* border-radius: 999px; */
+  width: 105%;
+  height: 106%;
+  transform: translate(-2%, -3%);
+  /* filter: blur(0.2px); */
+}
 .pre-order-hover {
   position: absolute;
   z-index: -999;
@@ -114,7 +135,7 @@ body {
 }
 .waitlist .pre-order-inside {
   background-color: #ff0000;
-  color: white;
+  color: black;
 border: 1px solid red;
 }
 
@@ -136,6 +157,53 @@ border: 1px solid red;
   transform: translate(-2.5%, -3%);
   filter: blur(0.2px);
 
+}
+.ready {
+  /* position: absolute; */
+  z-index: -999;
+  background: radial-gradient(
+    circle,
+    rgba(255, 0, 0, 0.1) 0%,
+    rgba(255, 0, 0, 0.5) 50%,
+    rgba(255, 0, 0, 0.1) 100%
+  );
+  transition: 3s;
+  animation: rotateBG 3s linear infinite ;
+  animation-play-state: paused;
+  background-size: 200%;
+  /* transition: 2s; */
+  /* border-radius: 9999px; */
+  /* width: 105%; */
+  /* height: 108%; */
+  /* transform: translate(-2.5%, -3%); */
+  /* filter: blur(0.2px); */
+  
+}
+.ready2 {
+  /* position: absolute; */
+  z-index: -999;
+  background: radial-gradient(
+    circle,
+    rgba(255, 0, 0, 1) 0%,
+    rgba(100, 0, 0,1) 50%,
+    rgba(255, 0, 0, 1) 100%
+  );
+  transition: 3s;
+  animation: rotateBG 3s linear infinite ;
+  animation-play-state: paused;
+  background-size: 200%;
+  /* transition: 2s; */
+  /* border-radius: 9999px; */
+  /* width: 105%; */
+  /* height: 108%; */
+  /* transform: translate(-2.5%, -3%); */
+  /* filter: blur(0.2px); */
+  
+}
+
+
+.ready:hover {
+    animation-play-state: running;
 }
 
 .loadig {
@@ -272,4 +340,10 @@ border: 1px solid red;
 
 
 
-        
+
+article * {
+  text-align: justify !important;
+}
+article h1 {
+  text-align: left !important;
+}
