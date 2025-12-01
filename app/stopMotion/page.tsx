@@ -62,6 +62,8 @@ export default function StopMotion() {
 
   const [loading, setLoading] = useState(false);
   const [backToHome, setBackToHome] = useState(false);
+
+  console.log(backToHome);
   const videoRef = useRef<HTMLVideoElement>(null);
   const videoRef3 = useRef<HTMLVideoElement>(null);
   const videoRef2 = useRef<HTMLVideoElement>(null);
@@ -83,15 +85,6 @@ export default function StopMotion() {
   const [currentImage, setCurrentImage] = useState("000");
   const [currentProductImage, setCurrentProductImage] = useState("000");
   const [isMobile, setIsMobile] = useState(false);
-  useEffect(() => {
-    (async function () {
-      const x = await fetch(`/miniframe/frame487.webp`);
-      if (x.status === 200) {
-        setLoading(false);
-        console.log(x);
-      }
-    })();
-  }, []);
 
   useEffect(() => {
     const checkMobile = () => {
@@ -550,6 +543,10 @@ export default function StopMotion() {
     } else {
       document.body.style.overflow = "hidden";
     }
+
+    if (backToHome) {
+      document.body.style.overflow = "hidden !important";
+    }
   }, [loadProgress]);
 
   return (
@@ -557,40 +554,48 @@ export default function StopMotion() {
       ref={containerRef}
       className="bg-black relative"
       style={{
-        minHeight: productPageOn ? "1000vh" : "400vh",
+        minHeight: productPageOn ? "1000vh" : backToHome ? "100vh" : "400vh",
+        maxHeight: backToHome ? "100vh" : "inherit",
+        height: backToHome ? "100vh" : "inherit",
+        overflow: backToHome ? "hidden" : "scroll",
       }}
     >
       <div id="top"></div>
 
-      <motion.div
-        style={{
-          opacity,
-        }}
-        className="fixed  z-999999999 flex justify-center  items-center w-full h-screen flex-col pointer-events-none"
-      >
-        <div className="flex flex-col justify-center items-center gap-9">
-          <img src="/logo-new.svg" className="neon w-52" alt="" />
-          {loadProgress < 100 && (
-            <div className="overflow-hidden w-56 rounded-xl bg-zinc-800">
-              <motion.div
-                className="h-1 rounded-xl w-56 loadig"
-                style={{
-                  width: `${loadProgress}%`,
-                }}
-                transition={{
-                  type: "keyframes",
-                }}
-              ></motion.div>
+      {!backToHome && (
+        <motion.div
+          style={{
+            opacity,
+          }}
+          className="fixed  z-999999999 flex justify-center  items-center w-full h-screen flex-col pointer-events-none"
+        >
+          <div className="flex flex-col justify-center items-center gap-9">
+            <img src="/logo-new.svg" className="neon w-52" alt="" />
+            {loadProgress < 100 && (
+              <div className="overflow-hidden w-56 rounded-xl bg-zinc-800">
+                <motion.div
+                  className="h-1 rounded-xl w-56 loadig"
+                  style={{
+                    width: `${loadProgress}%`,
+                  }}
+                  transition={{
+                    type: "keyframes",
+                  }}
+                ></motion.div>
+              </div>
+            )}
+          </div>
+          {loadProgress === 100 && (
+            <div
+              id="sd-container"
+              className="absolute bottom-6 max-md:bottom-32"
+            >
+              <div className="arrow"></div>
+              <div className="arrow"></div>
             </div>
           )}
-        </div>
-        {loadProgress === 100 && (
-          <div id="sd-container" className="absolute bottom-6 max-md:bottom-32">
-            <div className="arrow"></div>
-            <div className="arrow"></div>
-          </div>
-        )}
-      </motion.div>
+        </motion.div>
+      )}
 
       {/* <link
         className="fixed top-0 h-screen object-cover w-screen"
@@ -616,7 +621,7 @@ export default function StopMotion() {
         alt="Scroll frame"
       /> */}
 
-      {images && isLoaded && (
+      {images && isLoaded && !backToHome && (
         <img
           className={`fixed top-0 h-screen object-cover   duration-200   md:w-screen  /${
             currentImage > "420" && "max-md:translate-x-10 max-md:w-[150vw]"
@@ -672,24 +677,7 @@ export default function StopMotion() {
       </AnimatePresence> */}
 
       <AnimatePresence>
-        <motion.div className="min-h-screen max-h-screen overflow-hidden fixed left-1/2 -translate-x-1/2 w-full video-container z-99999999 flex justify-between pointer-events-none">
-          {/* <motion.div
-            style={{
-              x: leftX,
-            }}
-            className="bg-black w-[42%] max-md:w-[20%] h-screen "
-          ></motion.div> */}
-          {/* <motion.div
-            style={{
-              x: rightX,
-            }}
-            className="bg-black w-[43%] max-md:w-[20%] h-screen"
-          ></motion.div> */}
-        </motion.div>
-      </AnimatePresence>
-
-      <AnimatePresence>
-        {played && parseInt(currentImage) >= 457 && (
+        {(backToHome || (played && parseInt(currentImage) >= 457)) && (
           // Show red circle after animation 2 completes
           <>
             <motion.div
@@ -966,18 +954,23 @@ export default function StopMotion() {
         {
           <motion.div
             initial={{
-              opacity: 0,
+              opacity: backToHome ? 1 : 0,
             }}
             animate={{
               // opacity: 0,
-              opacity: parseInt(currentImage) > 457 ? 1 : 0,
+              opacity: parseInt(currentImage) > 457 ? 1 : backToHome ? 1 : 0,
               // opacity: parseInt(currentImage) > 417 ? 1 : 0,
             }}
             className={`min-h-screen max-h-screen overflow-hidden fixed left-1/2 -translate-x-1/2 w-full video-container ${
               parseInt(currentImage) <= 457 ? "pointer-events-none" : ""
             }`}
             style={{
-              visibility: parseInt(currentImage) > 457 ? "visible" : "hidden",
+              visibility:
+                parseInt(currentImage) > 457
+                  ? "visible"
+                  : backToHome
+                  ? "visible"
+                  : "hidden",
             }}
           >
             <div className="absolute top-0 px-16 p-10 z-999999999 text-white text-xl max-md:px-3 space-y-3">

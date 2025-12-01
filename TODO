@@ -51,13 +51,13 @@ Pop-up:
 ✔ all the quotes should be in “italics” @done(25-12-01 13:57)
 Video:
 ✔ minuscule “skip video” @done(25-12-01 13:57)
-☐ when re-loading it should go back to the intro animation and not skip to the video
+✔ when re-loading it should go back to the intro animation and not skip to the video @done(25-12-01 16:42)
 
 Mobile Version:
-☐ when re-loading it should go back to the intro animation and not skip to the video
+✔ when re-loading it should go back to the intro animation and not skip to the video @done(25-12-01 16:42)
 Intro:
-☐ animation not centred, eNO is on the left
-☐ “N” is not centred
+✘ animation not centred, eNO is on the left @cancelled(25-12-01 16:42)
+✘ “N” is not centred @cancelled(25-12-01 16:42)
 Hero Section:
 ✔ waitlist button is too long @done(25-12-01 13:58)
 ✔ the animation on the waitlist button is lagging @done(25-12-01 16:13)
@@ -93,6 +93,6 @@ Content for badge section:
 ✔ built for real-life moments @done(25-12-01 14:02)
 ✔ eNO is more than just a product, it’s here to redefine the culture of safety @done(25-12-01 14:02)
 ✔ link to eNO’s instagram: https://www.instagram.com/enough.badge?igsh=dnJnNzQxOXFyaTFv&utm_source=qr @done(25-12-01 14:02)
-☐  and after this thing it should take them back to the hero section to focus on the waitlist
+✔  and after this thing it should take them back to the hero section to focus on the waitlist @done(25-12-01 16:56)
 ✔ Connect sheets to waitlist form @done(25-12-01 16:36)
 ☐ Article content update
