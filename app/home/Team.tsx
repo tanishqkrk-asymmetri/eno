@@ -241,6 +241,9 @@ export default function FoundersCarousel({ founder }: { founder: number }) {
             className="text-gray-300 hover:text-white transition-all duration-300 hover:scale-105 group"
           >
             {getSocialIcon(currentFounder.socialPlatform)}
+            <div className="flex justify-center items-center mt-6">
+              <ArrowUpRight className="w-5 h-5 text-center" />
+            </div>
           </a>
         </div>
       </div>
