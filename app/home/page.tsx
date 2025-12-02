@@ -1204,7 +1204,7 @@ export default function StopMotion() {
             <video
               muted
               ref={videoRef2}
-              src=""
+              src="https://res.cloudinary.com/dyi7gdcpj/video/upload/v1764407817/hero2_iik12b.mp4"
               playsInline
               className="w-full h-screen object-cover md:object-cover scale-150   video  blur-lg fixed top-0 z-0 hidden max-md:block "
             ></video>

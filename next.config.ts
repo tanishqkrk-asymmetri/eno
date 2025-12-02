@@ -4,15 +4,15 @@ const nextConfig: NextConfig = {
   devIndicators: false,
   typescript: { ignoreBuildErrors: true },
   eslint: { ignoreDuringBuilds: true },
-  // redirects: async function () {
-  //   return [
-  //     {
-  //       source: "/",
-  //       destination: "/home",
-  //       permanent: true,
-  //     },
-  //   ];
-  // },
+  redirects: async function () {
+    return [
+      {
+        source: "/",
+        destination: "/home",
+        permanent: true,
+      },
+    ];
+  },
 };
 
 export default nextConfig;
