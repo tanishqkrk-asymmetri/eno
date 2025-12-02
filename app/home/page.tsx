@@ -1196,7 +1196,7 @@ export default function StopMotion() {
                       duration: 0.8,
                     }}
                     src={"/endframe-mobile.webp"}
-                    className="h-screen object-contain z-9999999999 scale-140 hidden max-md:block"
+                    className="h-screen object-contain z-99 scale-140 hidden max-md:block relative"
                   ></motion.img>
                 </>
               )}
