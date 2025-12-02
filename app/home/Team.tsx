@@ -46,24 +46,21 @@ const getSocialIcon = (platform: string) => {
   switch (platform) {
     case "instagram":
       return (
-        <div className="underline rounded-full   text-center flex justify-center items-center gap-2">
-          <ArrowUpRight className="w-5 h-5" /> wanna see the behind the scenes
-          of building a start-up
+        <div className="underline rounded-full   text-center flex justify-center items-center gap-2 text-xl sm:text-2xl md:text-3xl text-gray-200 font-medium">
+          wanna see the behind the scenes of building a start-up
         </div>
       );
     // return <Instagram className="w-5 h-5" />;
     case "x":
       return (
-        <div className="underline rounded-full   text-center flex justify-center items-center gap-2">
-          <ArrowUpRight className="w-5 h-5" />
+        <div className="underline rounded-full   text-center flex justify-center items-center gap-2 text-xl sm:text-2xl md:text-3xl text-gray-200 font-medium">
           curious to know his thoughts on latest on AI and emerging tech
         </div>
       );
     // return <img src="/x.svg" alt="" />;
     default:
       return (
-        <div className="underline rounded-full   text-center flex justify-center items-center gap-2">
-          <ArrowUpRight className="w-5 h-5" />
+        <div className="underline rounded-full   text-center flex justify-center items-center gap-2 text-xl sm:text-2xl md:text-3xl text-gray-200 font-medium">
           read about his personal insights from the hardware journey
         </div>
       );
