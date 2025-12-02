@@ -1921,12 +1921,12 @@ export default function StopMotion() {
                   <strong>Contact:</strong> press@enoughsafety.com
                 </p>
 
-                <h1 className="text-3xl md:text-5xl font-bold">
+                <h1 className="text-3xl md:text-5xl font-bold title">
                   London-based startup, eNOugh, has raised $2.7M to build a mini
                   AI bodyguard to empower people to get home safely.
                 </h1>
 
-                <div className="flex gap-16">
+                <div className="flex gap-16 max-md:flex-col">
                   <div>
                     <img src="/teamimage.png" className="w-400" alt="" />
                   </div>
@@ -2056,7 +2056,7 @@ export default function StopMotion() {
                   lives are shaped by the state of the cities they live in.
                 </p>
 
-                <h2 className="text-2xl font-bold">
+                <p className="text-2xl font-bold">
                   <a
                     href="https://www.ons.gov.uk/peoplepopulationandcommunity/crimeandjustice/datasets/perceptionsofpersonalsafetyandexperiencesofharassmentgreatbritain"
                     target="_blank"
@@ -2066,7 +2066,7 @@ export default function StopMotion() {
                     In the UK
                   </a>
                   :
-                </h2>
+                </p>
 
                 <ul className="list-disc pl-6">
                   <li>
@@ -2307,14 +2307,14 @@ export default function StopMotion() {
 
                 <div className="border-2 border-red-600   h-full text-center text-black bg-white  w-fit rounded-full cursor-pointer hover:shadow-2xl hover:shadow-red-800 duration-200  lowercase relative pre-order-container">
                   <div className="pre-order-outside2 p-4  w-full h-full rounded-full z-9"></div>
-                  <div
+                  <button
                     onClick={() => {
                       setShowWaitlist(true);
                     }}
-                    className="bg-white z-9999999999999 relative h-full w-full rounded-full p-4 font-bold"
+                    className="bg-white z-9999999 relative h-full w-full rounded-full p-4 font-bold"
                   >
                     Join the Waitlist
-                  </div>
+                  </button>
                 </div>
               </article>
             </motion.div>

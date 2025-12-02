@@ -349,7 +349,7 @@ article * {
   text-align: justify !important;
 }
 article h1 {
-  font-size: 36px !important;
+  font-size: 30px !important;
   text-align: left !important;
 }
 article h2 {
@@ -358,4 +358,8 @@ article h2 {
 }
 article p {
   font-size: 16px !important;
+ }
+
+ article .title {
+  font-size: 36px !important;
  }

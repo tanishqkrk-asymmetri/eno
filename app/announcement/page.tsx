@@ -210,7 +210,7 @@ export default function Announce() {
             <strong>Contact:</strong> press@enoughsafety.com
           </p>
 
-          <h1 className="text-3xl md:text-5xl font-bold">
+          <h1 className="text-3xl md:text-5xl font-bold title">
             London-based startup, eNOugh, has raised $2.7M to build a mini AI
             bodyguard to empower people to get home safely.
           </h1>
@@ -341,7 +341,7 @@ export default function Announce() {
             by the state of the cities they live in.
           </p>
 
-          <h2 className="text-2xl font-bold">
+          <p className="text-2xl font-bold">
             <a
               href="https://www.ons.gov.uk/peoplepopulationandcommunity/crimeandjustice/datasets/perceptionsofpersonalsafetyandexperiencesofharassmentgreatbritain"
               target="_blank"
@@ -351,7 +351,7 @@ export default function Announce() {
               In the UK
             </a>
             :
-          </h2>
+          </p>
 
           <ul className="list-disc pl-6">
             <li>
