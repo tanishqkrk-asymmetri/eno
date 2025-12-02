@@ -102,7 +102,7 @@ export default function CookieBanner() {
                 </div>
 
                 {/* Action buttons */}
-                <div className="flex flex-col sm:flex-row gap-3 w-full md:w-auto items-center">
+                <div className="flex flex-col md:flex-row gap-3 w-full md:w-auto items-center">
                   {/* Decline button */}
                   <motion.button
                     onClick={handleDecline}
