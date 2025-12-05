@@ -325,9 +325,10 @@ export default function StopMotion() {
     let animationFrameId: number;
     let userHasScrolled = false;
     let isScrollingProgrammatically = false;
+    let scrollTimeout: ReturnType<typeof setTimeout>;
 
     const autoScroll = (timestamp: number) => {
-      if (!isAutoScrolling || userHasScrolled) return;
+      if (!isAutoScrolling) return;
 
       // If paused, don't update scroll but keep the animation frame going
       if (isPaused) {
@@ -360,6 +361,42 @@ export default function StopMotion() {
       }
     };
 
+    const resumeAutoScroll = () => {
+      const currentScroll = window.scrollY;
+      const maxScroll =
+        document.documentElement.scrollHeight - window.innerHeight;
+      const currentEaseProgress = Math.max(
+        0,
+        Math.min(1, currentScroll / maxScroll)
+      );
+
+      // Inverse easing to find progress (t)
+      let t;
+      if (currentEaseProgress < 0.5) {
+        t = Math.sqrt(currentEaseProgress / 2);
+      } else {
+        t = 1 - Math.sqrt((1 - currentEaseProgress) / 2);
+      }
+
+      // Calculate elapsed time corresponding to this progress
+      const elapsed = t * 10000;
+
+      // Reset state to resume
+      isAutoScrolling = true;
+      userHasScrolled = false;
+      isPaused = false;
+      pausedTime = 0;
+      // Use performance.now() or fallback
+      const now = document.timeline
+        ? document.timeline.currentTime
+        : performance.now();
+      startTime = (Number(now) || performance.now()) - elapsed;
+
+      cancelAnimationFrame(animationFrameId);
+      animationFrameId = requestAnimationFrame(autoScroll);
+      console.log("Resuming auto-scroll");
+    };
+
     // Detect user scroll and stop auto-scroll permanently
     const handleUserScroll = () => {
       // Ignore if we're scrolling programmatically
@@ -368,10 +405,16 @@ export default function StopMotion() {
       if (isAutoScrolling) {
         userHasScrolled = true;
         isAutoScrolling = false;
-        isPaused = false;
+        // Keep isPaused as is, or reset?
+        // isPaused = false;
         cancelAnimationFrame(animationFrameId);
         console.log("User took control");
       }
+
+      clearTimeout(scrollTimeout);
+      scrollTimeout = setTimeout(() => {
+        resumeAutoScroll();
+      }, 100);
     };
 
     // Handle click to pause/play
@@ -434,6 +477,7 @@ export default function StopMotion() {
     // Cleanup
     return () => {
       clearTimeout(startDelay);
+      clearTimeout(scrollTimeout);
       cancelAnimationFrame(animationFrameId);
       window.removeEventListener("wheel", handleUserScroll);
       window.removeEventListener("touchstart", handleUserScroll);
