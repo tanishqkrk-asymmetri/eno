@@ -95,7 +95,7 @@ export default function CookieBanner() {
                       className="text-center text-white/60 underline"
                       href="/privacy"
                     >
-                      Policies
+                      Privacy Policy & TC
                     </a>
                     .{" "}
                   </p>

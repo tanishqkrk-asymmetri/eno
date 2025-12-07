@@ -77,7 +77,7 @@ export default function StopMotion() {
 
   const [showButtons, setShowButtons] = useState(false);
   const [founder, setFounder] = useState<null | number>(null);
-  const [productPageOn, setProductPageOn] = useState(false);
+  const [productPageOn, setProductPageOn] = useState(true);
   const [played, setPlayed] = useState(false);
   // const [played, setPlayed] = useState(false);
 
@@ -552,17 +552,6 @@ export default function StopMotion() {
       }, 100);
     };
 
-    // Listen for custom pause event from checkpoint navigation
-    const handlePauseEvent = () => {
-      console.log("Received pause event, pausing autoscroll...");
-      if (isAutoScrolling) {
-        userHasScrolled = true;
-        isAutoScrolling = false;
-        cancelAnimationFrame(animationFrameId);
-        clearTimeout(scrollTimeout);
-      }
-    };
-
     // Listen for user scroll events
     window.addEventListener("wheel", handleUserScroll, { passive: true });
     window.addEventListener("touchstart", handleUserScroll, { passive: true });
@@ -584,7 +573,6 @@ export default function StopMotion() {
       }
     });
     window.addEventListener("resumeProductAutoScroll", handleResumeEvent);
-    window.addEventListener("pauseProductAutoScroll", handlePauseEvent);
 
     // Start auto-scroll after a short delay
     const startDelay = setTimeout(() => {
@@ -600,7 +588,6 @@ export default function StopMotion() {
       window.removeEventListener("touchstart", handleUserScroll);
       window.removeEventListener("touchmove", handleUserScroll);
       window.removeEventListener("resumeProductAutoScroll", handleResumeEvent);
-      window.removeEventListener("pauseProductAutoScroll", handlePauseEvent);
     };
   }, [isLoaded, productPageOn]);
 
@@ -631,8 +618,7 @@ export default function StopMotion() {
     if (!productPageOn) return;
 
     const handleProductPageClick = (e: MouseEvent) => {
-      console.log("UNGABUNGAGA");
-      // Check if clUicking on interactive elements
+      // Check if clicking on interactive elements
       const target = e.target as HTMLElement;
       if (
         target.closest("button, a")
@@ -641,15 +627,11 @@ export default function StopMotion() {
         return;
       }
 
-      // FIRST: Pause the auto-scroll by triggering a scroll event
-      // This will cause the auto-scroll useEffect to pause
-      window.dispatchEvent(new Event("pauseProductAutoScroll"));
-
       // Determine previous checkpoint based on current frame
       const currentFrame = parseInt(currentProductImage);
       let targetFrame = 0;
 
-      // console.log("Current frame:", currentFrame);
+      console.log("Current frame:", currentFrame);
 
       if (currentFrame > 0 && currentFrame < 230) {
         targetFrame = 0;
@@ -661,7 +643,7 @@ export default function StopMotion() {
         targetFrame = 420;
       }
 
-      // console.log("Target frame:", targetFrame);
+      console.log("Target frame:", targetFrame);
 
       // Calculate scroll position for target frame
       // Formula from code: productProgress = (scrollYProgress - 0.01) / 0.99
@@ -669,16 +651,15 @@ export default function StopMotion() {
       // Reverse: scrollYProgress = (frame / 590) * 0.99 + 0.01
       const targetScrollYProgress = (targetFrame / 590) * 0.99 + 0.01;
 
-      // console.log("Target scrollYProgress:", targetScrollYProgress);
+      console.log("Target scrollYProgress:", targetScrollYProgress);
 
       // Convert to actual scroll position
       const maxScroll =
         document.documentElement.scrollHeight - window.innerHeight;
       const targetScrollPosition = targetScrollYProgress * maxScroll;
 
-      // console.log("Scrolling to:", targetScrollPosition, "of", maxScroll);
+      console.log("Scrolling to:", targetScrollPosition, "of", maxScroll);
 
-      // Wait a frame for pause to take effect, then scroll
       window.scrollTo({
         top: targetScrollPosition,
         behavior: "smooth",
@@ -690,7 +671,6 @@ export default function StopMotion() {
         console.log("Dispatching resume event...");
         window.dispatchEvent(new Event("resumeProductAutoScroll"));
       }, 1000);
-      requestAnimationFrame(() => {});
     };
 
     window.addEventListener("click", handleProductPageClick);
@@ -1954,12 +1934,6 @@ export default function StopMotion() {
                       className="cursor-pointer"
                     >
                       <Instagram className="my-6"></Instagram>
-                    </a>
-                    <a
-                      className="text-center text-white/60 underline absolute bottom-0"
-                      href="/privacy"
-                    >
-                      Privacy Policy & TC
                     </a>
                   </motion.div>
                   <div className="grid grid-cols-3 justify-items-center content-center max-md:flex max-md:flex-col max-md:h-screen">
