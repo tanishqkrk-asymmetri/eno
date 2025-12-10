@@ -1300,7 +1300,8 @@ export default function StopMotion() {
               )}
             </div>
 
-            {played && (
+            {
+              // played &&
               <motion.div
                 initial={{
                   opacity: 0,
@@ -1365,19 +1366,21 @@ export default function StopMotion() {
                 </div>
 
                 <div className="w-full max-md:w-full md:w-auto max-md:hidden group relative">
-                  <button
-                    onClick={() => {
-                      setAnnounce(true);
-                    }}
-                    className="border border-white/50 flex justify-center items-center gap-2 text-white p-3 rounded-full  duration-200 cursor-pointer hover:bg-red-800 hover:text-white hover:border-red-900 text-sm ready "
-                  >
-                    <div className="absolute w-full h-full bg-black/80 rounded-full group-hover:opacity-0 duration-300 pointer-events-none"></div>
-                    <p className="z-9">eNO’s announcement</p>{" "}
-                    <ArrowUpRight className="z-9"></ArrowUpRight>
-                  </button>
+                  {played && (
+                    <button
+                      onClick={() => {
+                        setAnnounce(true);
+                      }}
+                      className="border border-white/50 flex justify-center items-center gap-2 text-white p-3 rounded-full  duration-200 cursor-pointer hover:bg-red-800 hover:text-white hover:border-red-900 text-sm ready "
+                    >
+                      <div className="absolute w-full h-full bg-black/80 rounded-full group-hover:opacity-0 duration-300 pointer-events-none"></div>
+                      <p className="z-9">eNO’s announcement</p>{" "}
+                      <ArrowUpRight className="z-9"></ArrowUpRight>
+                    </button>
+                  )}
                 </div>
               </motion.div>
-            )}
+            }
 
             <AnimatePresence>
               {!played ? (
