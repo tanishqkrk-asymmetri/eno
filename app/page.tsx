@@ -222,6 +222,8 @@ export default function StopMotion() {
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const [currentFrame, setCurrentFrame] = useState(0);
 
+  const [pausedByClick, setPausedByClick] = useState(true);
+
   const frameCount = 488; // 0-487 = 488 frames
   const { images, isLoaded, loadProgress } = useImageSequence(
     frameCount,
@@ -499,7 +501,7 @@ export default function StopMotion() {
 
       cancelAnimationFrame(animationFrameId);
       animationFrameId = requestAnimationFrame(autoScroll);
-      console.log("Resuming auto-scroll");
+      // console.log("Resuming auto-scroll");
     };
 
     // Detect user scroll and stop auto-scroll permanently
@@ -513,7 +515,7 @@ export default function StopMotion() {
         // Keep isPaused as is, or reset?
         // isPaused = false;
         cancelAnimationFrame(animationFrameId);
-        console.log("User took control");
+        // console.log("User took control");
       }
 
       clearTimeout(scrollTimeout);
@@ -629,7 +631,7 @@ export default function StopMotion() {
 
       cancelAnimationFrame(animationFrameId);
       animationFrameId = requestAnimationFrame(autoScroll);
-      console.log("Resuming product page auto-scroll");
+      // console.log("Resuming product page auto-scroll");
     };
 
     // Detect user scroll and pause, then resume after they stop
@@ -638,15 +640,15 @@ export default function StopMotion() {
       if (isScrollingProgrammatically) return;
 
       if (isAutoScrolling) {
+        setPausedByClick(false);
         userHasScrolled = true;
         isAutoScrolling = false;
         cancelAnimationFrame(animationFrameId);
-        console.log("User scrolling - pausing product page auto-scroll");
+        // console.log("User scrolling - pausing product page auto-scroll");
       }
-
       clearTimeout(scrollTimeout);
       scrollTimeout = setTimeout(() => {
-        // resumeAutoScroll();
+        resumeAutoScroll();
       }, 100);
     };
 
@@ -655,12 +657,15 @@ export default function StopMotion() {
       resumeAutoScroll();
     }, 1000);
     const handleResumeEvent = () => {
-      console.log("Received resume event, resuming autoscroll...");
+      // console.log("Received resume event, resuming autoscroll...");
+      setTimeout(() => {
+        resumeAutoScroll();
+      }, 1000);
     };
 
     // Listen for custom pause event from checkpoint navigation
     const handlePauseEvent = () => {
-      console.log("Received pause event, pausing autoscroll...");
+      // console.log("Received pause event, pausing autoscroll...");
       if (isAutoScrolling) {
         userHasScrolled = true;
         isAutoScrolling = false;
@@ -735,9 +740,9 @@ export default function StopMotion() {
   // Checkpoint navigation on click for product page
   useEffect(() => {
     if (!productPageOn) return;
+    // console.log("scrolling ! ! ! ! ");
     // if (parseInt(currentProductImage) > 100) return;
     const handleProductPageClick = (e: MouseEvent | any) => {
-      // console.log("UNGABUNGAGA");
       // Check if clUicking on interactive elements
       const target = e.target as HTMLElement;
       if (
@@ -746,6 +751,18 @@ export default function StopMotion() {
       ) {
         return;
       }
+
+      // Second click: Resume animation if already paused
+      if (pausedByClick) {
+        setPausedByClick(false);
+        console.log("RESUME - Second click");
+        window.dispatchEvent(new Event("resumeProductAutoScroll"));
+        return;
+      }
+
+      // First click: Pause and scroll back to checkpoint
+      setPausedByClick(true);
+      console.log("PAUSE - First click, scrolling to checkpoint");
 
       // FIRST: Pause the auto-scroll by triggering a scroll event
       // This will cause the auto-scroll useEffect to pause
@@ -785,29 +802,24 @@ export default function StopMotion() {
       // console.log("Scrolling to:", targetScrollPosition, "of", maxScroll);
 
       // Wait a frame for pause to take effect, then scroll
-      setTimeout(() => {
-        console.log("scrolling !!!!!");
-        window.scrollTo({
-          top: targetScrollPosition,
-          behavior: "smooth",
-        });
-      }, 1000);
+      // setTimeout(() => {
+      //   console.log("scrolling !!!!!");
+      // }, 1000);
+      window.scrollTo({
+        top: targetScrollPosition,
+        behavior: "smooth",
+      });
 
-      // Wait for smooth scroll to complete, then dispatch custom event to resume autoscroll
-      // Smooth scroll typically takes 500-1000ms depending on distance
-      setTimeout(() => {
-        console.log("Dispatching resume event...");
-        window.dispatchEvent(new Event("resumeProductAutoScroll"));
-      }, 1000);
+      // Don't auto-resume - wait for user to click again
       requestAnimationFrame(() => {});
     };
     window.addEventListener("click", handleProductPageClick);
-    window.addEventListener("scrollend", handleProductPageClick);
+    // window.addEventListener("scrollend", handleProductPageClick);
     return () => {
       window.removeEventListener("click", handleProductPageClick);
-      window.removeEventListener("scrollend", handleProductPageClick);
+      // window.removeEventListener("scrollend", handleProductPageClick);
     };
-  }, [productPageOn, currentProductImage]);
+  }, [productPageOn, currentProductImage, pausedByClick]);
 
   return (
     <div
@@ -1841,6 +1853,26 @@ export default function StopMotion() {
                 </motion.div>
               )}
             </AnimatePresence>
+
+            <AnimatePresence>
+              {pausedByClick && (
+                <motion.div
+                  initial={{
+                    opacity: 0,
+                  }}
+                  animate={{
+                    opacity: 1,
+                  }}
+                  exit={{
+                    opacity: 0,
+                  }}
+                  className="text-white/60 z-99999999999 text-sm fixed bottom-32 left-1/2 -translate-x-1/2"
+                >
+                  Click anywhere to play
+                </motion.div>
+              )}
+            </AnimatePresence>
+
             <AnimatePresence>
               {currentProductImage > "230" && currentImage < "400" && (
                 <motion.div className="fixed text-white top-1/3 space-y-6 left-16 z-9999999999 max-w-sm max-md:bottom-16 max-md:top-auto  max-md:h-fit max-md:left-1/2 max-md:w-full max-md:-translate-x-1/2 max-md:px-6">
