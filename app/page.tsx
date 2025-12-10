@@ -303,7 +303,7 @@ export default function StopMotion() {
     }
   });
 
-  console.log(currentProductImage);
+  // console.log(currentProductImage);
 
   useEffect(() => {
     if (window) {
@@ -518,7 +518,7 @@ export default function StopMotion() {
 
       clearTimeout(scrollTimeout);
       scrollTimeout = setTimeout(() => {
-        // resumeAutoScroll();
+        resumeAutoScroll();
       }, 100);
     };
 
@@ -736,8 +736,8 @@ export default function StopMotion() {
   useEffect(() => {
     if (!productPageOn) return;
     // if (parseInt(currentProductImage) > 100) return;
-    const handleProductPageClick = (e: MouseEvent) => {
-      console.log("UNGABUNGAGA");
+    const handleProductPageClick = (e: MouseEvent | any) => {
+      // console.log("UNGABUNGAGA");
       // Check if clUicking on interactive elements
       const target = e.target as HTMLElement;
       if (
@@ -785,10 +785,13 @@ export default function StopMotion() {
       // console.log("Scrolling to:", targetScrollPosition, "of", maxScroll);
 
       // Wait a frame for pause to take effect, then scroll
-      window.scrollTo({
-        top: targetScrollPosition,
-        behavior: "smooth",
-      });
+      setTimeout(() => {
+        console.log("scrolling !!!!!");
+        window.scrollTo({
+          top: targetScrollPosition,
+          behavior: "smooth",
+        });
+      }, 1000);
 
       // Wait for smooth scroll to complete, then dispatch custom event to resume autoscroll
       // Smooth scroll typically takes 500-1000ms depending on distance
@@ -799,8 +802,10 @@ export default function StopMotion() {
       requestAnimationFrame(() => {});
     };
     window.addEventListener("click", handleProductPageClick);
+    window.addEventListener("scrollend", handleProductPageClick);
     return () => {
       window.removeEventListener("click", handleProductPageClick);
+      window.removeEventListener("scrollend", handleProductPageClick);
     };
   }, [productPageOn, currentProductImage]);
 
@@ -816,7 +821,7 @@ export default function StopMotion() {
       }}
     >
       <div id="top"></div>
-      <div className="fixed bottom-0 left-1/2 -translate-x-1/2 text-white space-x-6 z-99999999999999">
+      <div className="fixed bottom-0 left-1/2 -translate-x-1/2 text-white/50 space-x-6 z-99999999999999">
         <a href="/terms" className="underline text-sm">
           Terms of Service
         </a>
@@ -943,72 +948,72 @@ export default function StopMotion() {
         {(backToHome || (played && parseInt(currentImage) >= 457)) && (
           // Show red circle after animation 2 completes
           <>
-            <div className="top-[60%] left-[52%] max-md:top-[56%] -translate-x-1/2 fixed z-999999999999 text-white/50 text-xs">
-              Click to know more
-            </div>
-            <motion.div
-              onClick={() => {
-                if (!productPageOn) {
-                  setProductPageOn(true);
-                  setTimeout(() => {
-                    document.querySelector("#top")?.scrollIntoView();
-                  }, 1500);
-                }
-              }}
-              whileHover={{ scale: 1.15 }}
-              whileTap={{ scale: 0.95 }}
-              className="bg-red-500/20 rounded-full w-10 aspect-square fixed    top-[53%] left-[50%] flex justify-center items-center cursor-pointer duration-200 z-999999 max-md:left-[46%] max-md:top-[50%]"
-            >
-              {/* Subtle Ripple animations - increased opacity and slower */}
+            <div className="fixed top-[53%] left-[50%] flex flex-col-reverse z-999999999999  justify-center items-center gap-2">
+              <div className=" text-white/50 text-xs">Click to know more</div>
               <motion.div
-                className="absolute inset-0 border-red-400/40 border rounded-full"
-                initial={{ scale: 1, opacity: 0 }}
-                animate={{ scale: 2.5, opacity: [0, 0.25, 0] }}
-                transition={{
-                  duration: 2.5,
-                  repeat: Infinity,
-                  ease: "easeOut",
+                onClick={() => {
+                  if (!productPageOn) {
+                    setProductPageOn(true);
+                    setTimeout(() => {
+                      document.querySelector("#top")?.scrollIntoView();
+                    }, 1500);
+                  }
                 }}
-              />
-              <motion.div
-                className="absolute inset-0 border-red-400/40 border rounded-full"
-                initial={{ scale: 1, opacity: 0 }}
-                animate={{ scale: 2.5, opacity: [0, 0.25, 0] }}
-                transition={{
-                  duration: 2.5,
-                  repeat: Infinity,
-                  ease: "easeOut",
-                  delay: 0.8,
-                }}
-              />
-              <motion.div
-                className="absolute inset-0 border-red-400/40 border rounded-full"
-                initial={{ scale: 1, opacity: 0 }}
-                animate={{ scale: 2.5, opacity: [0, 0.25, 0] }}
-                transition={{
-                  duration: 2.5,
-                  repeat: Infinity,
-                  ease: "easeOut",
-                  delay: 1.6,
-                }}
-              />
-              <motion.div className="bg-red-800 border-2 border-red-500 rounded-full w-6 aspect-square flex justify-center items-center relative">
-                <div
-                  style={{
-                    // background: productPageOn ? "black" : "#FF0000",
-                    // scale: productPageOn ? 150 : 1,
-                    transition: "all 1s ease-in-out",
+                whileHover={{ scale: 1.15 }}
+                whileTap={{ scale: 0.95 }}
+                className="bg-red-500/20 rounded-full w-10 aspect-square flex justify-center items-center cursor-pointer duration-200 z-999999 max-md:left-[46%] max-md:top-[50%]"
+              >
+                {/* Subtle Ripple animations - increased opacity and slower */}
+                <motion.div
+                  className="absolute inset-0 border-red-400/40 border rounded-full"
+                  initial={{ scale: 1, opacity: 0 }}
+                  animate={{ scale: 2.5, opacity: [0, 0.25, 0] }}
+                  transition={{
+                    duration: 2.5,
+                    repeat: Infinity,
+                    ease: "easeOut",
                   }}
-                  onClick={(e) => {
-                    if (productPageOn) {
-                      e.stopPropagation();
-                      setProductPageOn(false);
-                    }
+                />
+                <motion.div
+                  className="absolute inset-0 border-red-400/40 border rounded-full"
+                  initial={{ scale: 1, opacity: 0 }}
+                  animate={{ scale: 2.5, opacity: [0, 0.25, 0] }}
+                  transition={{
+                    duration: 2.5,
+                    repeat: Infinity,
+                    ease: "easeOut",
+                    delay: 0.8,
                   }}
-                  className="rounded-full w-4 aspect-square"
-                ></div>
+                />
+                <motion.div
+                  className="absolute inset-0 border-red-400/40 border rounded-full"
+                  initial={{ scale: 1, opacity: 0 }}
+                  animate={{ scale: 2.5, opacity: [0, 0.25, 0] }}
+                  transition={{
+                    duration: 2.5,
+                    repeat: Infinity,
+                    ease: "easeOut",
+                    delay: 1.6,
+                  }}
+                />
+                <motion.div className="bg-red-800 border-2 border-red-500 rounded-full w-6 aspect-square flex justify-center items-center relative">
+                  <div
+                    style={{
+                      // background: productPageOn ? "black" : "#FF0000",
+                      // scale: productPageOn ? 150 : 1,
+                      transition: "all 1s ease-in-out",
+                    }}
+                    onClick={(e) => {
+                      if (productPageOn) {
+                        e.stopPropagation();
+                        setProductPageOn(false);
+                      }
+                    }}
+                    className="rounded-full w-4 aspect-square"
+                  ></div>
+                </motion.div>
               </motion.div>
-            </motion.div>
+            </div>
 
             <motion.div
               onClick={() => {
@@ -1399,7 +1404,7 @@ export default function StopMotion() {
                     muted
                     playsInline
                     ref={videoRef}
-                    src="https://res.cloudinary.com/dyi7gdcpj/video/upload/v1764407817/hero2_iik12b.mp4"
+                    src="https://ewdwsu3zqlwawwsn.public.blob.vercel-storage.com/hero2.mp4"
                     preload="auto"
                     className="w-full h-screen object-contain md:object-cover md:scale-150   video  z-9999 relative max-md:hidden"
                   ></motion.video>
@@ -1470,7 +1475,7 @@ export default function StopMotion() {
             <video
               muted
               ref={videoRef2}
-              src="https://res.cloudinary.com/dyi7gdcpj/video/upload/v1764407817/hero2_iik12b.mp4"
+              src="https://ewdwsu3zqlwawwsn.public.blob.vercel-storage.com/hero2.mp4"
               playsInline
               className="w-full h-screen object-cover md:object-cover scale-150   video  blur-lg fixed top-0 z-0 hidden max-md:block "
             ></video>
@@ -2077,12 +2082,6 @@ export default function StopMotion() {
                       className="cursor-pointer"
                     >
                       <Instagram className="my-6"></Instagram>
-                    </a>
-                    <a
-                      className="text-center text-white/60 underline absolute bottom-0"
-                      href="/privacy"
-                    >
-                      Privacy Policy & TC
                     </a>
                   </motion.div>
                   <div className="grid grid-cols-3 justify-items-center content-center max-md:flex max-md:flex-col max-md:h-screen">
