@@ -91,13 +91,21 @@ export default function CookieBanner() {
                     We use cookies to enhance your browsing experience and
                     analyze our traffic. By clicking "Accept", you consent to
                     our{" "}
-                    <a
-                      className="text-center text-white/60 underline"
-                      href="/privacy"
-                    >
-                      Privacy Policy & TC
-                    </a>
-                    .{" "}
+                    <div className="space-x-1.5 inline">
+                      <a
+                        className="text-center text-white/60 underline"
+                        href="/privacy"
+                      >
+                        Privacy Policy
+                      </a>
+                      <p className="inline">&</p>
+                      <a
+                        className="text-center text-white/60 underline"
+                        href="/terms"
+                      >
+                        Terms of Service .
+                      </a>
+                    </div>
                   </p>
                 </div>
 

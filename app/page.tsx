@@ -303,6 +303,8 @@ export default function StopMotion() {
     }
   });
 
+  console.log(currentProductImage);
+
   useEffect(() => {
     if (window) {
       // Always scroll to top on mount, regardless of isLoaded
@@ -516,7 +518,7 @@ export default function StopMotion() {
 
       clearTimeout(scrollTimeout);
       scrollTimeout = setTimeout(() => {
-        resumeAutoScroll();
+        // resumeAutoScroll();
       }, 100);
     };
 
@@ -644,16 +646,16 @@ export default function StopMotion() {
 
       clearTimeout(scrollTimeout);
       scrollTimeout = setTimeout(() => {
-        resumeAutoScroll();
+        // resumeAutoScroll();
       }, 100);
     };
 
     // Listen for custom resume event from checkpoint navigation
+    setTimeout(() => {
+      resumeAutoScroll();
+    }, 1000);
     const handleResumeEvent = () => {
       console.log("Received resume event, resuming autoscroll...");
-      setTimeout(() => {
-        resumeAutoScroll();
-      }, 100);
     };
 
     // Listen for custom pause event from checkpoint navigation
@@ -733,7 +735,7 @@ export default function StopMotion() {
   // Checkpoint navigation on click for product page
   useEffect(() => {
     if (!productPageOn) return;
-
+    // if (parseInt(currentProductImage) > 100) return;
     const handleProductPageClick = (e: MouseEvent) => {
       console.log("UNGABUNGAGA");
       // Check if clUicking on interactive elements
@@ -796,9 +798,7 @@ export default function StopMotion() {
       }, 1000);
       requestAnimationFrame(() => {});
     };
-
     window.addEventListener("click", handleProductPageClick);
-
     return () => {
       window.removeEventListener("click", handleProductPageClick);
     };
@@ -816,6 +816,14 @@ export default function StopMotion() {
       }}
     >
       <div id="top"></div>
+      <div className="fixed bottom-0 left-1/2 -translate-x-1/2 text-white space-x-6 z-99999999999999">
+        <a href="/terms" className="underline text-sm">
+          Terms of Service
+        </a>
+        <a href="/privacy" className="underline text-sm">
+          Privacy Policy
+        </a>
+      </div>
 
       {!backToHome && (
         <motion.div
@@ -935,6 +943,9 @@ export default function StopMotion() {
         {(backToHome || (played && parseInt(currentImage) >= 457)) && (
           // Show red circle after animation 2 completes
           <>
+            <div className="top-[60%] left-[52%] max-md:top-[56%] -translate-x-1/2 fixed z-999999999999 text-white/50 text-xs">
+              Click to know more
+            </div>
             <motion.div
               onClick={() => {
                 if (!productPageOn) {
@@ -981,7 +992,6 @@ export default function StopMotion() {
                   delay: 1.6,
                 }}
               />
-
               <motion.div className="bg-red-800 border-2 border-red-500 rounded-full w-6 aspect-square flex justify-center items-center relative">
                 <div
                   style={{
@@ -1302,6 +1312,7 @@ export default function StopMotion() {
                   <div className="text-white text-2xl max-md:text-3xl md:text-4xl font-light max-md:text-center ">
                     your mini AI bodyguard
                   </div>
+
                   <motion.div
                     initial={{
                       opacity: 0,
@@ -1974,6 +1985,14 @@ export default function StopMotion() {
             <AnimatePresence></AnimatePresence>
 
             <AnimatePresence>
+              <div className="fixed bottom-0 left-1/2 -translate-x-1/2 text-white/60 space-x-6 z-99999999999999">
+                <a href="/terms" className="underline text-sm">
+                  Terms of Service
+                </a>
+                <a href="/privacy" className="underline text-sm">
+                  Privacy Policy
+                </a>
+              </div>
               {parseInt(currentProductImage) < 20 && (
                 <motion.div
                   initial={{
