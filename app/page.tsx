@@ -835,10 +835,10 @@ export default function StopMotion() {
       <div id="top"></div>
       <div className="fixed bottom-0 left-1/2 -translate-x-1/2 text-white/50 space-x-6 z-99999999999999">
         <a href="/terms" className="underline text-sm">
-          Terms of Service
+          terms of Service
         </a>
         <a href="/privacy" className="underline text-sm">
-          Privacy Policy
+          privacy Policy
         </a>
       </div>
 
@@ -961,7 +961,7 @@ export default function StopMotion() {
           // Show red circle after animation 2 completes
           <>
             <div className="fixed top-[53%] left-[50%] flex flex-col-reverse z-999999999999  justify-center items-center gap-2">
-              <div className=" text-white/50 text-xs">Click to know more</div>
+              <div className=" text-white/50 text-xs">click to know more</div>
               <motion.div
                 onClick={() => {
                   if (!productPageOn) {
@@ -1866,7 +1866,7 @@ export default function StopMotion() {
                   exit={{
                     opacity: 0,
                   }}
-                  className="text-white/60 z-99999999999 text-sm fixed bottom-32 left-1/2 -translate-x-1/2"
+                  className="text-white/60 z-99999999999 text-sm fixed bottom-32 left-1/2 -translate-x-1/2 lowercase"
                 >
                   Click anywhere to play
                 </motion.div>
@@ -2025,12 +2025,12 @@ export default function StopMotion() {
             <AnimatePresence></AnimatePresence>
 
             <AnimatePresence>
-              <div className="fixed bottom-0 left-1/2 -translate-x-1/2 text-white/60 space-x-6 z-99999999999999">
+              <div className="fixed bottom-0 left-1/2 -translate-x-1/2 text-white/60 space-x-6 z-99999999999999 lowercase">
                 <a href="/terms" className="underline text-sm">
-                  Terms of Service
+                  terms of Service
                 </a>
                 <a href="/privacy" className="underline text-sm">
-                  Privacy Policy
+                  privacy Policy
                 </a>
               </div>
               {parseInt(currentProductImage) < 20 && (
