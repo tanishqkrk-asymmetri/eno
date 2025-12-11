@@ -1382,12 +1382,12 @@ export default function StopMotion() {
                     transition={{
                       duration: 0.6,
                     }}
-                    // onTimeUpdate={(e) => {
-                    //   if (e.timeStamp > 40000 && videoRef.current) {
-                    //     setShowButtons(true);
-                    //     setPlayed(true);
-                    //   }
-                    // }}
+                    onTimeUpdate={(e) => {
+                      if (e.timeStamp > 40000 && videoRef.current) {
+                        setShowButtons(true);
+                        setPlayed(true);
+                      }
+                    }}
                     muted
                     playsInline
                     ref={videoRef}
