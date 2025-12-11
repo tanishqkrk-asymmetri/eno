@@ -1868,7 +1868,7 @@ export default function StopMotion() {
                   }}
                   className="text-white/60 z-99999999999 text-sm fixed bottom-32 left-1/2 -translate-x-1/2 lowercase"
                 >
-                  Click anywhere to play
+                  click anywhere to play
                 </motion.div>
               )}
             </AnimatePresence>
