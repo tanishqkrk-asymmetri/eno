@@ -740,10 +740,7 @@ export default function StopMotion() {
   // Checkpoint navigation on click for product page
   useEffect(() => {
     if (!productPageOn) return;
-    // console.log("scrolling ! ! ! ! ");
-    // if (parseInt(currentProductImage) > 100) return;
-    const handleProductPageClick = (e: MouseEvent | any) => {
-      // Check if clUicking on interactive elements
+    const handleProductPageClick = (e: MouseEvent) => {
       const target = e.target as HTMLElement;
       if (
         target.closest("button, a")
@@ -752,7 +749,6 @@ export default function StopMotion() {
         return;
       }
 
-      // Second click: Resume animation if already paused
       if (pausedByClick) {
         setPausedByClick(false);
         console.log("RESUME - Second click");
@@ -760,19 +756,13 @@ export default function StopMotion() {
         return;
       }
 
-      // First click: Pause and scroll back to checkpoint
       setPausedByClick(true);
       console.log("PAUSE - First click, scrolling to checkpoint");
 
-      // FIRST: Pause the auto-scroll by triggering a scroll event
-      // This will cause the auto-scroll useEffect to pause
       window.dispatchEvent(new Event("pauseProductAutoScroll"));
 
-      // Determine previous checkpoint based on current frame
       const currentFrame = parseInt(currentProductImage);
       let targetFrame = 0;
-
-      // console.log("Current frame:", currentFrame);
 
       if (currentFrame > 0 && currentFrame < 230) {
         targetFrame = 0;
@@ -784,27 +774,10 @@ export default function StopMotion() {
         targetFrame = 420;
       }
 
-      // console.log("Target frame:", targetFrame);
-
-      // Calculate scroll position for target frame
-      // Formula from code: productProgress = (scrollYProgress - 0.01) / 0.99
-      // frame = productProgress * 590
-      // Reverse: scrollYProgress = (frame / 590) * 0.99 + 0.01
       const targetScrollYProgress = (targetFrame / 590) * 0.99 + 0.01;
-
-      // console.log("Target scrollYProgress:", targetScrollYProgress);
-
-      // Convert to actual scroll position
       const maxScroll =
         document.documentElement.scrollHeight - window.innerHeight;
       const targetScrollPosition = targetScrollYProgress * maxScroll;
-
-      // console.log("Scrolling to:", targetScrollPosition, "of", maxScroll);
-
-      // Wait a frame for pause to take effect, then scroll
-      // setTimeout(() => {
-      //   console.log("scrolling !!!!!");
-      // }, 1000);
       window.scrollTo({
         top: targetScrollPosition,
         behavior: "smooth",
@@ -813,11 +786,10 @@ export default function StopMotion() {
       // Don't auto-resume - wait for user to click again
       requestAnimationFrame(() => {});
     };
+
     window.addEventListener("click", handleProductPageClick);
-    // window.addEventListener("scrollend", handleProductPageClick);
     return () => {
       window.removeEventListener("click", handleProductPageClick);
-      // window.removeEventListener("scrollend", handleProductPageClick);
     };
   }, [productPageOn, currentProductImage, pausedByClick]);
 
@@ -833,7 +805,7 @@ export default function StopMotion() {
       }}
     >
       <div id="top"></div>
-      <div className="fixed bottom-0 left-1/2 -translate-x-1/2 text-white/50 space-x-6 z-99999999999999">
+      <div className="fixed bottom-0 left-1/2 -translate-x-1/2 text-white/50 space-x-6 z-99999999999999 max-md:w-full max-md:justify-center max-md:flex max-md:pb-6">
         <a href="/terms" className="underline text-sm">
           terms of Service
         </a>
@@ -960,7 +932,7 @@ export default function StopMotion() {
         {(backToHome || (played && parseInt(currentImage) >= 457)) && (
           // Show red circle after animation 2 completes
           <>
-            <div className="fixed top-[53%] left-[50%] flex flex-col-reverse z-999999999999  justify-center items-center gap-2">
+            <div className="fixed top-[53%] left-[50%] flex flex-col-reverse z-999999999999  justify-center items-center gap-2 max-md:left-[50%] -translate-x-1/2 max-md:top-[50%]">
               <div className=" text-white/50 text-xs">click to know more</div>
               <motion.div
                 onClick={() => {
@@ -1092,7 +1064,7 @@ export default function StopMotion() {
               }}
               whileHover={{ scale: 1.15 }}
               whileTap={{ scale: 0.95 }}
-              className="border-white rounded-full border p-0.5 group-hover:p-1.5 aspect-square fixed top-[65%] left-[45%] z-9999  flex justify-center items-center cursor-pointer hover:scale-110 transition-transform group max-md:top-[70%] max-md:left-[40%]"
+              className="border-white rounded-full border p-0.5 group-hover:p-1.5 aspect-square fixed top-[65%] left-[45%] z-9999  flex justify-center items-center cursor-pointer hover:scale-110 transition-transform group max-md:top-[65%] max-md:left-[40%]"
             >
               {/* Subtle Ripple animations - increased opacity and slower */}
               <motion.div
@@ -1410,16 +1382,16 @@ export default function StopMotion() {
                     transition={{
                       duration: 0.6,
                     }}
-                    onTimeUpdate={(e) => {
-                      if (e.timeStamp > 40000 && videoRef.current) {
-                        setShowButtons(true);
-                        setPlayed(true);
-                      }
-                    }}
+                    // onTimeUpdate={(e) => {
+                    //   if (e.timeStamp > 40000 && videoRef.current) {
+                    //     setShowButtons(true);
+                    //     setPlayed(true);
+                    //   }
+                    // }}
                     muted
                     playsInline
                     ref={videoRef}
-                    src="https://ewdwsu3zqlwawwsn.public.blob.vercel-storage.com/hero2.mp4"
+                    src="https://ewdwsu3zqlwawwsn.public.blob.vercel-storage.com/heroDesktopCompressed.mp4"
                     preload="auto"
                     className="w-full h-screen object-contain md:object-cover md:scale-150   video  z-9999 relative max-md:hidden"
                   ></motion.video>
@@ -1445,7 +1417,7 @@ export default function StopMotion() {
                     }}
                     muted
                     ref={videoRef3}
-                    src="https://res.cloudinary.com/dyi7gdcpj/video/upload/v1764419674/heroMobile_hmusmk.mp4"
+                    src="https://ewdwsu3zqlwawwsn.public.blob.vercel-storage.com/videoMobileCompressed.mp4"
                     preload="auto"
                     className="w-full h-screen object-contain md:object-cover md:scale-150   video  z-9999 relative hidden max-md:block"
                   ></motion.video>
@@ -1490,7 +1462,7 @@ export default function StopMotion() {
             <video
               muted
               ref={videoRef2}
-              src="https://ewdwsu3zqlwawwsn.public.blob.vercel-storage.com/hero2.mp4"
+              src="https://ewdwsu3zqlwawwsn.public.blob.vercel-storage.com/heroDesktopCompressed.mp4"
               playsInline
               className="w-full h-screen object-cover md:object-cover scale-150   video  blur-lg fixed top-0 z-0 hidden max-md:block "
             ></video>
@@ -2025,7 +1997,7 @@ export default function StopMotion() {
             <AnimatePresence></AnimatePresence>
 
             <AnimatePresence>
-              <div className="fixed bottom-0 left-1/2 -translate-x-1/2 text-white/60 space-x-6 z-99999999999999 lowercase">
+              <div className="fixed bottom-0 left-1/2 -translate-x-1/2 text-white/50 space-x-6 z-99999999999999 max-md:w-full max-md:justify-center max-md:flex max-md:pb-6">
                 <a href="/terms" className="underline text-sm">
                   terms of Service
                 </a>
