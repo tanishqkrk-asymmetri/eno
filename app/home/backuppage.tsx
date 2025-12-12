@@ -1,3 +1,107 @@
+// "use client";
+
+// import { motion } from "motion/react";
+// import { useEffect } from "react";
+
+// export default function Home() {
+//   return (
+//     <div className="min-h-screen bg-black flex flex-col items-center justify-center relative overflow-hidden">
+//       {/* Animated background glow effects */}
+//       <motion.div
+//         className="absolute top-1/4 left-1/4 w-96 h-96 bg-red-600/20 rounded-full blur-[120px]"
+//         animate={{
+//           scale: [1, 1.2, 1],
+//           opacity: [0.3, 0.5, 0.3],
+//         }}
+//         transition={{
+//           duration: 4,
+//           repeat: Infinity,
+//           ease: "easeInOut",
+//         }}
+//       />
+//       <motion.div
+//         className="absolute bottom-1/4 right-1/4 w-96 h-96 bg-red-600/20 rounded-full blur-[120px]"
+//         animate={{
+//           scale: [1.2, 1, 1.2],
+//           opacity: [0.5, 0.3, 0.5],
+//         }}
+//         transition={{
+//           duration: 4,
+//           repeat: Infinity,
+//           ease: "easeInOut",
+//           delay: 1,
+//         }}
+//       />
+
+//       {/* Content */}
+//       <div className="relative z-10 flex flex-col items-center justify-center space-y-12 px-4">
+//         {/* Logo */}
+//         <motion.div
+//           initial={{ opacity: 0, y: -20 }}
+//           animate={{ opacity: 1, y: 0 }}
+//           transition={{ duration: 0.8 }}
+//         >
+//           <img
+//             src="/logo-small.svg"
+//             alt="eNO Logo"
+//             className="w-48 md:w-64 neon"
+//           />
+//         </motion.div>
+
+//         {/* Coming Soon Text */}
+//         <motion.div
+//           initial={{ opacity: 0, y: 20 }}
+//           animate={{ opacity: 1, y: 0 }}
+//           transition={{ duration: 0.8, delay: 0.2 }}
+//           className="text-center space-y-4"
+//         >
+//           <h1 className="text-5xl md:text-7xl font-bold text-white">
+//             <span className="gradient-text">Coming Soon</span>
+//           </h1>
+//           <p className="text-white/60 text-lg md:text-xl max-w-2xl">
+//             Something exciting is on the way
+//           </p>
+//         </motion.div>
+
+//         {/* Animated decorative line */}
+//         <motion.div
+//           initial={{ width: 0 }}
+//           animate={{ width: "200px" }}
+//           transition={{ duration: 1, delay: 0.5 }}
+//           className="h-[2px] bg-gradient-to-r from-transparent via-red-600 to-transparent"
+//         />
+
+//         {/* Pulsing dot indicator */}
+//         <motion.div
+//           className="flex items-center space-x-3"
+//           initial={{ opacity: 0 }}
+//           animate={{ opacity: 1 }}
+//           transition={{ delay: 0.8 }}
+//         >
+//           <motion.div
+//             className="w-3 h-3 bg-red-600 rounded-full"
+//             animate={{
+//               scale: [1, 1.2, 1],
+//               opacity: [1, 0.6, 1],
+//             }}
+//             transition={{
+//               duration: 2,
+//               repeat: Infinity,
+//               ease: "easeInOut",
+//             }}
+//           />
+//           <span className="text-white/40 text-sm uppercase tracking-wider">
+//             Stay tuned
+//           </span>
+//         </motion.div>
+//       </div>
+
+//       {/* Bottom fade effect */}
+//       <div className="absolute bottom-0 left-0 right-0 h-32 bg-gradient-to-t from-black to-transparent pointer-events-none" />
+//     </div>
+//   );
+// }
+
 "use client";
 
 import {
@@ -9,13 +113,15 @@ import {
   AnimatePresence,
 } from "motion/react";
 import { useEffect, useMemo, useRef, useState } from "react";
-import FoundersCarousel from "./Team";
+import FoundersCarousel from "../app/home/Team";
 import Image from "next/image";
-import ENOughLanding from "./Launch";
+import ENOughLanding from "../app/home/Launch";
 import {
   ArrowUpRight,
+  ChevronDown,
   ChevronLeft,
   ChevronRight,
+  ChevronUp,
   Instagram,
   X,
 } from "lucide-react";
@@ -77,7 +183,7 @@ export default function StopMotion() {
 
   const [showButtons, setShowButtons] = useState(false);
   const [founder, setFounder] = useState<null | number>(null);
-  const [productPageOn, setProductPageOn] = useState(true);
+  const [productPageOn, setProductPageOn] = useState(false);
   const [played, setPlayed] = useState(false);
   // const [played, setPlayed] = useState(false);
 
@@ -117,6 +223,9 @@ export default function StopMotion() {
 
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const [currentFrame, setCurrentFrame] = useState(0);
+
+  const [pausedByClick, setPausedByClick] = useState(false);
+  const [isPlaying, setIsPlaying] = useState(true);
 
   const frameCount = 488; // 0-487 = 488 frames
   const { images, isLoaded, loadProgress } = useImageSequence(
@@ -199,6 +308,8 @@ export default function StopMotion() {
     }
   });
 
+  // console.log(currentProductImage);
+
   useEffect(() => {
     if (window) {
       // Always scroll to top on mount, regardless of isLoaded
@@ -207,7 +318,7 @@ export default function StopMotion() {
         window.scrollTo(0, 0);
       }
     }
-  }, [isLoaded]);
+  }, [isLoaded, productPageOn]);
 
   // Reset videos and states on mount/refresh to start from beginning
   useEffect(() => {
@@ -393,7 +504,7 @@ export default function StopMotion() {
 
       cancelAnimationFrame(animationFrameId);
       animationFrameId = requestAnimationFrame(autoScroll);
-      console.log("Resuming auto-scroll");
+      // console.log("Resuming auto-scroll");
     };
 
     // Detect user scroll and stop auto-scroll permanently
@@ -407,7 +518,7 @@ export default function StopMotion() {
         // Keep isPaused as is, or reset?
         // isPaused = false;
         cancelAnimationFrame(animationFrameId);
-        console.log("User took control");
+        // console.log("User took control");
       }
 
       clearTimeout(scrollTimeout);
@@ -523,7 +634,7 @@ export default function StopMotion() {
 
       cancelAnimationFrame(animationFrameId);
       animationFrameId = requestAnimationFrame(autoScroll);
-      console.log("Resuming product page auto-scroll");
+      // console.log("Resuming product page auto-scroll");
     };
 
     // Detect user scroll and pause, then resume after they stop
@@ -532,23 +643,58 @@ export default function StopMotion() {
       if (isScrollingProgrammatically) return;
 
       if (isAutoScrolling) {
+        setPausedByClick(false);
+        setIsPlaying(false);
         userHasScrolled = true;
         isAutoScrolling = false;
         cancelAnimationFrame(animationFrameId);
-        console.log("User scrolling - pausing product page auto-scroll");
+        // console.log("User scrolling - pausing product page auto-scroll");
       }
-
       clearTimeout(scrollTimeout);
       scrollTimeout = setTimeout(() => {
+        setIsPlaying(true);
         resumeAutoScroll();
       }, 100);
     };
 
     // Listen for custom resume event from checkpoint navigation
+    setTimeout(() => {
+      resumeAutoScroll();
+    }, 1000);
     const handleResumeEvent = () => {
-      console.log("Received resume event, resuming autoscroll...");
+      // console.log("Received resume event, resuming autoscroll...");
       setTimeout(() => {
         resumeAutoScroll();
+      }, 1000);
+    };
+
+    // Listen for custom pause event from checkpoint navigation
+    const handlePauseEvent = () => {
+      // console.log("Received pause event, pausing autoscroll...");
+      if (isAutoScrolling) {
+        userHasScrolled = true;
+        isAutoScrolling = false;
+        cancelAnimationFrame(animationFrameId);
+        clearTimeout(scrollTimeout);
+      }
+    };
+
+    // Listen for scroll-up navigation events to prevent auto-resume
+    const handleScrollUpNavigationStart = () => {
+      isScrollingProgrammatically = true;
+      // Also pause autoscroll
+      if (isAutoScrolling) {
+        userHasScrolled = true;
+        isAutoScrolling = false;
+        cancelAnimationFrame(animationFrameId);
+        clearTimeout(scrollTimeout);
+      }
+    };
+
+    const handleScrollUpNavigationEnd = () => {
+      setTimeout(() => {
+        isScrollingProgrammatically = false;
+        // Don't resume - keep it paused after scroll-up navigation
       }, 100);
     };
 
@@ -573,6 +719,15 @@ export default function StopMotion() {
       }
     });
     window.addEventListener("resumeProductAutoScroll", handleResumeEvent);
+    window.addEventListener("pauseProductAutoScroll", handlePauseEvent);
+    window.addEventListener(
+      "scrollUpNavigationStart",
+      handleScrollUpNavigationStart
+    );
+    window.addEventListener(
+      "scrollUpNavigationEnd",
+      handleScrollUpNavigationEnd
+    );
 
     // Start auto-scroll after a short delay
     const startDelay = setTimeout(() => {
@@ -588,22 +743,21 @@ export default function StopMotion() {
       window.removeEventListener("touchstart", handleUserScroll);
       window.removeEventListener("touchmove", handleUserScroll);
       window.removeEventListener("resumeProductAutoScroll", handleResumeEvent);
+      window.removeEventListener("pauseProductAutoScroll", handlePauseEvent);
+      window.removeEventListener(
+        "scrollUpNavigationStart",
+        handleScrollUpNavigationStart
+      );
+      window.removeEventListener(
+        "scrollUpNavigationEnd",
+        handleScrollUpNavigationEnd
+      );
     };
   }, [isLoaded, productPageOn]);
 
   useEffect(() => {
     if (loadProgress === 100) {
       document.body.style.overflow = "scroll";
-      // setTimeout(() => {
-      //   // window.scrollTo({
-      //   //   top: document.body.getBoundingClientRect().bottom,
-      //   //   left: 0,
-      //   //   behavior: "smooth",
-      //   // });
-      //   document.querySelector("#bottom-new")?.scrollIntoView({
-      //     behavior: "smooth",
-      //   });
-      // }, 0);
     } else {
       document.body.style.overflow = "hidden";
     }
@@ -613,12 +767,245 @@ export default function StopMotion() {
     }
   }, [loadProgress]);
 
-  // Checkpoint navigation on click for product page
+  // Checkpoint navigation on scroll up for product page
+
+  useEffect(() => {
+    if (productPageOn) {
+      setTimeout(() => {
+        window.dispatchEvent(new Event("resumeProductAutoScroll"));
+      }, 1400);
+    }
+  }, [productPageOn]);
+
+  // Control handlers for product page
+  const handlePlayPause = () => {
+    if (isPlaying) {
+      setPausedByClick(true);
+      setIsPlaying(false);
+      window.dispatchEvent(new Event("pauseProductAutoScroll"));
+    } else {
+      setPausedByClick(false);
+      setIsPlaying(true);
+      window.dispatchEvent(new Event("resumeProductAutoScroll"));
+    }
+  };
+
+  const handlePreviousCheckpoint = () => {
+    setPausedByClick(true);
+    setIsPlaying(false);
+    window.dispatchEvent(new Event("pauseProductAutoScroll"));
+    // window.dispatchEvent(new Event("clickCheckpointNavigationStart"));
+
+    // Calculate current frame from actual scroll position instead of state
+    const maxScroll =
+      document.documentElement.scrollHeight - window.innerHeight;
+    const currentScrollY = window.scrollY;
+    const scrollYProgress = maxScroll > 0 ? currentScrollY / maxScroll : 0;
+    const productScrollStart = 0.01;
+    const productProgress = Math.max(
+      0,
+      (scrollYProgress - productScrollStart) / (1 - productScrollStart)
+    );
+    const currentFrame = Math.floor(productProgress * 590);
+
+    let targetFrame = 0;
+
+    if (currentFrame <= 140) {
+      targetFrame = 0;
+    } else if (currentFrame <= 260) {
+      targetFrame = 140;
+    } else if (currentFrame <= 420) {
+      targetFrame = 260;
+    } else {
+      targetFrame = 420;
+    }
+
+    const targetScrollYProgress = (targetFrame / 590) * 0.99 + 0.01;
+    const targetScrollPosition = targetScrollYProgress * maxScroll;
+
+    window.scrollTo({
+      top: targetScrollPosition,
+      behavior: "smooth",
+    });
+
+    setTimeout(() => {
+      // window.dispatchEvent(new Event("clickCheckpointNavigationEnd"));
+    }, 1000);
+  };
+
+  const handleNextCheckpoint = () => {
+    setPausedByClick(true);
+    setIsPlaying(false);
+    window.dispatchEvent(new Event("pauseProductAutoScroll"));
+    // window.dispatchEvent(new Event("clickCheckpointNavigationStart"));
+
+    // Calculate current frame from actual scroll position instead of state
+    const maxScroll =
+      document.documentElement.scrollHeight - window.innerHeight;
+    const currentScrollY = window.scrollY;
+    const scrollYProgress = maxScroll > 0 ? currentScrollY / maxScroll : 0;
+    const productScrollStart = 0.01;
+    const productProgress = Math.max(
+      0,
+      (scrollYProgress - productScrollStart) / (1 - productScrollStart)
+    );
+    const currentFrame = Math.floor(productProgress * 590);
+
+    // Checkpoints: 0, 140, 260, 420, 590
+    // Find which checkpoint we're at or closest to, then go to the next one
+    const checkpoints = [0, 140, 260, 420, 590];
+    let targetFrame = 590; // Default to last checkpoint
+
+    // Find the current checkpoint (within 10 frame tolerance)
+    let currentCheckpointIndex = -1;
+    for (let i = 0; i < checkpoints.length; i++) {
+      if (Math.abs(currentFrame - checkpoints[i]) <= 10) {
+        currentCheckpointIndex = i;
+        break;
+      }
+    }
+
+    // If we found a checkpoint, go to the next one
+    if (
+      currentCheckpointIndex >= 0 &&
+      currentCheckpointIndex < checkpoints.length - 1
+    ) {
+      targetFrame = checkpoints[currentCheckpointIndex + 1];
+    } else {
+      // If we're between checkpoints, find the next one
+      if (currentFrame < 140) {
+        targetFrame = 140;
+      } else if (currentFrame < 260) {
+        targetFrame = 260;
+      } else if (currentFrame < 420) {
+        targetFrame = 420;
+      } else {
+        targetFrame = 590;
+      }
+    }
+
+    const targetScrollYProgress = (targetFrame / 590) * 0.99 + 0.01;
+    const targetScrollPosition = targetScrollYProgress * maxScroll;
+
+    window.scrollTo({
+      top: targetScrollPosition,
+      behavior: "smooth",
+    });
+
+    setTimeout(() => {
+      // window.dispatchEvent(new Event("clickCheckpointNavigationEnd"));
+    }, 1000);
+  };
+
   useEffect(() => {
     if (!productPageOn) return;
 
+    let lastScrollY = window.scrollY;
+    let isNavigating = false;
+    let isProgrammaticScroll = false;
+    const SCROLL_UP_THRESHOLD = 5; // Very sensitive - immediate response
+
+    const handleScrollUp = () => {
+      // Ignore if it's a programmatic scroll from click handler
+      if (isNavigating || isProgrammaticScroll) return;
+
+      const currentScrollY = window.scrollY;
+      const deltaY = lastScrollY - currentScrollY;
+
+      if (deltaY > SCROLL_UP_THRESHOLD) {
+        // User scrolling up detected (not programmatic)
+        isNavigating = true;
+
+        // Pause auto-scroll permanently (no auto-resume)
+        setPausedByClick(true);
+        setIsPlaying(false);
+        console.log(
+          "PAUSE - User scroll up detected, navigating to previous checkpoint"
+        );
+        window.dispatchEvent(new Event("pauseProductAutoScroll"));
+
+        // Mark as programmatic scroll to ignore our own scrolling
+        isProgrammaticScroll = true;
+
+        // Notify autoscroll handler that programmatic scroll is starting
+        window.dispatchEvent(new Event("scrollUpNavigationStart"));
+
+        // Trigger navigation to previous checkpoint
+        const currentFrame = parseInt(currentProductImage);
+        let targetFrame = 0;
+
+        // Navigate to PREVIOUS checkpoint based on actual checkpoint positions
+        // Checkpoints are at: 0, 140, 260, 420
+        if (currentFrame <= 140) {
+          targetFrame = 0; // At or before first major checkpoint, stay at start
+        } else if (currentFrame <= 260) {
+          targetFrame = 140; // Between 140-260, go back to 140
+        } else if (currentFrame <= 420) {
+          targetFrame = 260; // Between 260-420, go back to 260
+        } else {
+          targetFrame = 420; // Past 420, go back to 420
+        }
+
+        const targetScrollYProgress = (targetFrame / 590) * 0.99 + 0.01;
+        const maxScroll =
+          document.documentElement.scrollHeight - window.innerHeight;
+        const targetScrollPosition = targetScrollYProgress * maxScroll;
+
+        window.scrollTo({
+          top: targetScrollPosition,
+          behavior: "smooth",
+        });
+
+        // Notify autoscroll that navigation is done and reset flags
+        setTimeout(() => {
+          window.dispatchEvent(new Event("scrollUpNavigationEnd"));
+          isNavigating = false;
+          isProgrammaticScroll = false;
+          lastScrollY = window.scrollY;
+        }, 1000);
+      } else {
+        lastScrollY = currentScrollY;
+      }
+    };
+
+    // Listen for click navigation - mark as programmatic scroll
+    const handleClickNavigationStart = () => {
+      isProgrammaticScroll = true;
+    };
+
+    const handleClickNavigationEnd = () => {
+      setTimeout(() => {
+        isProgrammaticScroll = false;
+        lastScrollY = window.scrollY;
+      }, 1000);
+    };
+
+    // window.addEventListener("scroll", handleScrollUp, { passive: true });
+    // window.addEventListener(
+    //   "clickCheckpointNavigationStart",
+    //   handleClickNavigationStart
+    // );
+    // window.addEventListener(
+    //   "clickCheckpointNavigationEnd",
+    //   handleClickNavigationEnd
+    // );
+    // return () => {
+    //   window.removeEventListener("scroll", handleScrollUp);
+    //   window.removeEventListener(
+    //     "clickCheckpointNavigationStart",
+    //     handleClickNavigationStart
+    //   );
+    //   window.removeEventListener(
+    //     "clickCheckpointNavigationEnd",
+    //     handleClickNavigationEnd
+    //   );
+    // };
+  }, [productPageOn, currentProductImage]);
+
+  // Checkpoint navigation on click for product page
+  useEffect(() => {
+    if (!productPageOn) return;
     const handleProductPageClick = (e: MouseEvent) => {
-      // Check if clicking on interactive elements
       const target = e.target as HTMLElement;
       if (
         target.closest("button, a")
@@ -627,11 +1014,24 @@ export default function StopMotion() {
         return;
       }
 
-      // Determine previous checkpoint based on current frame
+      if (pausedByClick) {
+        setPausedByClick(false);
+        setIsPlaying(true);
+        console.log("RESUME - Second click");
+        window.dispatchEvent(new Event("resumeProductAutoScroll"));
+        return;
+      }
+
+      setPausedByClick(true);
+      setIsPlaying(false);
+      console.log("PAUSE - First click, scrolling to checkpoint");
+
+      // Notify scroll handler that click navigation is starting (BEFORE scroll)
+      window.dispatchEvent(new Event("clickCheckpointNavigationStart"));
+      window.dispatchEvent(new Event("pauseProductAutoScroll"));
+
       const currentFrame = parseInt(currentProductImage);
       let targetFrame = 0;
-
-      console.log("Current frame:", currentFrame);
 
       if (currentFrame > 0 && currentFrame < 230) {
         targetFrame = 0;
@@ -643,42 +1043,24 @@ export default function StopMotion() {
         targetFrame = 420;
       }
 
-      console.log("Target frame:", targetFrame);
-
-      // Calculate scroll position for target frame
-      // Formula from code: productProgress = (scrollYProgress - 0.01) / 0.99
-      // frame = productProgress * 590
-      // Reverse: scrollYProgress = (frame / 590) * 0.99 + 0.01
       const targetScrollYProgress = (targetFrame / 590) * 0.99 + 0.01;
-
-      console.log("Target scrollYProgress:", targetScrollYProgress);
-
-      // Convert to actual scroll position
       const maxScroll =
         document.documentElement.scrollHeight - window.innerHeight;
       const targetScrollPosition = targetScrollYProgress * maxScroll;
-
-      console.log("Scrolling to:", targetScrollPosition, "of", maxScroll);
-
       window.scrollTo({
         top: targetScrollPosition,
         behavior: "smooth",
       });
 
-      // Wait for smooth scroll to complete, then dispatch custom event to resume autoscroll
-      // Smooth scroll typically takes 500-1000ms depending on distance
-      setTimeout(() => {
-        console.log("Dispatching resume event...");
-        window.dispatchEvent(new Event("resumeProductAutoScroll"));
-      }, 1000);
+      // Notify when navigation ends
+      window.dispatchEvent(new Event("clickCheckpointNavigationEnd"));
     };
 
-    window.addEventListener("click", handleProductPageClick);
-
+    // window.addEventListener("click", handleProductPageClick);
     return () => {
       window.removeEventListener("click", handleProductPageClick);
     };
-  }, [productPageOn, currentProductImage]);
+  }, [productPageOn, currentProductImage, pausedByClick]);
 
   return (
     <div
@@ -692,6 +1074,14 @@ export default function StopMotion() {
       }}
     >
       <div id="top"></div>
+      <div className="fixed bottom-0 left-1/2 -translate-x-1/2 text-white/50 space-x-6 z-99999999999999 max-md:w-full max-md:justify-center max-md:flex max-md:pb-6">
+        <a href="/terms" className="underline text-sm">
+          terms of Service
+        </a>
+        <a href="/privacy" className="underline text-sm">
+          privacy Policy
+        </a>
+      </div>
 
       {!backToHome && (
         <motion.div
@@ -811,70 +1201,72 @@ export default function StopMotion() {
         {(backToHome || (played && parseInt(currentImage) >= 457)) && (
           // Show red circle after animation 2 completes
           <>
-            <motion.div
-              onClick={() => {
-                if (!productPageOn) {
-                  setProductPageOn(true);
-                  setTimeout(() => {
-                    document.querySelector("#top")?.scrollIntoView();
-                  }, 1500);
-                }
-              }}
-              whileHover={{ scale: 1.15 }}
-              whileTap={{ scale: 0.95 }}
-              className="bg-red-500/20 rounded-full w-10 aspect-square fixed    top-[53%] left-[50%] flex justify-center items-center cursor-pointer duration-200 z-999999 max-md:left-[46%] max-md:top-[50%]"
-            >
-              {/* Subtle Ripple animations - increased opacity and slower */}
+            <div className="fixed top-[53%] left-[50%] flex flex-col-reverse z-999999999999  justify-center items-center gap-2 max-md:left-[50%] -translate-x-1/2 max-md:top-[50%]">
+              <div className=" text-white/50 text-xs">click to know more</div>
               <motion.div
-                className="absolute inset-0 border-red-400/40 border rounded-full"
-                initial={{ scale: 1, opacity: 0 }}
-                animate={{ scale: 2.5, opacity: [0, 0.25, 0] }}
-                transition={{
-                  duration: 2.5,
-                  repeat: Infinity,
-                  ease: "easeOut",
+                onClick={() => {
+                  if (!productPageOn) {
+                    setProductPageOn(true);
+                    setTimeout(() => {
+                      document.querySelector("#top")?.scrollIntoView();
+                    }, 1500);
+                  }
                 }}
-              />
-              <motion.div
-                className="absolute inset-0 border-red-400/40 border rounded-full"
-                initial={{ scale: 1, opacity: 0 }}
-                animate={{ scale: 2.5, opacity: [0, 0.25, 0] }}
-                transition={{
-                  duration: 2.5,
-                  repeat: Infinity,
-                  ease: "easeOut",
-                  delay: 0.8,
-                }}
-              />
-              <motion.div
-                className="absolute inset-0 border-red-400/40 border rounded-full"
-                initial={{ scale: 1, opacity: 0 }}
-                animate={{ scale: 2.5, opacity: [0, 0.25, 0] }}
-                transition={{
-                  duration: 2.5,
-                  repeat: Infinity,
-                  ease: "easeOut",
-                  delay: 1.6,
-                }}
-              />
-
-              <motion.div className="bg-red-800 border-2 border-red-500 rounded-full w-6 aspect-square flex justify-center items-center relative">
-                <div
-                  style={{
-                    // background: productPageOn ? "black" : "#FF0000",
-                    // scale: productPageOn ? 150 : 1,
-                    transition: "all 1s ease-in-out",
+                whileHover={{ scale: 1.15 }}
+                whileTap={{ scale: 0.95 }}
+                className="bg-red-500/20 rounded-full w-10 aspect-square flex justify-center items-center cursor-pointer duration-200 z-999999 max-md:left-[46%] max-md:top-[50%]"
+              >
+                {/* Subtle Ripple animations - increased opacity and slower */}
+                <motion.div
+                  className="absolute inset-0 border-red-400/40 border rounded-full"
+                  initial={{ scale: 1, opacity: 0 }}
+                  animate={{ scale: 2.5, opacity: [0, 0.25, 0] }}
+                  transition={{
+                    duration: 2.5,
+                    repeat: Infinity,
+                    ease: "easeOut",
                   }}
-                  onClick={(e) => {
-                    if (productPageOn) {
-                      e.stopPropagation();
-                      setProductPageOn(false);
-                    }
+                />
+                <motion.div
+                  className="absolute inset-0 border-red-400/40 border rounded-full"
+                  initial={{ scale: 1, opacity: 0 }}
+                  animate={{ scale: 2.5, opacity: [0, 0.25, 0] }}
+                  transition={{
+                    duration: 2.5,
+                    repeat: Infinity,
+                    ease: "easeOut",
+                    delay: 0.8,
                   }}
-                  className="rounded-full w-4 aspect-square"
-                ></div>
+                />
+                <motion.div
+                  className="absolute inset-0 border-red-400/40 border rounded-full"
+                  initial={{ scale: 1, opacity: 0 }}
+                  animate={{ scale: 2.5, opacity: [0, 0.25, 0] }}
+                  transition={{
+                    duration: 2.5,
+                    repeat: Infinity,
+                    ease: "easeOut",
+                    delay: 1.6,
+                  }}
+                />
+                <motion.div className="bg-red-800 border-2 border-red-500 rounded-full w-6 aspect-square flex justify-center items-center relative">
+                  <div
+                    style={{
+                      // background: productPageOn ? "black" : "#FF0000",
+                      // scale: productPageOn ? 150 : 1,
+                      transition: "all 1s ease-in-out",
+                    }}
+                    onClick={(e) => {
+                      if (productPageOn) {
+                        e.stopPropagation();
+                        setProductPageOn(false);
+                      }
+                    }}
+                    className="rounded-full w-4 aspect-square"
+                  ></div>
+                </motion.div>
               </motion.div>
-            </motion.div>
+            </div>
 
             <motion.div
               onClick={() => {
@@ -941,7 +1333,7 @@ export default function StopMotion() {
               }}
               whileHover={{ scale: 1.15 }}
               whileTap={{ scale: 0.95 }}
-              className="border-white rounded-full border p-0.5 group-hover:p-1.5 aspect-square fixed top-[65%] left-[45%] z-9999  flex justify-center items-center cursor-pointer hover:scale-110 transition-transform group max-md:top-[70%] max-md:left-[40%]"
+              className="border-white rounded-full border p-0.5 group-hover:p-1.5 aspect-square fixed top-[65%] left-[45%] z-9999  flex justify-center items-center cursor-pointer hover:scale-110 transition-transform group max-md:top-[65%] max-md:left-[40%]"
             >
               {/* Subtle Ripple animations - increased opacity and slower */}
               <motion.div
@@ -1093,7 +1485,7 @@ export default function StopMotion() {
               // opacity: parseInt(currentImage) > 417 ? 1 : 0,
             }}
             className={`min-h-screen max-h-screen overflow-hidden fixed left-1/2 -translate-x-1/2 w-full video-container ${
-              parseInt(currentImage) <= 457 ? "pointer-events-none" : ""
+              parseInt(currentImage) <= 457 ? "-none" : ""
             }`}
             style={{
               visibility:
@@ -1161,7 +1553,8 @@ export default function StopMotion() {
               )}
             </div>
 
-            {played && (
+            {
+              // played &&
               <motion.div
                 initial={{
                   opacity: 0,
@@ -1178,6 +1571,7 @@ export default function StopMotion() {
                   <div className="text-white text-2xl max-md:text-3xl md:text-4xl font-light max-md:text-center ">
                     your mini AI bodyguard
                   </div>
+
                   <motion.div
                     initial={{
                       opacity: 0,
@@ -1225,23 +1619,26 @@ export default function StopMotion() {
                 </div>
 
                 <div className="w-full max-md:w-full md:w-auto max-md:hidden group relative">
-                  <button
-                    onClick={() => {
-                      setAnnounce(true);
-                    }}
-                    className="border border-white/50 flex justify-center items-center gap-2 text-white p-3 rounded-full  duration-200 cursor-pointer hover:bg-red-800 hover:text-white hover:border-red-900 text-sm ready "
-                  >
-                    <div className="absolute w-full h-full bg-black/80 rounded-full group-hover:opacity-0 duration-300 pointer-events-none"></div>
-                    <p className="z-9">eNO’s announcement</p>{" "}
-                    <ArrowUpRight className="z-9"></ArrowUpRight>
-                  </button>
+                  {played && (
+                    <button
+                      onClick={() => {
+                        setAnnounce(true);
+                      }}
+                      className="border border-white/50 flex justify-center items-center gap-2 text-white p-3 rounded-full  duration-200 cursor-pointer hover:bg-red-800 hover:text-white hover:border-red-900 text-sm ready "
+                    >
+                      <div className="absolute w-full h-full bg-black/80 rounded-full group-hover:opacity-0 duration-300 pointer-events-none"></div>
+                      <p className="z-9">eNO’s announcement</p>{" "}
+                      <ArrowUpRight className="z-9"></ArrowUpRight>
+                    </button>
+                  )}
                 </div>
               </motion.div>
-            )}
+            }
 
             <AnimatePresence>
               {!played ? (
                 <>
+                  {/*// ! ENABLE THIS */}
                   <motion.video
                     initial={{
                       opacity: 0,
@@ -1264,10 +1661,11 @@ export default function StopMotion() {
                     muted
                     playsInline
                     ref={videoRef}
-                    src="https://res.cloudinary.com/dyi7gdcpj/video/upload/v1764407817/hero2_iik12b.mp4"
+                    src="https://ewdwsu3zqlwawwsn.public.blob.vercel-storage.com/heroDesktopCompressed.mp4"
                     preload="auto"
                     className="w-full h-screen object-contain md:object-cover md:scale-150   video  z-9999 relative max-md:hidden"
                   ></motion.video>
+                  {/*// ! ENABLE THIS */}
                   <motion.video
                     playsInline
                     initial={{
@@ -1290,7 +1688,7 @@ export default function StopMotion() {
                     }}
                     muted
                     ref={videoRef3}
-                    src="https://res.cloudinary.com/dyi7gdcpj/video/upload/v1764419674/heroMobile_hmusmk.mp4"
+                    src="https://ewdwsu3zqlwawwsn.public.blob.vercel-storage.com/videoMobileCompressed.mp4"
                     preload="auto"
                     className="w-full h-screen object-contain md:object-cover md:scale-150   video  z-9999 relative hidden max-md:block"
                   ></motion.video>
@@ -1332,10 +1730,11 @@ export default function StopMotion() {
                 </>
               )}
             </AnimatePresence>
+            {/*// ! ENABLE THIS */}
             <video
               muted
               ref={videoRef2}
-              src="https://res.cloudinary.com/dyi7gdcpj/video/upload/v1764407817/hero2_iik12b.mp4"
+              src="https://ewdwsu3zqlwawwsn.public.blob.vercel-storage.com/heroDesktopCompressed.mp4"
               playsInline
               className="w-full h-screen object-cover md:object-cover scale-150   video  blur-lg fixed top-0 z-0 hidden max-md:block "
             ></video>
@@ -1698,6 +2097,26 @@ export default function StopMotion() {
                 </motion.div>
               )}
             </AnimatePresence>
+
+            {/* <AnimatePresence>
+              {pausedByClick && (
+                <motion.div
+                  initial={{
+                    opacity: 0,
+                  }}
+                  animate={{
+                    opacity: 1,
+                  }}
+                  exit={{
+                    opacity: 0,
+                  }}
+                  className="text-white/60 z-99999999999 text-sm fixed bottom-32 left-1/2 -translate-x-1/2 lowercase"
+                >
+                  click anywhere to play
+                </motion.div>
+              )}
+            </AnimatePresence> */}
+
             <AnimatePresence>
               {currentProductImage > "230" && currentImage < "400" && (
                 <motion.div className="fixed text-white top-1/3 space-y-6 left-16 z-9999999999 max-w-sm max-md:bottom-16 max-md:top-auto  max-md:h-fit max-md:left-1/2 max-md:w-full max-md:-translate-x-1/2 max-md:px-6">
@@ -1850,6 +2269,75 @@ export default function StopMotion() {
             <AnimatePresence></AnimatePresence>
 
             <AnimatePresence>
+              {/* Control buttons for product page */}
+              <motion.div
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                exit={{ opacity: 0, y: 20 }}
+                className="fixed bottom-20 right-0 -translate-x-1/2 flex items-center gap-3 z-999999999999999 flex-col max-md:bottom-auto max-md:top-16"
+              >
+                {/* Previous checkpoint button */}
+                <button
+                  onClick={handlePreviousCheckpoint}
+                  className="bg-white/10 hover:bg-white/20 backdrop-blur-sm border border-white/20 rounded-full p-2.5 text-white transition-all duration-200 hover:scale-105"
+                  title="Previous checkpoint"
+                >
+                  <ChevronUp className="w-4 h-4" />
+                </button>
+
+                {/* Play/Pause button */}
+                <button
+                  onClick={handlePlayPause}
+                  className="bg-white/10 hover:bg-white/20 backdrop-blur-sm border border-white/20 rounded-full p-2.5 text-white transition-all duration-200 hover:scale-105"
+                  title={isPlaying ? "Pause" : "Play"}
+                >
+                  {isPlaying ? (
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      viewBox="0 0 24 24"
+                      fill="currentColor"
+                      className="w-4 h-4"
+                    >
+                      <path
+                        fillRule="evenodd"
+                        d="M6.75 5.25a.75.75 0 01.75-.75H9a.75.75 0 01.75.75v13.5a.75.75 0 01-.75.75H7.5a.75.75 0 01-.75-.75V5.25zm7.5 0A.75.75 0 0115 4.5h1.5a.75.75 0 01.75.75v13.5a.75.75 0 01-.75.75H15a.75.75 0 01-.75-.75V5.25z"
+                        clipRule="evenodd"
+                      />
+                    </svg>
+                  ) : (
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      viewBox="0 0 24 24"
+                      fill="currentColor"
+                      className="w-4 h-4"
+                    >
+                      <path
+                        fillRule="evenodd"
+                        d="M4.5 5.653c0-1.426 1.529-2.33 2.779-1.643l11.54 6.348c1.295.712 1.295 2.573 0 3.285L7.28 19.991c-1.25.687-2.779-.217-2.779-1.643V5.653z"
+                        clipRule="evenodd"
+                      />
+                    </svg>
+                  )}
+                </button>
+
+                {/* Next checkpoint button */}
+                <button
+                  onClick={handleNextCheckpoint}
+                  className="bg-white/10 hover:bg-white/20 backdrop-blur-sm border border-white/20 rounded-full p-2.5 text-white transition-all duration-200 hover:scale-105"
+                  title="Next checkpoint"
+                >
+                  <ChevronDown className="w-4 h-4" />
+                </button>
+              </motion.div>
+
+              <div className="fixed bottom-0 left-1/2 -translate-x-1/2 text-white/50 space-x-6 z-99999999999999 max-md:w-full max-md:justify-center max-md:flex max-md:pb-6">
+                <a href="/terms" className="underline text-sm">
+                  terms of Service
+                </a>
+                <a href="/privacy" className="underline text-sm">
+                  privacy Policy
+                </a>
+              </div>
               {parseInt(currentProductImage) < 20 && (
                 <motion.div
                   initial={{

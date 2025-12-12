@@ -118,8 +118,10 @@ import Image from "next/image";
 import ENOughLanding from "../app/home/Launch";
 import {
   ArrowUpRight,
+  ChevronDown,
   ChevronLeft,
   ChevronRight,
+  ChevronUp,
   Instagram,
   X,
 } from "lucide-react";
@@ -223,6 +225,7 @@ export default function StopMotion() {
   const [currentFrame, setCurrentFrame] = useState(0);
 
   const [pausedByClick, setPausedByClick] = useState(false);
+  const [isPlaying, setIsPlaying] = useState(true);
 
   const frameCount = 488; // 0-487 = 488 frames
   const { images, isLoaded, loadProgress } = useImageSequence(
@@ -641,6 +644,7 @@ export default function StopMotion() {
 
       if (isAutoScrolling) {
         setPausedByClick(false);
+        setIsPlaying(false);
         userHasScrolled = true;
         isAutoScrolling = false;
         cancelAnimationFrame(animationFrameId);
@@ -648,6 +652,7 @@ export default function StopMotion() {
       }
       clearTimeout(scrollTimeout);
       scrollTimeout = setTimeout(() => {
+        setIsPlaying(true);
         resumeAutoScroll();
       }, 100);
     };
@@ -772,6 +777,201 @@ export default function StopMotion() {
     }
   }, [productPageOn]);
 
+  // Control handlers for product page
+  const handlePlayPause = () => {
+    if (isPlaying) {
+      setPausedByClick(true);
+      setIsPlaying(false);
+      window.dispatchEvent(new Event("pauseProductAutoScroll"));
+    } else {
+      setPausedByClick(false);
+      setIsPlaying(true);
+      window.dispatchEvent(new Event("resumeProductAutoScroll"));
+    }
+  };
+
+  // Helper function for smooth scrolling that works better on mobile
+  const smoothScrollTo = (targetPosition: number) => {
+    if (typeof window === "undefined") return;
+
+    const startPosition = window.scrollY;
+    const distance = targetPosition - startPosition;
+
+    // If distance is very small, just scroll immediately
+    if (Math.abs(distance) < 5) {
+      window.scrollTo(0, targetPosition);
+      return;
+    }
+
+    const duration = 600; // 600ms for smooth scroll
+    let startTime: number | null = null;
+
+    // Detect mobile devices - check for touch support and screen size
+    const isMobile =
+      typeof navigator !== "undefined" &&
+      (/iPhone|iPad|iPod|Android/i.test(navigator.userAgent) ||
+        (navigator.maxTouchPoints && navigator.maxTouchPoints > 2) ||
+        window.innerWidth <= 768);
+
+    if (isMobile) {
+      // Use requestAnimationFrame for better mobile performance
+      const animateScroll = (currentTime: number) => {
+        if (startTime === null) startTime = currentTime;
+        const timeElapsed = currentTime - startTime;
+        const progress = Math.min(timeElapsed / duration, 1);
+
+        // Easing function (ease-in-out)
+        const ease =
+          progress < 0.5
+            ? 2 * progress * progress
+            : 1 - Math.pow(-2 * progress + 2, 2) / 2;
+
+        const currentPosition = startPosition + distance * ease;
+        window.scrollTo(0, currentPosition);
+
+        if (progress < 1) {
+          requestAnimationFrame(animateScroll);
+        } else {
+          // Ensure we end up exactly at the target position
+          window.scrollTo(0, targetPosition);
+        }
+      };
+      requestAnimationFrame(animateScroll);
+    } else {
+      // Use native smooth scroll for desktop
+      window.scrollTo({
+        top: targetPosition,
+        behavior: "smooth",
+      });
+    }
+  };
+
+  const handlePreviousCheckpoint = () => {
+    setPausedByClick(true);
+    setIsPlaying(false);
+    window.dispatchEvent(new Event("pauseProductAutoScroll"));
+    // window.dispatchEvent(new Event("clickCheckpointNavigationStart"));
+
+    // Calculate current frame from actual scroll position instead of state
+    const maxScroll =
+      document.documentElement.scrollHeight - window.innerHeight;
+    const currentScrollY = window.scrollY;
+    const scrollYProgress = maxScroll > 0 ? currentScrollY / maxScroll : 0;
+    const productScrollStart = 0.01;
+    const productProgress = Math.max(
+      0,
+      (scrollYProgress - productScrollStart) / (1 - productScrollStart)
+    );
+    const currentFrame = Math.floor(productProgress * 590);
+
+    // Checkpoints: 0, 140, 260, 420, 590
+    // Find which checkpoint we're at or closest to, then go to the previous one
+    const checkpoints = [0, 140, 260, 420, 590];
+    let targetFrame = 0; // Default to first checkpoint
+
+    // Find the current checkpoint (within 10 frame tolerance)
+    let currentCheckpointIndex = -1;
+    for (let i = 0; i < checkpoints.length; i++) {
+      if (Math.abs(currentFrame - checkpoints[i]) <= 10) {
+        currentCheckpointIndex = i;
+        break;
+      }
+    }
+
+    // Determine target checkpoint
+    if (currentCheckpointIndex > 0) {
+      // If we're at a checkpoint (not the first one), go to the previous checkpoint
+      targetFrame = checkpoints[currentCheckpointIndex - 1];
+    } else if (currentCheckpointIndex === 0) {
+      // If we're at the first checkpoint (0), stay there
+      targetFrame = 0;
+    } else {
+      // If we're between checkpoints, find the previous checkpoint
+      // Find the highest checkpoint that's less than currentFrame
+      for (let i = checkpoints.length - 1; i >= 0; i--) {
+        if (checkpoints[i] < currentFrame) {
+          targetFrame = checkpoints[i];
+          break;
+        }
+      }
+      // If no checkpoint found (shouldn't happen, but fallback)
+      if (targetFrame === 0 && currentFrame > 0) {
+        targetFrame = 0;
+      }
+    }
+
+    const targetScrollYProgress = (targetFrame / 590) * 0.99 + 0.01;
+    const targetScrollPosition = targetScrollYProgress * maxScroll;
+
+    // Always scroll to the target position
+    smoothScrollTo(targetScrollPosition);
+
+    setTimeout(() => {
+      // window.dispatchEvent(new Event("clickCheckpointNavigationEnd"));
+    }, 1000);
+  };
+
+  const handleNextCheckpoint = () => {
+    setPausedByClick(true);
+    setIsPlaying(false);
+    window.dispatchEvent(new Event("pauseProductAutoScroll"));
+    // window.dispatchEvent(new Event("clickCheckpointNavigationStart"));
+
+    // Calculate current frame from actual scroll position instead of state
+    const maxScroll =
+      document.documentElement.scrollHeight - window.innerHeight;
+    const currentScrollY = window.scrollY;
+    const scrollYProgress = maxScroll > 0 ? currentScrollY / maxScroll : 0;
+    const productScrollStart = 0.01;
+    const productProgress = Math.max(
+      0,
+      (scrollYProgress - productScrollStart) / (1 - productScrollStart)
+    );
+    const currentFrame = Math.floor(productProgress * 590);
+
+    // Checkpoints: 0, 140, 260, 420, 590
+    // Find which checkpoint we're at or closest to, then go to the next one
+    const checkpoints = [0, 140, 260, 420, 590];
+    let targetFrame = 590; // Default to last checkpoint
+
+    // Find the current checkpoint (within 10 frame tolerance)
+    let currentCheckpointIndex = -1;
+    for (let i = 0; i < checkpoints.length; i++) {
+      if (Math.abs(currentFrame - checkpoints[i]) <= 10) {
+        currentCheckpointIndex = i;
+        break;
+      }
+    }
+
+    // If we found a checkpoint, go to the next one
+    if (
+      currentCheckpointIndex >= 0 &&
+      currentCheckpointIndex < checkpoints.length - 1
+    ) {
+      targetFrame = checkpoints[currentCheckpointIndex + 1];
+    } else {
+      // If we're between checkpoints, find the next one
+      if (currentFrame < 140) {
+        targetFrame = 140;
+      } else if (currentFrame < 260) {
+        targetFrame = 260;
+      } else if (currentFrame < 420) {
+        targetFrame = 420;
+      } else {
+        targetFrame = 590;
+      }
+    }
+
+    const targetScrollYProgress = (targetFrame / 590) * 0.99 + 0.01;
+    const targetScrollPosition = targetScrollYProgress * maxScroll;
+
+    smoothScrollTo(targetScrollPosition);
+
+    setTimeout(() => {
+      // window.dispatchEvent(new Event("clickCheckpointNavigationEnd"));
+    }, 1000);
+  };
+
   useEffect(() => {
     if (!productPageOn) return;
 
@@ -793,6 +993,7 @@ export default function StopMotion() {
 
         // Pause auto-scroll permanently (no auto-resume)
         setPausedByClick(true);
+        setIsPlaying(false);
         console.log(
           "PAUSE - User scroll up detected, navigating to previous checkpoint"
         );
@@ -854,26 +1055,26 @@ export default function StopMotion() {
       }, 1000);
     };
 
-    window.addEventListener("scroll", handleScrollUp, { passive: true });
-    window.addEventListener(
-      "clickCheckpointNavigationStart",
-      handleClickNavigationStart
-    );
-    window.addEventListener(
-      "clickCheckpointNavigationEnd",
-      handleClickNavigationEnd
-    );
-    return () => {
-      window.removeEventListener("scroll", handleScrollUp);
-      window.removeEventListener(
-        "clickCheckpointNavigationStart",
-        handleClickNavigationStart
-      );
-      window.removeEventListener(
-        "clickCheckpointNavigationEnd",
-        handleClickNavigationEnd
-      );
-    };
+    // window.addEventListener("scroll", handleScrollUp, { passive: true });
+    // window.addEventListener(
+    //   "clickCheckpointNavigationStart",
+    //   handleClickNavigationStart
+    // );
+    // window.addEventListener(
+    //   "clickCheckpointNavigationEnd",
+    //   handleClickNavigationEnd
+    // );
+    // return () => {
+    //   window.removeEventListener("scroll", handleScrollUp);
+    //   window.removeEventListener(
+    //     "clickCheckpointNavigationStart",
+    //     handleClickNavigationStart
+    //   );
+    //   window.removeEventListener(
+    //     "clickCheckpointNavigationEnd",
+    //     handleClickNavigationEnd
+    //   );
+    // };
   }, [productPageOn, currentProductImage]);
 
   // Checkpoint navigation on click for product page
@@ -890,12 +1091,14 @@ export default function StopMotion() {
 
       if (pausedByClick) {
         setPausedByClick(false);
+        setIsPlaying(true);
         console.log("RESUME - Second click");
         window.dispatchEvent(new Event("resumeProductAutoScroll"));
         return;
       }
 
       setPausedByClick(true);
+      setIsPlaying(false);
       console.log("PAUSE - First click, scrolling to checkpoint");
 
       // Notify scroll handler that click navigation is starting (BEFORE scroll)
@@ -928,7 +1131,7 @@ export default function StopMotion() {
       window.dispatchEvent(new Event("clickCheckpointNavigationEnd"));
     };
 
-    window.addEventListener("click", handleProductPageClick);
+    // window.addEventListener("click", handleProductPageClick);
     return () => {
       window.removeEventListener("click", handleProductPageClick);
     };
@@ -2141,6 +2344,67 @@ export default function StopMotion() {
             <AnimatePresence></AnimatePresence>
 
             <AnimatePresence>
+              {/* Control buttons for product page */}
+              <motion.div
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                exit={{ opacity: 0, y: 20 }}
+                className="fixed bottom-20 right-0 -translate-x-1/2 flex items-center gap-3 z-999999999999999 flex-col max-md:bottom-auto max-md:top-16"
+              >
+                {/* Previous checkpoint button */}
+                <button
+                  onClick={handlePreviousCheckpoint}
+                  className="bg-white/10 hover:bg-white/20 backdrop-blur-sm border border-white/20 rounded-full p-2.5 text-white transition-all duration-200 hover:scale-105"
+                  title="Previous checkpoint"
+                >
+                  <ChevronUp className="w-4 h-4" />
+                </button>
+
+                {/* Play/Pause button */}
+                <button
+                  onClick={handlePlayPause}
+                  className="bg-white/10 hover:bg-white/20 backdrop-blur-sm border border-white/20 rounded-full p-2.5 text-white transition-all duration-200 hover:scale-105"
+                  title={isPlaying ? "Pause" : "Play"}
+                >
+                  {isPlaying ? (
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      viewBox="0 0 24 24"
+                      fill="currentColor"
+                      className="w-4 h-4"
+                    >
+                      <path
+                        fillRule="evenodd"
+                        d="M6.75 5.25a.75.75 0 01.75-.75H9a.75.75 0 01.75.75v13.5a.75.75 0 01-.75.75H7.5a.75.75 0 01-.75-.75V5.25zm7.5 0A.75.75 0 0115 4.5h1.5a.75.75 0 01.75.75v13.5a.75.75 0 01-.75.75H15a.75.75 0 01-.75-.75V5.25z"
+                        clipRule="evenodd"
+                      />
+                    </svg>
+                  ) : (
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      viewBox="0 0 24 24"
+                      fill="currentColor"
+                      className="w-4 h-4"
+                    >
+                      <path
+                        fillRule="evenodd"
+                        d="M4.5 5.653c0-1.426 1.529-2.33 2.779-1.643l11.54 6.348c1.295.712 1.295 2.573 0 3.285L7.28 19.991c-1.25.687-2.779-.217-2.779-1.643V5.653z"
+                        clipRule="evenodd"
+                      />
+                    </svg>
+                  )}
+                </button>
+
+                {/* Next checkpoint button */}
+                <button
+                  onClick={handleNextCheckpoint}
+                  className="bg-white/10 hover:bg-white/20 backdrop-blur-sm border border-white/20 rounded-full p-2.5 text-white transition-all duration-200 hover:scale-105"
+                  title="Next checkpoint"
+                >
+                  <ChevronDown className="w-4 h-4" />
+                </button>
+              </motion.div>
+
               <div className="fixed bottom-0 left-1/2 -translate-x-1/2 text-white/50 space-x-6 z-99999999999999 max-md:w-full max-md:justify-center max-md:flex max-md:pb-6">
                 <a href="/terms" className="underline text-sm">
                   terms of Service
