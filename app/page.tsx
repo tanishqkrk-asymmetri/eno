@@ -222,7 +222,7 @@ export default function StopMotion() {
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const [currentFrame, setCurrentFrame] = useState(0);
 
-  const [pausedByClick, setPausedByClick] = useState(true);
+  const [pausedByClick, setPausedByClick] = useState(false);
 
   const frameCount = 488; // 0-487 = 488 frames
   const { images, isLoaded, loadProgress } = useImageSequence(
@@ -315,7 +315,7 @@ export default function StopMotion() {
         window.scrollTo(0, 0);
       }
     }
-  }, [isLoaded]);
+  }, [isLoaded, productPageOn]);
 
   // Reset videos and states on mount/refresh to start from beginning
   useEffect(() => {
@@ -674,6 +674,25 @@ export default function StopMotion() {
       }
     };
 
+    // Listen for scroll-up navigation events to prevent auto-resume
+    const handleScrollUpNavigationStart = () => {
+      isScrollingProgrammatically = true;
+      // Also pause autoscroll
+      if (isAutoScrolling) {
+        userHasScrolled = true;
+        isAutoScrolling = false;
+        cancelAnimationFrame(animationFrameId);
+        clearTimeout(scrollTimeout);
+      }
+    };
+
+    const handleScrollUpNavigationEnd = () => {
+      setTimeout(() => {
+        isScrollingProgrammatically = false;
+        // Don't resume - keep it paused after scroll-up navigation
+      }, 100);
+    };
+
     // Listen for user scroll events
     window.addEventListener("wheel", handleUserScroll, { passive: true });
     window.addEventListener("touchstart", handleUserScroll, { passive: true });
@@ -696,6 +715,14 @@ export default function StopMotion() {
     });
     window.addEventListener("resumeProductAutoScroll", handleResumeEvent);
     window.addEventListener("pauseProductAutoScroll", handlePauseEvent);
+    window.addEventListener(
+      "scrollUpNavigationStart",
+      handleScrollUpNavigationStart
+    );
+    window.addEventListener(
+      "scrollUpNavigationEnd",
+      handleScrollUpNavigationEnd
+    );
 
     // Start auto-scroll after a short delay
     const startDelay = setTimeout(() => {
@@ -712,22 +739,20 @@ export default function StopMotion() {
       window.removeEventListener("touchmove", handleUserScroll);
       window.removeEventListener("resumeProductAutoScroll", handleResumeEvent);
       window.removeEventListener("pauseProductAutoScroll", handlePauseEvent);
+      window.removeEventListener(
+        "scrollUpNavigationStart",
+        handleScrollUpNavigationStart
+      );
+      window.removeEventListener(
+        "scrollUpNavigationEnd",
+        handleScrollUpNavigationEnd
+      );
     };
   }, [isLoaded, productPageOn]);
 
   useEffect(() => {
     if (loadProgress === 100) {
       document.body.style.overflow = "scroll";
-      // setTimeout(() => {
-      //   // window.scrollTo({
-      //   //   top: document.body.getBoundingClientRect().bottom,
-      //   //   left: 0,
-      //   //   behavior: "smooth",
-      //   // });
-      //   document.querySelector("#bottom-new")?.scrollIntoView({
-      //     behavior: "smooth",
-      //   });
-      // }, 0);
     } else {
       document.body.style.overflow = "hidden";
     }
@@ -736,6 +761,120 @@ export default function StopMotion() {
       document.body.style.overflow = "hidden !important";
     }
   }, [loadProgress]);
+
+  // Checkpoint navigation on scroll up for product page
+
+  useEffect(() => {
+    if (productPageOn) {
+      setTimeout(() => {
+        window.dispatchEvent(new Event("resumeProductAutoScroll"));
+      }, 1400);
+    }
+  }, [productPageOn]);
+
+  useEffect(() => {
+    if (!productPageOn) return;
+
+    let lastScrollY = window.scrollY;
+    let isNavigating = false;
+    let isProgrammaticScroll = false;
+    const SCROLL_UP_THRESHOLD = 5; // Very sensitive - immediate response
+
+    const handleScrollUp = () => {
+      // Ignore if it's a programmatic scroll from click handler
+      if (isNavigating || isProgrammaticScroll) return;
+
+      const currentScrollY = window.scrollY;
+      const deltaY = lastScrollY - currentScrollY;
+
+      if (deltaY > SCROLL_UP_THRESHOLD) {
+        // User scrolling up detected (not programmatic)
+        isNavigating = true;
+
+        // Pause auto-scroll permanently (no auto-resume)
+        setPausedByClick(true);
+        console.log(
+          "PAUSE - User scroll up detected, navigating to previous checkpoint"
+        );
+        window.dispatchEvent(new Event("pauseProductAutoScroll"));
+
+        // Mark as programmatic scroll to ignore our own scrolling
+        isProgrammaticScroll = true;
+
+        // Notify autoscroll handler that programmatic scroll is starting
+        window.dispatchEvent(new Event("scrollUpNavigationStart"));
+
+        // Trigger navigation to previous checkpoint
+        const currentFrame = parseInt(currentProductImage);
+        let targetFrame = 0;
+
+        // Navigate to PREVIOUS checkpoint based on actual checkpoint positions
+        // Checkpoints are at: 0, 140, 260, 420
+        if (currentFrame <= 140) {
+          targetFrame = 0; // At or before first major checkpoint, stay at start
+        } else if (currentFrame <= 260) {
+          targetFrame = 140; // Between 140-260, go back to 140
+        } else if (currentFrame <= 420) {
+          targetFrame = 260; // Between 260-420, go back to 260
+        } else {
+          targetFrame = 420; // Past 420, go back to 420
+        }
+
+        const targetScrollYProgress = (targetFrame / 590) * 0.99 + 0.01;
+        const maxScroll =
+          document.documentElement.scrollHeight - window.innerHeight;
+        const targetScrollPosition = targetScrollYProgress * maxScroll;
+
+        window.scrollTo({
+          top: targetScrollPosition,
+          behavior: "smooth",
+        });
+
+        // Notify autoscroll that navigation is done and reset flags
+        setTimeout(() => {
+          window.dispatchEvent(new Event("scrollUpNavigationEnd"));
+          isNavigating = false;
+          isProgrammaticScroll = false;
+          lastScrollY = window.scrollY;
+        }, 1000);
+      } else {
+        lastScrollY = currentScrollY;
+      }
+    };
+
+    // Listen for click navigation - mark as programmatic scroll
+    const handleClickNavigationStart = () => {
+      isProgrammaticScroll = true;
+    };
+
+    const handleClickNavigationEnd = () => {
+      setTimeout(() => {
+        isProgrammaticScroll = false;
+        lastScrollY = window.scrollY;
+      }, 1000);
+    };
+
+    window.addEventListener("scroll", handleScrollUp, { passive: true });
+    window.addEventListener(
+      "clickCheckpointNavigationStart",
+      handleClickNavigationStart
+    );
+    window.addEventListener(
+      "clickCheckpointNavigationEnd",
+      handleClickNavigationEnd
+    );
+    return () => {
+      window.removeEventListener("scroll", handleScrollUp);
+      window.removeEventListener(
+        "clickCheckpointNavigationStart",
+        handleClickNavigationStart
+      );
+      window.removeEventListener(
+        "clickCheckpointNavigationEnd",
+        handleClickNavigationEnd
+      );
+    };
+  }, [productPageOn, currentProductImage]);
 
   // Checkpoint navigation on click for product page
   useEffect(() => {
@@ -759,6 +898,8 @@ export default function StopMotion() {
       setPausedByClick(true);
       console.log("PAUSE - First click, scrolling to checkpoint");
 
+      // Notify scroll handler that click navigation is starting (BEFORE scroll)
+      window.dispatchEvent(new Event("clickCheckpointNavigationStart"));
       window.dispatchEvent(new Event("pauseProductAutoScroll"));
 
       const currentFrame = parseInt(currentProductImage);
@@ -783,8 +924,8 @@ export default function StopMotion() {
         behavior: "smooth",
       });
 
-      // Don't auto-resume - wait for user to click again
-      requestAnimationFrame(() => {});
+      // Notify when navigation ends
+      window.dispatchEvent(new Event("clickCheckpointNavigationEnd"));
     };
 
     window.addEventListener("click", handleProductPageClick);
@@ -1369,6 +1510,7 @@ export default function StopMotion() {
             <AnimatePresence>
               {!played ? (
                 <>
+                  {/*// ! ENABLE THIS */}
                   <motion.video
                     initial={{
                       opacity: 0,
@@ -1395,6 +1537,7 @@ export default function StopMotion() {
                     preload="auto"
                     className="w-full h-screen object-contain md:object-cover md:scale-150   video  z-9999 relative max-md:hidden"
                   ></motion.video>
+                  {/*// ! ENABLE THIS */}
                   <motion.video
                     playsInline
                     initial={{
@@ -1459,6 +1602,7 @@ export default function StopMotion() {
                 </>
               )}
             </AnimatePresence>
+            {/*// ! ENABLE THIS */}
             <video
               muted
               ref={videoRef2}
@@ -1826,7 +1970,7 @@ export default function StopMotion() {
               )}
             </AnimatePresence>
 
-            <AnimatePresence>
+            {/* <AnimatePresence>
               {pausedByClick && (
                 <motion.div
                   initial={{
@@ -1843,7 +1987,7 @@ export default function StopMotion() {
                   click anywhere to play
                 </motion.div>
               )}
-            </AnimatePresence>
+            </AnimatePresence> */}
 
             <AnimatePresence>
               {currentProductImage > "230" && currentImage < "400" && (
