@@ -780,9 +780,11 @@ export default function StopMotion() {
   // Control handlers for product page
   const handlePlayPause = () => {
     if (isPlaying) {
+      handlePreviousCheckpoint();
       setPausedByClick(true);
       setIsPlaying(false);
-      window.dispatchEvent(new Event("pauseProductAutoScroll"));
+      // window.dispatchEvent(new Event("pauseProductAutoScroll"));
+      // handlePreviousCheckpoint()
     } else {
       setPausedByClick(false);
       setIsPlaying(true);
