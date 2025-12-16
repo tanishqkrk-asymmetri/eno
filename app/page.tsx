@@ -2600,7 +2600,7 @@ export default function StopMotion() {
                   // autoplay
                   // muted
                   controls
-                  src="https://res.cloudinary.com/dyi7gdcpj/video/upload/v1764577052/TRAILER_V3_1_fwcfhx.mp4"
+                  src="https://ewdwsu3zqlwawwsn.public.blob.vercel-storage.com/TRAILER%20V3%20%281%29.mp4"
                 ></video>
                 <p className="text-sm">
                   <strong>By:</strong>{" "}
