@@ -2,11 +2,19 @@
 
 import { X } from "lucide-react";
 import { AnimatePresence, motion } from "motion/react";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 
 export default function Announce() {
   const [showWaitlist, setShowWaitlist] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [isWaitlistSuccess, setIsWaitlistSuccess] = useState(false);
+
+  // Reset success state when popup is opened
+  useEffect(() => {
+    if (showWaitlist) {
+      setIsWaitlistSuccess(false);
+    }
+  }, [showWaitlist]);
 
   return (
     <section className="relative">
@@ -47,8 +55,42 @@ export default function Announce() {
                   <img src="/logo-new.png" className="w-16" alt="" />
                 </div>
 
-                {/* Form */}
-                <form
+                {/* Success Message */}
+                {isWaitlistSuccess ? (
+                  <motion.div
+                    initial={{ opacity: 0, y: 20 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    className="space-y-6 text-center"
+                  >
+                    <motion.div
+                      initial={{ scale: 0 }}
+                      animate={{ scale: 1 }}
+                      transition={{ delay: 0.2, type: "spring" }}
+                      className="w-20 h-20 mx-auto bg-red-500/20 rounded-full flex items-center justify-center"
+                    >
+                      <svg
+                        className="w-10 h-10 text-red-500"
+                        fill="none"
+                        stroke="currentColor"
+                        viewBox="0 0 24 24"
+                      >
+                        <path
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                          strokeWidth={2}
+                          d="M5 13l4 4L19 7"
+                        />
+                      </svg>
+                    </motion.div>
+                    <div className="space-y-3">
+                      <h2 className="text-2xl font-bold text-white text-center">
+                        You're on the list!
+                      </h2>
+                    </div>
+                  </motion.div>
+                ) : (
+                  /* Form */
+                  <form
                   className="space-y-4"
                   method="POST"
                   action="https://script.google.com/macros/s/AKfycbwS2W7Ysd5ct-ITiM2JGgQk2Ytl18-xlpx_khLtUwzHLw7y4tW6-A0wYwEPIAp0rw8dPg/exec"
@@ -65,7 +107,7 @@ export default function Announce() {
                     })
                       .then(() => {
                         setIsSubmitting(false);
-                        setShowWaitlist(false);
+                        setIsWaitlistSuccess(true);
                         form.reset();
                       })
                       .catch((error) => {
@@ -176,6 +218,7 @@ export default function Announce() {
                     to contact you about eNO updates.
                   </p>
                 </form>
+                )}
               </div>
             </motion.div>
           </motion.div>
