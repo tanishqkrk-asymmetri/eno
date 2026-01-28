@@ -73,7 +73,7 @@ export default function WaitlistPage() {
             <form
             className="space-y-4"
             method="POST"
-            action="https://script.google.com/macros/s/AKfycbwS2W7Ysd5ct-ITiM2JGgQk2Ytl18-xlpx_khLtUwzHLw7y4tW6-A0wYwEPIAp0rw8dPg/exec"
+            action="https://script.google.com/a/macros/enoughsafety.com/s/AKfycbyKEnMonTGsM97soOft1QsAkPiHBevWiGPAMVTDs5zaq60Kn5HmCK9I0u5CmlcmjFJCpQ/exec"
             onSubmit={(e) => {
               e.preventDefault();
               const form = e.currentTarget;
@@ -122,12 +122,13 @@ export default function WaitlistPage() {
               />
             </div>
 
-            {/* Phone field (optional) */}
+            {/* Phone field */}
             <div className="space-y-2">
               <input
                 type="tel"
                 id="phone"
                 name="Phone"
+                required
                 className="w-full bg-black/50 border border-white/20 rounded-lg px-4 py-3 text-white placeholder-white/40 focus:outline-none focus:border-red-500/50 focus:ring-1 focus:ring-red-500/50 transition-all"
                 placeholder="+44 123 456 7890"
               />

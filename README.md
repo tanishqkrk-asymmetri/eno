@@ -1,6 +1,7 @@
-Aayush
-+91-9992511098
+Waitlist Google Apps Script
 
-AKfycbwS2W7Ysd5ct-ITiM2JGgQk2Ytl18-xlpx_khLtUwzHLw7y4tW6-A0wYwEPIAp0rw8dPg
+Script ID: AKfycbyKEnMonTGsM97soOft1QsAkPiHBevWiGPAMVTDs5zaq60Kn5HmCK9I0u5CmlcmjFJCpQ
 
-https://script.google.com/macros/s/AKfycbwS2W7Ysd5ct-ITiM2JGgQk2Ytl18-xlpx_khLtUwzHLw7y4tW6-A0wYwEPIAp0rw8dPg/exec
+Web App URL: https://script.google.com/a/macros/enoughsafety.com/s/AKfycbyKEnMonTGsM97soOft1QsAkPiHBevWiGPAMVTDs5zaq60Kn5HmCK9I0u5CmlcmjFJCpQ/exec
+
+Spreadsheet: https://docs.google.com/spreadsheets/d/1-25Wo1OA01cDSpGQWwcXO8ikDz6uIDJ3Dug6B8V31Sw/edit
