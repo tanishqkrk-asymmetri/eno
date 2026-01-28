@@ -2418,7 +2418,7 @@ export default function StopMotion() {
                       culture of safety{" "}
                     </p>
                     <a
-                      href="https://www.instagram.com/enough.badge?igsh=dnJnNzQxOXFyaTFv&utm_source=qr"
+                      href="https://www.instagram.com/eno.badge/"
                       className="cursor-pointer"
                     >
                       <Instagram className="my-6"></Instagram>
