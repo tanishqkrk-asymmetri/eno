@@ -90,7 +90,7 @@ export default function Announce() {
                   </motion.div>
                 ) : (
                   /* Form */
-                  <form
+                <form
                   className="space-y-4"
                   method="POST"
                   action="https://script.google.com/a/macros/enoughsafety.com/s/AKfycbyKEnMonTGsM97soOft1QsAkPiHBevWiGPAMVTDs5zaq60Kn5HmCK9I0u5CmlcmjFJCpQ/exec"
@@ -169,6 +169,51 @@ export default function Announce() {
                       className="w-full bg-black/50 border border-white/20 rounded-lg px-4 py-3 text-white placeholder-white/40 focus:outline-none focus:border-red-500/50 focus:ring-1 focus:ring-red-500/50 transition-all"
                       placeholder="+44 123 456 7890"
                     />
+                  </div>
+
+                  {/* Checkboxes */}
+                  <div className="space-y-4 mt-6">
+                    {/* Product updates - required, pre-checked */}
+                    <div className="space-y-1">
+                      <label className="flex items-start gap-3 cursor-pointer group">
+                        <input
+                          type="checkbox"
+                          name="ProductUpdates"
+                          value="Yes"
+                          defaultChecked
+                          required
+                          className="mt-1 w-4 h-4 bg-black/50 border border-white/30 rounded text-red-500 focus:ring-red-500/50 focus:ring-2 cursor-pointer"
+                        />
+                        <div className="flex-1">
+                          <span className="text-white font-medium">
+                            product updates <span className="text-white/60">(required)</span>
+                          </span>
+                          <p className="text-white/60 text-sm mt-0.5">
+                            launch updates only
+                          </p>
+                        </div>
+                      </label>
+                    </div>
+
+                    {/* Join eNO circle */}
+                    <div className="space-y-1">
+                      <label className="flex items-start gap-3 cursor-pointer group">
+                        <input
+                          type="checkbox"
+                          name="ENOCircle"
+                          value="Yes"
+                          className="mt-1 w-4 h-4 bg-black/50 border border-white/30 rounded text-red-500 focus:ring-red-500/50 focus:ring-2 cursor-pointer"
+                        />
+                        <div className="flex-1">
+                          <span className="text-white font-medium">
+                            join the eNO circle
+                          </span>
+                          <p className="text-white/60 text-sm mt-0.5">
+                            exclusive updates, BTS access, & more
+                          </p>
+                        </div>
+                      </label>
+                    </div>
                   </div>
 
                   {/* Submit button */}
