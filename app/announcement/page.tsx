@@ -99,6 +99,17 @@ export default function Announce() {
                     const form = e.currentTarget;
                     const formData = new FormData(form);
 
+                    // Explicitly add checkbox values (checkboxes don't send data when unchecked)
+                    const productUpdatesCheckbox = form.querySelector('input[name="ProductUpdates"]') as HTMLInputElement;
+                    const enoCircleCheckbox = form.querySelector('input[name="ENOCircle"]') as HTMLInputElement;
+                    
+                    // Remove existing checkbox values and add explicit ones
+                    formData.delete('ProductUpdates');
+                    formData.delete('ENOCircle');
+                    
+                    formData.append('ProductUpdates', productUpdatesCheckbox.checked ? 'Yes' : 'No');
+                    formData.append('ENOCircle', enoCircleCheckbox.checked ? 'Yes' : 'No');
+
                     setIsSubmitting(true);
 
                     fetch(form.action, {
